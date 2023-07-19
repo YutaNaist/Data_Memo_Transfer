@@ -1,0 +1,26 @@
+temporary.json
+Data_Model copy.py
+Data_Model-02.py
+signalsDiamondClient.py
+forms/*Blank.ui
+forms/*Blank_ui.py
+forms/*コピー.ui
+forms/*コピー_ui.py
+forms/*01.ui
+forms/*01_ui.py
+forms/*02.ui
+forms/*02_ui.py
+forms/*03.ui
+forms/*03_ui.py
+forms/*04.ui
+forms/*04_ui.py
+forms/Window_Edit_File_Information.ui
+forms/Window_Edit_File_Information_ui.py
+forms/Window_Edit_Form.ui
+forms/Window_Edit_Form_ui.py
+forms/Test/*
+
+__pycache__
+forms/__pycache__
+controller/__pycache__
+
