@@ -254,9 +254,13 @@ class Window_Main(QtWidgets.QMainWindow):
                                       | QtWidgets.QMessageBox.Cancel)
             retval = msgBox.exec_()
             if retval == 1024:
-                self.setWindowTitle("Please Wait To Uploading.")
+                self.setWindowTitle("Please wait for uploading.")
+                msgBox = QtWidgets.QMessageBox()
+                msgBox.setText("Please wait for uploading.")
+                msgBox.exec_()
                 response = self.messageSender.sendRequestFinishExperiment(
                     self.data_Model, isAppendExisting=True)
+                msgBox.close()
                 # response = self.messageSender.sendRequestFinishExperiment(
                 #     experiment_ID,
                 #     self.sub_Wid_File_Names,
