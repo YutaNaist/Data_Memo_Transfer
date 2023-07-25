@@ -53,6 +53,7 @@ class Dialog_Edit_Form(QtWidgets.QDialog):
         self.ui.PB_OK.clicked.connect(self.save_Update)
         self.ui.PB_Cancel.clicked.connect(self.cancel_Update)
         self.ui.PB_Current_Sample.clicked.connect(self.read_Current_Sample)
+        self.ui.PB_Undo.clicked.connect(self.Undo)
 
     def set_Data_Model(self, data_model):
         self.data_Model = data_model
@@ -138,3 +139,6 @@ class Dialog_Edit_Form(QtWidgets.QDialog):
             self.sub_Widget.set_All_From_Data_Model()
         elif self.index_Form_Type == 2:
             self.sub_Widget.set_All_From_Data_Model()
+
+    def Undo(self):
+        self.sub_Widget.undo()

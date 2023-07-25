@@ -6,6 +6,7 @@ from Data_Model import DataModel
 
 
 class senderMessageToDiamond:
+
     def __init__(self, url):
         self._url = url
         self.data_Model = DataModel()
@@ -70,9 +71,7 @@ class senderMessageToDiamond:
         self.data_Model = data_Model
         args = {}
         args["experiment_id"] = self.data_Model.get_Experiment_ID()
-        args[
-            "storagePCShareDirectory"] = self.data_Model.get_Share_Directory_In_Storage(
-            )
+        args["storagePCShareDirectory"] = self.data_Model.get_Share_Directory_In_Storage()
         args["isAppendExisting"] = isAppendExisting
         args["file_names"] = self.data_Model.get_File_Names()
         args["meta_data"] = self.data_Model.get_list_dict_meta_data()
@@ -97,9 +96,7 @@ class senderMessageToDiamond:
         self.data_Model = data_Model
         args = {}
         args["experiment_id"] = str_Experiment_ID
-        args[
-            "storagePC_share_directory"] = self.data_Model.get_Share_Directory_In_Storage(
-            )
+        args["storagePC_share_directory"] = self.data_Model.get_Share_Directory_In_Storage()
         dictResponse = self.sendMessage(self.commandList[5], args)
         return dictResponse
 

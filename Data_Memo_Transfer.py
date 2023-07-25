@@ -9,11 +9,16 @@ import sys
 # from PyQt5 import QtGui
 from PyQt5 import QtWidgets
 
-URL_DIAMOND = 'http://192.168.150.10:5462/request'
-URL_DIAMOND = 'http://192.168.0.10:5462/request'
-SAVE_DIRECTORY = "Z:/"
-SHARE_DIRECTORY_IN_STORAGE = "D:/Share/NR-301/"
-SHARE_DIRECTORY_IN_STORAGE = "C:/Share/SmartLab/"
+import global_variable
+
+# URL_DIAMOND = 'http://192.168.150.10:5462/request'
+# URL_DIAMOND = 'http://192.168.0.10:5462/request'
+# SAVE_DIRECTORY = "Z:/"
+# SHARE_DIRECTORY_IN_STORAGE = "D:/Share/NR-301/"
+# SHARE_DIRECTORY_IN_STORAGE = "C:/Share/SmartLab/"
+URL_DIAMOND = global_variable.URL_DIAMOND
+SAVE_DIRECTORY = global_variable.SAVE_DIRECTORY
+SHARE_DIRECTORY_IN_STORAGE = global_variable.SHARE_DIRECTORY_IN_STORAGE
 
 if __name__ == "__main__":
     app = QtWidgets.QApplication(sys.argv)

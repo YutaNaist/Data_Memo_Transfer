@@ -151,7 +151,7 @@ class Sub_Widget_Each_Files_Information(QtWidgets.QWidget):
         self.dialog_Edit_Sample_Information.show()
         self.dialog_Edit_Sample_Information.signal_Update_Form.connect(
             self.update_Sample_And_Equipment_Information)
-        print("check sample")
+        # print("check sample")
         # self.set_Sample_And_Equipment_Information(self.index)
         # self.update_Title()
 
@@ -170,7 +170,7 @@ class Sub_Widget_Each_Files_Information(QtWidgets.QWidget):
         self.dialog_Edit_Sample_Information.signal_Update_Form.connect(
             self.update_Sample_And_Equipment_Information)
         self.dialog_Edit_Sample_Information.show()
-        print("check equipment")
+        # print("check equipment")
         # self.set_Sample_And_Equipment_Information(self.index)
         # self.update_Title()
 

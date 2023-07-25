@@ -42,7 +42,14 @@
      <item>
       <widget class="QPushButton" name="PB_Current_Sample">
        <property name="text">
-        <string>Current Sample</string>
+        <string>Read from main window</string>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QPushButton" name="PB_Undo">
+       <property name="text">
+        <string>Undo</string>
        </property>
       </widget>
      </item>

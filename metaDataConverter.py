@@ -145,3 +145,4 @@ class MetaDataConverter:
         message_Sender = senderMessageToDiamond(self.url_To_Diamond)
         metaData = message_Sender.sendRequestGetMetaData(usageID)
         return metaData
+

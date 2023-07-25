@@ -30,6 +30,9 @@ class Ui_Dialog(object):
         self.PB_Current_Sample = QtWidgets.QPushButton(Dialog)
         self.PB_Current_Sample.setObjectName("PB_Current_Sample")
         self.horizontalLayout_3.addWidget(self.PB_Current_Sample)
+        self.PB_Undo = QtWidgets.QPushButton(Dialog)
+        self.PB_Undo.setObjectName("PB_Undo")
+        self.horizontalLayout_3.addWidget(self.PB_Undo)
         self.verticalLayout.addLayout(self.horizontalLayout_3)
         self.horizontalLayout_2 = QtWidgets.QHBoxLayout()
         self.horizontalLayout_2.setObjectName("horizontalLayout_2")
@@ -50,6 +53,7 @@ class Ui_Dialog(object):
         _translate = QtCore.QCoreApplication.translate
         Dialog.setWindowTitle(_translate("Dialog", "Dialog"))
         self.LAB_Title.setText(_translate("Dialog", "Title"))
-        self.PB_Current_Sample.setText(_translate("Dialog", "Current Sample"))
+        self.PB_Current_Sample.setText(_translate("Dialog", "Read from main window"))
+        self.PB_Undo.setText(_translate("Dialog", "Undo"))
         self.PB_OK.setText(_translate("Dialog", "OK"))
         self.PB_Cancel.setText(_translate("Dialog", "Cancel"))

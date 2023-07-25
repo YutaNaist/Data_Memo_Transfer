@@ -1,3 +1,6 @@
+@echo off
+setlocal enabledelayedexpansion
+
 pyuic5.exe "./forms/Dialog_Ask_Experiment_ID.ui" -o "./forms/Dialog_Ask_Experiment_ID_ui.py"
 pyuic5.exe "./forms/Dialog_Edit_Form.ui" -o "./forms/Dialog_Edit_Form_ui.py"
 pyuic5.exe "./forms/Dialog_Set_Initial.ui" -o "./forms/Dialog_Set_Initial_ui.py"

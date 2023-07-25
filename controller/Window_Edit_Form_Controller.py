@@ -38,6 +38,7 @@ class Window_Edit_Form(QtWidgets.QMainWindow):
     def set_Signals(self):
         self.ui.PB_OK.clicked.connect(self.save_Update)
         self.ui.PB_Cancel.clicked.connect(self.cancel_Update)
+        self.ui.PB_Undo(self.Undo)
 
     def set_Data_Model(self, data_model):
         self.data_Model = data_model
@@ -81,4 +82,7 @@ class Window_Edit_Form(QtWidgets.QMainWindow):
         self.close()
 
     def cancel_Update(self):
+        self.close()
+
+    def Undo(self):
         self.close()

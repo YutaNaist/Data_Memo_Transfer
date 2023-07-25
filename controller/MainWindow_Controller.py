@@ -7,7 +7,7 @@ from controller.SubWidget_Each_Files_Information_Controller import Sub_Widget_Ea
 from Data_Model import DataModel
 from sendMessageToDiamond import senderMessageToDiamond
 
-# from PyQt5 import QtCore
+from PyQt5 import QtCore
 from PyQt5 import QtGui
 from PyQt5 import QtWidgets
 
@@ -76,9 +76,15 @@ class Window_Main(QtWidgets.QMainWindow):
             QtGui.QIcon("./icons/edit.png"))
         self.ui.PB_Refresh.setIcon(QtGui.QIcon("./icons/reflesh.png"))
         self.ui.PB_Upload_Data.setIcon(QtGui.QIcon("./icons/Exit2.png"))
-        self.ui.LAB_Confirmed.setIcon(QtGui.QIcon("./icons/FileIcon.png"))
-        self.ui.LAB_UnConfirmed.setIcon(
-            QtGui.QIcon("./icons/FileIcon_red.png"))
+        pixmap = QtGui.QPixmap("./icons/FileIcon.png")
+        pixmap = pixmap.scaled(25, 25, QtCore.Qt.KeepAspectRatio,
+                               QtCore.Qt.FastTransformation)
+        self.ui.LAB_Confirmed.setPixmap(pixmap)
+
+        pixmap_red = QtGui.QPixmap("./icons/FileIcon_red.png")
+        pixmap_red = pixmap_red.scaled(25, 25, QtCore.Qt.KeepAspectRatio,
+                                       QtCore.Qt.FastTransformation)
+        self.ui.LAB_UnConfirmed.setPixmap(pixmap_red)
         self.set_Template_Form_By_Data_Model()
         # if self.data_Model.get_File_Names() != []:
         #     self.refresh_Files()
@@ -241,7 +247,7 @@ class Window_Main(QtWidgets.QMainWindow):
             strSetText += "OKボタンを押すと、共有フォルダのファイルはすべて保存領域に移動します！\n"
             strSetText += "保存が必要な場合は、実験終了前に保存してください！\n\n"
             strSetText += "Are you sure to submit the experiment?\n"
-            strSetText += "If OK button is pushed, files in the shared folder is moved and you can't access directory!\n"
+            strSetText += "If OK button is clicked, files in the shared folder is moved and you can't access directory!\n"
             strSetText += "Before finish experiment, please check all files are saved!"
             msgBox.setText(strSetText)
             msgBox.setStandardButtons(QtWidgets.QMessageBox.Ok
@@ -259,7 +265,7 @@ class Window_Main(QtWidgets.QMainWindow):
                 #     isAppendExisting=True)
                 if response["status"] is True:
                     msgBox.setText(
-                        "Data upload have finished.\nThis program will be closed after pushing OK button."
+                        "Data upload have finished.\nThis program will be closed after click OK button."
                     )
                     msgBox.setStandardButtons(QtWidgets.QMessageBox.Ok)
                     retval = msgBox.exec_()

@@ -15,16 +15,6 @@
   </property>
   <layout class="QVBoxLayout" name="verticalLayout">
    <item>
-    <widget class="QLabel" name="LAB_Sample_ID_2">
-     <property name="text">
-      <string>Sample ID</string>
-     </property>
-    </widget>
-   </item>
-   <item>
-    <widget class="QLineEdit" name="LE_Sample_ID"/>
-   </item>
-   <item>
     <widget class="QLabel" name="LAB_Sample_Name">
      <property name="text">
       <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-weight:700;&quot;&gt;*Sample Name&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
@@ -33,6 +23,16 @@
    </item>
    <item>
     <widget class="QLineEdit" name="LE_Sample_Name"/>
+   </item>
+   <item>
+    <widget class="QLabel" name="LAB_Sample_ID_2">
+     <property name="text">
+      <string>Sample ID</string>
+     </property>
+    </widget>
+   </item>
+   <item>
+    <widget class="QLineEdit" name="LE_Sample_ID"/>
    </item>
    <item>
     <widget class="QLabel" name="LAB_Sample_Comment">
