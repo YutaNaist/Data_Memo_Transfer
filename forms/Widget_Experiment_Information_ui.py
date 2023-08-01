@@ -29,6 +29,7 @@ class Ui_Form(object):
         font = QtGui.QFont()
         font.setPointSize(9)
         self.LE_Title.setFont(font)
+        self.LE_Title.setReadOnly(False)
         self.LE_Title.setObjectName("LE_Title")
         self.verticalLayout.addWidget(self.LE_Title)
         self.LAB_Title_2 = QtWidgets.QLabel(Form)

@@ -269,6 +269,7 @@ class Ui_MainWindow(object):
         sizePolicy.setVerticalStretch(0)
         sizePolicy.setHeightForWidth(self.toolBox.sizePolicy().hasHeightForWidth())
         self.toolBox.setSizePolicy(sizePolicy)
+        self.toolBox.setMinimumSize(QtCore.QSize(0, 0))
         self.toolBox.setBaseSize(QtCore.QSize(1000, 400))
         palette = QtGui.QPalette()
         brush = QtGui.QBrush(QtGui.QColor(240, 240, 240))

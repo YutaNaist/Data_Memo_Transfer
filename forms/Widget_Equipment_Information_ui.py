@@ -21,6 +21,7 @@ class Ui_Form(object):
         self.label.setObjectName("label")
         self.verticalLayout.addWidget(self.label)
         self.CMB_Method = QtWidgets.QComboBox(Form)
+        self.CMB_Method.setEditable(False)
         self.CMB_Method.setObjectName("CMB_Method")
         self.CMB_Method.addItem("")
         self.CMB_Method.addItem("")
