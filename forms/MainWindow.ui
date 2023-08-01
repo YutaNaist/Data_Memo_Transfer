@@ -7,20 +7,20 @@
     <x>0</x>
     <y>0</y>
     <width>1600</width>
-    <height>1200</height>
+    <height>700</height>
    </rect>
   </property>
   <property name="minimumSize">
    <size>
     <width>1200</width>
-    <height>900</height>
+    <height>700</height>
    </size>
   </property>
   <property name="windowTitle">
    <string>MainWindow</string>
   </property>
   <widget class="QWidget" name="centralwidget">
-   <layout class="QVBoxLayout" name="verticalLayout_8">
+   <layout class="QVBoxLayout" name="verticalLayout_11">
     <item>
      <layout class="QHBoxLayout" name="horizontalLayout_7">
       <item>
@@ -696,8 +696,8 @@
              <rect>
               <x>0</x>
               <y>0</y>
-              <width>775</width>
-              <height>1077</height>
+              <width>1344</width>
+              <height>577</height>
              </rect>
             </property>
             <layout class="QVBoxLayout" name="verticalLayout_5">
@@ -775,8 +775,8 @@
                  <rect>
                   <x>0</x>
                   <y>0</y>
-                  <width>763</width>
-                  <height>1041</height>
+                  <width>1332</width>
+                  <height>541</height>
                  </rect>
                 </property>
                 <attribute name="label">
@@ -794,7 +794,19 @@
        </widget>
       </item>
       <item>
-       <layout class="QVBoxLayout" name="verticalLayout_6">
+       <layout class="QVBoxLayout" name="verticalLayout_4">
+        <item>
+         <widget class="QLabel" name="label">
+          <property name="font">
+           <font>
+            <pointsize>11</pointsize>
+           </font>
+          </property>
+          <property name="text">
+           <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-weight:700;&quot;&gt;Metadata Clipboad&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+          </property>
+         </widget>
+        </item>
         <item>
          <widget class="QFrame" name="frame">
           <property name="minimumSize">
@@ -864,7 +876,7 @@
           <property name="frameShadow">
            <enum>QFrame::Raised</enum>
           </property>
-          <layout class="QVBoxLayout" name="verticalLayout_2">
+          <layout class="QVBoxLayout" name="verticalLayout_10">
            <item>
             <layout class="QHBoxLayout" name="horizontalLayout_3">
              <item>
@@ -925,169 +937,7 @@
             </layout>
            </item>
            <item>
-            <widget class="QLabel" name="LAB_Title">
-             <property name="text">
-              <string>Experiment Title</string>
-             </property>
-            </widget>
-           </item>
-           <item>
-            <widget class="QLineEdit" name="LE_Title">
-             <property name="enabled">
-              <bool>true</bool>
-             </property>
-             <property name="minimumSize">
-              <size>
-               <width>200</width>
-               <height>0</height>
-              </size>
-             </property>
-             <property name="palette">
-              <palette>
-               <active>
-                <colorrole role="Base">
-                 <brush brushstyle="SolidPattern">
-                  <color alpha="255">
-                   <red>239</red>
-                   <green>239</green>
-                   <blue>239</blue>
-                  </color>
-                 </brush>
-                </colorrole>
-               </active>
-               <inactive>
-                <colorrole role="Base">
-                 <brush brushstyle="SolidPattern">
-                  <color alpha="255">
-                   <red>239</red>
-                   <green>239</green>
-                   <blue>239</blue>
-                  </color>
-                 </brush>
-                </colorrole>
-               </inactive>
-               <disabled/>
-              </palette>
-             </property>
-             <property name="font">
-              <font>
-               <pointsize>10</pointsize>
-              </font>
-             </property>
-             <property name="readOnly">
-              <bool>true</bool>
-             </property>
-            </widget>
-           </item>
-           <item>
-            <widget class="QLabel" name="LAB_Title_2">
-             <property name="text">
-              <string>Experiment Comment</string>
-             </property>
-            </widget>
-           </item>
-           <item>
-            <widget class="QPlainTextEdit" name="TE_Experiment_Comment">
-             <property name="enabled">
-              <bool>true</bool>
-             </property>
-             <property name="minimumSize">
-              <size>
-               <width>200</width>
-               <height>0</height>
-              </size>
-             </property>
-             <property name="palette">
-              <palette>
-               <active>
-                <colorrole role="BrightText">
-                 <brush brushstyle="SolidPattern">
-                  <color alpha="255">
-                   <red>233</red>
-                   <green>233</green>
-                   <blue>233</blue>
-                  </color>
-                 </brush>
-                </colorrole>
-                <colorrole role="Base">
-                 <brush brushstyle="SolidPattern">
-                  <color alpha="255">
-                   <red>239</red>
-                   <green>239</green>
-                   <blue>239</blue>
-                  </color>
-                 </brush>
-                </colorrole>
-                <colorrole role="HighlightedText">
-                 <brush brushstyle="SolidPattern">
-                  <color alpha="255">
-                   <red>233</red>
-                   <green>233</green>
-                   <blue>233</blue>
-                  </color>
-                 </brush>
-                </colorrole>
-               </active>
-               <inactive>
-                <colorrole role="BrightText">
-                 <brush brushstyle="SolidPattern">
-                  <color alpha="255">
-                   <red>233</red>
-                   <green>233</green>
-                   <blue>233</blue>
-                  </color>
-                 </brush>
-                </colorrole>
-                <colorrole role="Base">
-                 <brush brushstyle="SolidPattern">
-                  <color alpha="255">
-                   <red>239</red>
-                   <green>239</green>
-                   <blue>239</blue>
-                  </color>
-                 </brush>
-                </colorrole>
-                <colorrole role="HighlightedText">
-                 <brush brushstyle="SolidPattern">
-                  <color alpha="255">
-                   <red>233</red>
-                   <green>233</green>
-                   <blue>233</blue>
-                  </color>
-                 </brush>
-                </colorrole>
-               </inactive>
-               <disabled>
-                <colorrole role="BrightText">
-                 <brush brushstyle="SolidPattern">
-                  <color alpha="255">
-                   <red>233</red>
-                   <green>233</green>
-                   <blue>233</blue>
-                  </color>
-                 </brush>
-                </colorrole>
-                <colorrole role="HighlightedText">
-                 <brush brushstyle="SolidPattern">
-                  <color alpha="255">
-                   <red>233</red>
-                   <green>233</green>
-                   <blue>233</blue>
-                  </color>
-                 </brush>
-                </colorrole>
-               </disabled>
-              </palette>
-             </property>
-             <property name="font">
-              <font>
-               <pointsize>10</pointsize>
-              </font>
-             </property>
-             <property name="readOnly">
-              <bool>true</bool>
-             </property>
-            </widget>
+            <layout class="QVBoxLayout" name="VL_Experiment"/>
            </item>
           </layout>
          </widget>
@@ -1216,172 +1066,7 @@
             </layout>
            </item>
            <item>
-            <widget class="QLabel" name="LAB_Title_5">
-             <property name="text">
-              <string>Sample Name</string>
-             </property>
-            </widget>
-           </item>
-           <item>
-            <widget class="QLineEdit" name="LE_Sample_Name">
-             <property name="enabled">
-              <bool>true</bool>
-             </property>
-             <property name="minimumSize">
-              <size>
-               <width>200</width>
-               <height>0</height>
-              </size>
-             </property>
-             <property name="palette">
-              <palette>
-               <active>
-                <colorrole role="Base">
-                 <brush brushstyle="SolidPattern">
-                  <color alpha="255">
-                   <red>239</red>
-                   <green>239</green>
-                   <blue>239</blue>
-                  </color>
-                 </brush>
-                </colorrole>
-               </active>
-               <inactive>
-                <colorrole role="Base">
-                 <brush brushstyle="SolidPattern">
-                  <color alpha="255">
-                   <red>239</red>
-                   <green>239</green>
-                   <blue>239</blue>
-                  </color>
-                 </brush>
-                </colorrole>
-               </inactive>
-               <disabled/>
-              </palette>
-             </property>
-             <property name="font">
-              <font>
-               <pointsize>10</pointsize>
-              </font>
-             </property>
-             <property name="readOnly">
-              <bool>true</bool>
-             </property>
-            </widget>
-           </item>
-           <item>
-            <widget class="QLabel" name="LAB_Title_4">
-             <property name="text">
-              <string>Sample ID</string>
-             </property>
-            </widget>
-           </item>
-           <item>
-            <widget class="QLineEdit" name="LE_Sample_ID">
-             <property name="enabled">
-              <bool>true</bool>
-             </property>
-             <property name="minimumSize">
-              <size>
-               <width>200</width>
-               <height>0</height>
-              </size>
-             </property>
-             <property name="palette">
-              <palette>
-               <active>
-                <colorrole role="Base">
-                 <brush brushstyle="SolidPattern">
-                  <color alpha="255">
-                   <red>239</red>
-                   <green>239</green>
-                   <blue>239</blue>
-                  </color>
-                 </brush>
-                </colorrole>
-               </active>
-               <inactive>
-                <colorrole role="Base">
-                 <brush brushstyle="SolidPattern">
-                  <color alpha="255">
-                   <red>239</red>
-                   <green>239</green>
-                   <blue>239</blue>
-                  </color>
-                 </brush>
-                </colorrole>
-               </inactive>
-               <disabled/>
-              </palette>
-             </property>
-             <property name="font">
-              <font>
-               <pointsize>10</pointsize>
-              </font>
-             </property>
-             <property name="readOnly">
-              <bool>true</bool>
-             </property>
-            </widget>
-           </item>
-           <item>
-            <widget class="QLabel" name="LAB_Title_6">
-             <property name="text">
-              <string>Sample Comment</string>
-             </property>
-            </widget>
-           </item>
-           <item>
-            <widget class="QPlainTextEdit" name="TE_Sample_Comment">
-             <property name="enabled">
-              <bool>true</bool>
-             </property>
-             <property name="minimumSize">
-              <size>
-               <width>200</width>
-               <height>0</height>
-              </size>
-             </property>
-             <property name="palette">
-              <palette>
-               <active>
-                <colorrole role="Base">
-                 <brush brushstyle="SolidPattern">
-                  <color alpha="255">
-                   <red>239</red>
-                   <green>239</green>
-                   <blue>239</blue>
-                  </color>
-                 </brush>
-                </colorrole>
-               </active>
-               <inactive>
-                <colorrole role="Base">
-                 <brush brushstyle="SolidPattern">
-                  <color alpha="255">
-                   <red>239</red>
-                   <green>239</green>
-                   <blue>239</blue>
-                  </color>
-                 </brush>
-                </colorrole>
-               </inactive>
-               <disabled/>
-              </palette>
-             </property>
-             <property name="font">
-              <font>
-               <pointsize>10</pointsize>
-              </font>
-             </property>
-             <property name="autoFillBackground">
-              <bool>true</bool>
-             </property>
-             <property name="readOnly">
-              <bool>true</bool>
-             </property>
-            </widget>
+            <layout class="QVBoxLayout" name="VL_Sample"/>
            </item>
           </layout>
          </widget>
@@ -1449,7 +1134,7 @@
           <property name="frameShadow">
            <enum>QFrame::Raised</enum>
           </property>
-          <layout class="QVBoxLayout" name="verticalLayout_4">
+          <layout class="QVBoxLayout" name="verticalLayout_2">
            <item>
             <layout class="QHBoxLayout" name="horizontalLayout_5">
              <item>
@@ -1510,114 +1195,7 @@
             </layout>
            </item>
            <item>
-            <widget class="QLabel" name="LAB_Title_8">
-             <property name="text">
-              <string>Experiment method</string>
-             </property>
-            </widget>
-           </item>
-           <item>
-            <widget class="QLineEdit" name="LE_Experiment_Method">
-             <property name="enabled">
-              <bool>true</bool>
-             </property>
-             <property name="minimumSize">
-              <size>
-               <width>200</width>
-               <height>0</height>
-              </size>
-             </property>
-             <property name="palette">
-              <palette>
-               <active>
-                <colorrole role="Base">
-                 <brush brushstyle="SolidPattern">
-                  <color alpha="255">
-                   <red>239</red>
-                   <green>239</green>
-                   <blue>239</blue>
-                  </color>
-                 </brush>
-                </colorrole>
-               </active>
-               <inactive>
-                <colorrole role="Base">
-                 <brush brushstyle="SolidPattern">
-                  <color alpha="255">
-                   <red>239</red>
-                   <green>239</green>
-                   <blue>239</blue>
-                  </color>
-                 </brush>
-                </colorrole>
-               </inactive>
-               <disabled/>
-              </palette>
-             </property>
-             <property name="font">
-              <font>
-               <pointsize>10</pointsize>
-              </font>
-             </property>
-             <property name="readOnly">
-              <bool>true</bool>
-             </property>
-            </widget>
-           </item>
-           <item>
-            <widget class="QLabel" name="LAB_Title_9">
-             <property name="text">
-              <string>Equipment Infromation</string>
-             </property>
-            </widget>
-           </item>
-           <item>
-            <widget class="QPlainTextEdit" name="TE_Equipmen_Information">
-             <property name="enabled">
-              <bool>true</bool>
-             </property>
-             <property name="minimumSize">
-              <size>
-               <width>200</width>
-               <height>0</height>
-              </size>
-             </property>
-             <property name="palette">
-              <palette>
-               <active>
-                <colorrole role="Base">
-                 <brush brushstyle="SolidPattern">
-                  <color alpha="255">
-                   <red>239</red>
-                   <green>239</green>
-                   <blue>239</blue>
-                  </color>
-                 </brush>
-                </colorrole>
-               </active>
-               <inactive>
-                <colorrole role="Base">
-                 <brush brushstyle="SolidPattern">
-                  <color alpha="255">
-                   <red>239</red>
-                   <green>239</green>
-                   <blue>239</blue>
-                  </color>
-                 </brush>
-                </colorrole>
-               </inactive>
-               <disabled/>
-              </palette>
-             </property>
-             <property name="font">
-              <font>
-               <pointsize>10</pointsize>
-              </font>
-             </property>
-             <property name="readOnly">
-              <bool>true</bool>
-             </property>
-            </widget>
+            <layout class="QVBoxLayout" name="VL_Equipment"/>
            </item>
           </layout>
          </widget>

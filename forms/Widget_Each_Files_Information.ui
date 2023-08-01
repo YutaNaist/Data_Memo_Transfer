@@ -63,6 +63,35 @@
     </widget>
    </item>
    <item>
+    <widget class="QGroupBox" name="GB_ARIM_Upload">
+     <property name="title">
+      <string/>
+     </property>
+     <layout class="QHBoxLayout" name="horizontalLayout_4">
+      <item>
+       <widget class="QRadioButton" name="RB_ARIM_Upload">
+        <property name="text">
+         <string>Upload To NIMS</string>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QRadioButton" name="RB_ARIM_Not_Upload">
+        <property name="text">
+         <string>Not Upload</string>
+        </property>
+        <property name="checked">
+         <bool>true</bool>
+        </property>
+        <property name="autoRepeat">
+         <bool>false</bool>
+        </property>
+       </widget>
+      </item>
+     </layout>
+    </widget>
+   </item>
+   <item>
     <layout class="QVBoxLayout" name="verticalLayout_2">
      <item>
       <widget class="QLabel" name="LAB_Free_Comment">

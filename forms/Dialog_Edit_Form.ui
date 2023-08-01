@@ -40,16 +40,16 @@
       </spacer>
      </item>
      <item>
-      <widget class="QPushButton" name="PB_Current_Sample">
+      <widget class="QPushButton" name="PB_Copy_From_Clipboard">
        <property name="text">
-        <string>Read from main window</string>
+        <string>Copy from clipboard</string>
        </property>
       </widget>
      </item>
      <item>
-      <widget class="QPushButton" name="PB_Undo">
+      <widget class="QPushButton" name="PB_Paste_To_Clipboard">
        <property name="text">
-        <string>Undo</string>
+        <string>Paste to clipboard</string>
        </property>
       </widget>
      </item>

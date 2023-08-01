@@ -4,6 +4,10 @@ import forms.MainWindow_ui as MainWidow_ui
 from controller.Dialog_Edit_Form_Controller import Dialog_Edit_Form
 from controller.SubWidget_Each_Files_Information_Controller import Sub_Widget_Each_Files_Information
 
+from controller.SubWidget_Experiment_Information_Controller import Sub_Widget_Experiment_Information
+from controller.SubWidget_Sample_Information_Controller import Sub_Widget_Sample_Information
+from controller.SubWidget_Equipment_Information_Controller import Sub_Widget_Equipment_Information
+
 from Data_Model import DataModel
 from sendMessageToDiamond import senderMessageToDiamond
 
@@ -19,16 +23,14 @@ import os
 class Window_Main(QtWidgets.QMainWindow):
     # signal_Update_Data_Model = QtCore.pyqtSignal()
     # signal_Get_SampleInfo = QtCore.pyqtSignal()
+    signal_update_to_metadata_clipboard = QtCore.pyqtSignal()
 
-    def __init__(self, parent=None, data_Model=None):
+    def __init__(self, parent=None, data_Model: DataModel = None):
         if data_Model is not None:
             self.data_Model = data_Model
         else:
             self.data_Model = DataModel()
-        # print(self.data_Model.get_File_Names())
 
-        # self.timer = QtCore.QTimer()
-        # self.timer.start(600000)
         self.current_Index_ToolBox = 0
 
         super().__init__(parent)
@@ -43,24 +45,33 @@ class Window_Main(QtWidgets.QMainWindow):
         self.ui.toolBox.removeItem(0)
         self.set_Signals()
         self.initialize_Forms()
-
+        self.refresh_Files()
         # self.ui.HL_AddSampleInformation.addWidget(self.subWidSampleInfo)
         # self.ui.PB_Upload_Data.isEnabled = False
         # self.load_Information_Temporals()
 
+    # def __del__(self):
+    #     self.finish_Experiment()
+
     def set_Signals(self):
         self.ui.PB_Refresh.clicked.connect(self.refresh_Files)
         self.ui.toolBox.currentChanged.connect(self.change_ToolBox_Index)
-
         self.ui.PB_Experiment_Title_Edit.clicked.connect(
             self.edit_Experiment_Information)
-
         self.ui.PB_Sample_ID_Edit.clicked.connect(self.edit_Sample_Information)
-
         self.ui.PB_Experiment_Method_Edit.clicked.connect(
             self.edit_Equipment_Information)
+        # self.ui.PB_Upload_Data.clicked.connect(self.finish_Experiment)
+        self.ui.PB_Upload_Data.clicked.connect(self.close)
+        self.signal_update_to_metadata_clipboard.connect(
+            self.set_Template_Form_By_Data_Model)
 
-        self.ui.PB_Upload_Data.clicked.connect(self.finish_Experiment)
+    def closeEvent(self, event):
+        finish_Status = self.finish_Experiment()
+        if finish_Status:
+            event.accept()
+        else:
+            event.ignore()
 
     def change_ToolBox_Index(self, index):
         self.current_Index_ToolBox = index
@@ -85,35 +96,27 @@ class Window_Main(QtWidgets.QMainWindow):
         pixmap_red = pixmap_red.scaled(25, 25, QtCore.Qt.KeepAspectRatio,
                                        QtCore.Qt.FastTransformation)
         self.ui.LAB_UnConfirmed.setPixmap(pixmap_red)
+        self.sub_Widget_Experiment = Sub_Widget_Experiment_Information(
+            data_Model=self.data_Model, isEditable=False)
+        self.sub_Widget_Sample = Sub_Widget_Sample_Information(
+            data_Model=self.data_Model, isEditable=False)
+        self.sub_Widget_Equipment = Sub_Widget_Equipment_Information(
+            data_Model=self.data_Model, isEditable=False)
+        self.ui.VL_Experiment.addWidget(self.sub_Widget_Experiment)
+        self.ui.VL_Sample.addWidget(self.sub_Widget_Sample)
+        self.ui.VL_Equipment.addWidget(self.sub_Widget_Equipment)
+
         self.set_Template_Form_By_Data_Model()
         # if self.data_Model.get_File_Names() != []:
         #     self.refresh_Files()
 
     def set_Template_Form_By_Data_Model(self):
         str_ID_Text = "Experiment ID : {}".format(
-            self.data_Model.get_Experiment_ID())
+            self.data_Model.get_Dict_Data_Model("str_experiment_id"))
         self.ui.LAB_Experiment_ID.setText(str_ID_Text)
-        self.ui.LE_Title.setText(
-            self.data_Model.get_Template_Data_By_Key("title"))
-        self.ui.TE_Experiment_Comment.setPlainText(
-            self.data_Model.get_Template_Data_By_Key("experiment_comment"))
-
-        self.ui.LE_Sample_ID.setText(
-            self.data_Model.get_Template_Data_By_Key("sample_id"))
-        self.ui.LE_Sample_Name.setText(
-            self.data_Model.get_Template_Data_By_Key("sample_name"))
-        self.ui.TE_Sample_Comment.setPlainText(
-            self.data_Model.get_Template_Data_By_Key("sample_comment"))
-
-        self.ui.LE_Experiment_Method.setText(
-            self.data_Model.get_Equipment_Contents("experiment_method"))
-        equipment_Key = self.data_Model.get_Equipment_Contents_Keys()
-        if len(equipment_Key) > 1:
-            str_Equipment_Contents = ""
-            for i in range(len(equipment_Key) - 1):
-                str_Equipment_Contents += "{}: {}\n".format(
-                    equipment_Key[i],
-                    self.data_Model.get_Equipment_Contents(equipment_Key[i]))
+        self.sub_Widget_Experiment.get_From_Data_Model()
+        self.sub_Widget_Sample.get_From_Data_Model()
+        self.sub_Widget_Equipment.get_From_Data_Model()
 
     def edit_Experiment_Information(self):
         self.window_Edit_Form = Dialog_Edit_Form(
@@ -121,8 +124,8 @@ class Window_Main(QtWidgets.QMainWindow):
             type_Form="experiment_information",
             isTemplate=True)
         self.window_Edit_Form.set_Input_Form()
-        self.window_Edit_Form.signal_Update_Form.connect(
-            self.set_Template_Form_By_Data_Model)
+        self.window_Edit_Form.set_Signal_Update_To_Metadata_Clipboard(
+            self.signal_update_to_metadata_clipboard)
         self.window_Edit_Form.show()
 
     def edit_Sample_Information(self):
@@ -131,8 +134,8 @@ class Window_Main(QtWidgets.QMainWindow):
             type_Form="sample_information",
             isTemplate=True)
         self.window_Edit_Form.set_Input_Form()
-        self.window_Edit_Form.signal_Update_Form.connect(
-            self.set_Template_Form_By_Data_Model)
+        self.window_Edit_Form.set_Signal_Update_To_Metadata_Clipboard(
+            self.signal_update_to_metadata_clipboard)
         self.window_Edit_Form.show()
 
     def edit_Equipment_Information(self):
@@ -141,32 +144,28 @@ class Window_Main(QtWidgets.QMainWindow):
             type_Form="equipment_information",
             isTemplate=True)
         self.window_Edit_Form.set_Input_Form()
-        self.window_Edit_Form.signal_Update_Form.connect(
-            self.set_Template_Form_By_Data_Model)
+        self.window_Edit_Form.set_Signal_Update_To_Metadata_Clipboard(
+            self.signal_update_to_metadata_clipboard)
         self.window_Edit_Form.show()
 
     def refresh_Files(self):
         self.ui.LAB_File_List.setText("File List")
-        save_Directory = self.data_Model.get_Share_Directory()
+        save_Directory = self.data_Model.get_Dict_Data_Model(
+            "str_share_directory_in_storage")
         list_Files_In_Save_Directory_Original = glob.glob(save_Directory +
                                                           "**",
                                                           recursive=True)
-
         lenBaseDir = len(save_Directory)
-
         list_Files_In_Save_Directory = []
         xs = []
-
         for file in list_Files_In_Save_Directory_Original:
             path = os.path.join(save_Directory, file)
             xs.append((os.path.getmtime(path), file))
         for _, file in sorted(xs):
             list_Files_In_Save_Directory.append(file)
-
         new_List_File_Names = []
         new_List_File_Data = []
         # self.data_Model.reset_File_Data()
-
         focused_Index = self.current_Index_ToolBox
         focused_File_Name = self.ui.toolBox.itemText(focused_Index)
 
@@ -174,53 +173,69 @@ class Window_Main(QtWidgets.QMainWindow):
             self.ui.toolBox.removeItem(0)
 
         count = 0
+
+        def check_Index(str_File_Name, list_File_Names):
+            if str_File_Name in list_File_Names:
+                return list_File_Names.index(str_File_Name)
+            else:
+                return -1
+
+        list_filenames = self.data_Model.get_File_Name_List()
+        old_list_File_Data = copy.copy(
+            self.data_Model.get_Dict_Data_Model("list_file_data"))
+        self.data_Model.reset_File_Data()
+
         for i, file in enumerate(list_Files_In_Save_Directory):
+            file = file.replace("\\", "/")
             if file == save_Directory:
                 continue
             file = file[lenBaseDir:]
-            file = file.replace("\\", "/")
-            index = self.data_Model.check_Index_File_Name(file)
+            # index = self.data_Model.check_Index_File_Name(file)
+            index = check_Index(file, list_filenames)
             # if file not in self.data_Model.get_File_Names():
             if index == -1:
                 new_List_File_Names.append(file)
                 dict_File_Data = copy.copy(
-                    self.data_Model.get_File_Data_Template())
-                dict_File_Data["file_name"] = file
-                dict_File_Data["file_index"] = count
-                dict_File_Data["file_status_classified"] = "not_classified"
-                dict_File_Data["file_is_valid"] = False
-                dict_File_Data["file_comment"] = ""
-                dict_File_Data[
-                    "file_sample_id"] = self.data_Model.get_Template_Data_By_Key(
-                        "sample_id")
-                dict_File_Data[
-                    "file_sample_name"] = self.data_Model.get_Template_Data_By_Key(
-                        "sample_name")
-                dict_File_Data[
-                    "file_sample_comment"] = self.data_Model.get_Template_Data_By_Key(
-                        "sample_comment")
-                dict_File_Data[
-                    "file_equipment_contents"] = self.data_Model.get_Template_Data_By_Key(
-                        "equipment_contents")
+                    self.data_Model.get_Dict_Data_Model("dict_clipboard"))
+                dict_File_Data["filename"] = file
+                dict_File_Data["index"] = count
+                dict_File_Data["classified"] = "not_classified"
+                dict_File_Data["valid"] = False
+                dict_File_Data["comment"] = ""
+                # dict_File_Data[
+                #     "file_sample_id"] = self.data_Model.get_Template_Data_By_Key(
+                #         "sample_id")
+                # dict_File_Data[
+                #     "file_sample_name"] = self.data_Model.get_Template_Data_By_Key(
+                #         "sample_name")
+                # dict_File_Data[
+                #     "file_sample_comment"] = self.data_Model.get_Template_Data_By_Key(
+                #         "sample_comment")
+                # dict_File_Data[
+                #     "file_equipment_contents"] = self.data_Model.get_Template_Data_By_Key(
+                #         "equipment_contents")
+                self.data_Model.add_File_Information(dict_File_Data)
                 new_List_File_Data.append(dict_File_Data)
             else:
                 new_List_File_Names.append(file)
-                dict_File_Data = copy.copy(
-                    self.data_Model.get_File_Data_By_Index(index))
-                dict_File_Data["file_index"] = count
+                dict_File_Data = copy.copy(old_list_File_Data[index])
+                # self.data_Model.get_File_Data_By_Index(index))
+                dict_File_Data["index"] = count
+                self.data_Model.add_File_Information(dict_File_Data)
                 new_List_File_Data.append(dict_File_Data)
             count += 1
 
-        self.data_Model.set_File_Names(copy.copy(new_List_File_Names))
-        self.data_Model.set_All_File_Data(copy.copy(new_List_File_Data))
+        # self.data_Model.set_File_Names(copy.copy(new_List_File_Names))
+        # self.data_Model.set_All_File_Data(copy.copy(new_List_File_Data))
         for i, file in enumerate(new_List_File_Names):
             sub_Widget_Each_Files_Information = Sub_Widget_Each_Files_Information(
                 data_Model=self.data_Model)
+            sub_Widget_Each_Files_Information.set_Signal_Update_To_Metadata_Clipboard(
+                self.signal_update_to_metadata_clipboard)
             self.ui.toolBox.addItem(sub_Widget_Each_Files_Information, file)
             sub_Widget_Each_Files_Information.set_Parent_Widget(
                 self.ui.toolBox, i)
 
-            sub_Widget_Each_Files_Information
             sub_Widget_Each_Files_Information.set_Index(i)
             sub_Widget_Each_Files_Information.set_File_Name(file)
             sub_Widget_Each_Files_Information.set_Text_From_Data_Model()
@@ -232,60 +247,57 @@ class Window_Main(QtWidgets.QMainWindow):
         self.data_Model.save_To_Temporary()
 
     def finish_Experiment(self):
-        experiment_ID = self.data_Model.get_Experiment_ID()
+        experiment_ID = self.data_Model.get_Dict_Data_Model(
+            "str_experiment_id")
         self.messageSender = senderMessageToDiamond(
-            self.data_Model.get_URL_Address_Diamond())
-        if experiment_ID == "":
-            msgBox = QtWidgets.QMessageBox()
-            msgBox.setText("Please input ID.")
-            msgBox.setStandardButtons(QtWidgets.QMessageBox.Ok)
-            msgBox.exec_()
-        else:
-            msgBox = QtWidgets.QMessageBox()
-            strSetText = ""
-            strSetText += "実を終了しますか？\n"
-            strSetText += "OKボタンを押すと、共有フォルダのファイルはすべて保存領域に移動します！\n"
-            strSetText += "保存が必要な場合は、実験終了前に保存してください！\n\n"
-            strSetText += "Are you sure to submit the experiment?\n"
-            strSetText += "If OK button is clicked, files in the shared folder is moved and you can't access directory!\n"
-            strSetText += "Before finish experiment, please check all files are saved!"
-            msgBox.setText(strSetText)
-            msgBox.setStandardButtons(QtWidgets.QMessageBox.Ok
-                                      | QtWidgets.QMessageBox.Cancel)
-            retval = msgBox.exec_()
-            if retval == 1024:
-                self.setWindowTitle("Please wait for uploading.")
+            self.data_Model.get_Dict_Data_Model("str_url_diamond"))
+        if self.data_Model.get_Dict_Data_Model("is_upload_arim") is True:
+            list_file_data = self.data_Model.get_All_File_Information()
+            flag_checked_arim = False
+            for file_data in list_file_data:
+                if file_data["arim_upload"] is True:
+                    flag_checked_arim = True
+                    break
+            if flag_checked_arim is False:
                 msgBox = QtWidgets.QMessageBox()
-                msgBox.setText("Please wait for uploading.")
+                msgBox.setText(
+                    "Your data should be uploaded to NIMS.\nPlease select at least one file to upload."
+                )
+                msgBox.setStandardButtons(QtWidgets.QMessageBox.Ok)
                 msgBox.exec_()
-                response = self.messageSender.sendRequestFinishExperiment(
-                    self.data_Model, isAppendExisting=True)
-                msgBox.close()
-                # response = self.messageSender.sendRequestFinishExperiment(
-                #     experiment_ID,
-                #     self.sub_Wid_File_Names,
-                #     self.metaDatas,
-                #     self.data_Model.get_Share_Directory_In_Storage(),
-                #     isAppendExisting=True)
-                if response["status"] is True:
-                    msgBox.setText(
-                        "Data upload have finished.\nThis program will be closed after click OK button."
-                    )
-                    msgBox.setStandardButtons(QtWidgets.QMessageBox.Ok)
-                    retval = msgBox.exec_()
-                    os.remove("./temporary.json")
-                    self.close()
-                else:
-                    msgBox.setText(response["message"])
-                    msgBox.setStandardButtons(QtWidgets.QMessageBox.Ok)
-                    retval = msgBox.exec_()
-                # elif response["status"] is True:
-                #     msgBox.setText(response["message"])
-                #     msgBox.setStandardButtons(QtWidgets.QMessageBox.Ok)
-                #     retval = msgBox.exec_()
-                #     os.remove("./temporary.json")
-                #     self.close()
-                # else:
-                #     msgBox.setText(response["message"])
-                #     msgBox.setStandardButtons(QtWidgets.QMessageBox.Ok)
-                #     retval = msgBox.exec_()
+                return False
+
+        # if experiment_ID == "":
+        #     msgBox = QtWidgets.QMessageBox()
+        #     msgBox.setText("Please input ID.")
+        #     msgBox.setStandardButtons(QtWidgets.QMessageBox.Ok)
+        #     msgBox.exec_()
+        # else:
+        msgBox = QtWidgets.QMessageBox()
+        strSetText = ""
+        strSetText += "実を終了しますか？\n"
+        strSetText += "OKボタンを押すと、共有フォルダのファイルはすべて保存領域に移動します！\n"
+        strSetText += "保存が必要な場合は、実験終了前に保存してください！\n\n"
+        strSetText += "Are you sure to submit the experiment?\n"
+        strSetText += "If OK button is clicked, files in the shared folder is moved and you can't access directory!\n"
+        strSetText += "Before finish experiment, please check all files are saved!"
+        msgBox.setText(strSetText)
+        msgBox.setStandardButtons(QtWidgets.QMessageBox.Ok
+                                  | QtWidgets.QMessageBox.Cancel)
+        retval = msgBox.exec_()
+        if retval == 1024:
+            response = self.messageSender.sendRequestFinishExperiment(
+                self.data_Model, isAppendExisting=True)
+            if response["status"] is True:
+                msgBox.setText(
+                    "Data upload have finished.\nThis program will be closed after click OK button."
+                )
+                msgBox.setStandardButtons(QtWidgets.QMessageBox.Ok)
+                retval = msgBox.exec_()
+                os.remove("./temporary.json")
+                return True
+            else:
+                msgBox.setText(response["message"])
+                msgBox.setStandardButtons(QtWidgets.QMessageBox.Ok)
+                retval = msgBox.exec_()
+                return False

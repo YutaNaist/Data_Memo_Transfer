@@ -43,5 +43,5 @@ class Ui_Form(object):
         _translate = QtCore.QCoreApplication.translate
         Form.setWindowTitle(_translate("Form", "Form"))
         self.LAB_Sample_Name.setText(_translate("Form", "<html><head/><body><p><span style=\" font-weight:700;\">*Sample Name</span></p></body></html>"))
-        self.LAB_Sample_ID_2.setText(_translate("Form", "Sample ID"))
+        self.LAB_Sample_ID_2.setText(_translate("Form", "Sample ID (If you have)"))
         self.LAB_Sample_Comment.setText(_translate("Form", "Sample Comment"))

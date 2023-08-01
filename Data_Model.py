@@ -4,288 +4,157 @@ import os
 import datetime
 
 
-class DataModel:
+class DataModel_DataMemoTransfer_Exception(Exception):
+
     def __init__(self):
-        self.str_Diamond_URL = "http://192.168.0.10:5462/request"
-        self.str_Share_Directory = "Z:/"
-        self.str_Share_Directory_In_Storage = "C:/Share/SmartLab/"
-        self.str_Experiment_ID = ""
-        self.dict_User_Information = {}
-        self.is_exist_Temp_File = False
+        pass
 
-        self.dict_Template_Data = {}
-        self.list_file_names = []
-        self.list_Dict_Files_Data = []
 
-        self.list_keys_Template_Data = [
-            "title", "experiment_comment", "sample_id", "sample_name",
-            "sample_comment", "equipment_contents"
+class DataModel_DataMemoTransfer_TypeException(
+        DataModel_DataMemoTransfer_Exception):
+
+    def __str__(self):
+        return "DataModelException DataMemoTransfer: Different Type is used."
+
+
+class DataModel:
+
+    def __init__(self):
+        self.dict_Data_Model = {}
+        self.list_keys = [
+            "str_url_diamond", "str_save_directory",
+            "str_share_directory_in_storage", "str_experiment_id",
+            "is_upload_arim", "is_share_with_google", "dict_user_information",
+            "is_exist_temp_file", "dict_clipboard", "list_file_data"
         ]
-        self.list_keys_File_Data = [
-            "file_name", "file_index", "file_status_classified",
-            "file_is_valid", "file_comment", "file_sample_id",
-            "file_sample_name", "file_sample_comment",
-            "file_equipment_contents"
+        self.list_keys_data = [
+            "filename", "index", "classified", "valid", "arim_upload",
+            "comment", "experiment", "sample", "equipment"
         ]
-        for key in self.list_keys_Template_Data:
-            if key == "equipment_contents":
-                self.dict_Template_Data[key] = {"experiment_method": ""}
-            else:
-                self.dict_Template_Data[key] = ""
+        self.initialize_data_model()
 
-        self.list_Dict_Files_Data_Template = {}
-        for key in self.list_keys_File_Data:
-            if key == "file_equipment_contents":
-                self.list_Dict_Files_Data_Template[key] = {
-                    "experiment_method": ""
-                }
-            elif key == "file_status_classified":
-                self.list_Dict_Files_Data_Template[key] = "not_classified"
-            elif key == "file_index":
-                self.list_Dict_Files_Data_Template[key] = 0
-            else:
-                self.list_Dict_Files_Data_Template[key] = ""
+    def initialize_data_model(self):
+        self.dict_Data_Model[
+            "str_url_diamond"] = "http://192.168.0.10:5462/request"
+        self.dict_Data_Model["str_save_directory"] = "Z:/"
+        self.dict_Data_Model[
+            "str_share_directory_in_storage"] = "C:/Share/SmartLab/"
+        self.dict_Data_Model["str_experiment_id"] = ""
+        self.dict_Data_Model["dict_user_information"] = {}
+        self.dict_Data_Model["is_exist_temp_file"] = False
+        self.dict_Data_Model["is_upload_arim"] = False
+        self.dict_Data_Model["is_share_with_google"] = False
+        # self.dict_Data_Model["list_file_name"] = []
+        self.dict_Data_Model["dict_clipboard"] = {}
+        self.dict_Data_Model["list_file_data"] = []
+
+        dict_Template_Clipboard = {}
+        dict_Template_Clipboard["filename"] = ""
+        dict_Template_Clipboard["index"] = -1
+        dict_Template_Clipboard["classified"] = "Unclassified"
+        dict_Template_Clipboard["valid"] = False
+        dict_Template_Clipboard["arim_upload"] = False
+        dict_Template_Clipboard["comment"] = ""
+
+        dict_Template_Clipboard["experiment"] = {}
+        dict_Template_Clipboard["experiment"]["title"] = ""
+        dict_Template_Clipboard["experiment"]["comment"] = ""
+        dict_Template_Clipboard["sample"] = {}
+        dict_Template_Clipboard["sample"]["id"] = ""
+        dict_Template_Clipboard["sample"]["name"] = ""
+        dict_Template_Clipboard["sample"]["comment"] = ""
+        dict_Template_Clipboard["equipment"] = {}
+        dict_Template_Clipboard["equipment"]["method"] = ""
+        self.dict_Data_Model["dict_clipboard"] = dict_Template_Clipboard
 
     # Function of Template Data
-    def set_User_Information(self, dict_User_Information):
-        self.dict_User_Information = dict_User_Information
+    def get_All_Dict_Data_Model(self):
+        return self.dict_Data_Model
 
-    def set_Template_Data(self, dict_Template_Data):
-        self.dict_Template_Data = dict_Template_Data
-
-    def set_URL_Address_Diamond(self, str_URL):
-        self.str_Diamond_URL = str_URL
-
-    def get_URL_Address_Diamond(self):
-        return self.str_Diamond_URL
-
-    def set_Share_Directory(self, str_Share_Directory):
-        self.str_Share_Directory = str_Share_Directory
-
-    def get_Share_Directory(self):
-        return self.str_Share_Directory
-
-    def set_Share_Directory_In_Storage(self, str_Share_Directory_In_Storage):
-        self.str_Share_Directory_In_Storage = str_Share_Directory_In_Storage
-
-    def get_Share_Directory_In_Storage(self):
-        return self.str_Share_Directory_In_Storage
-
-    def set_Experiment_ID(self, str_Experiment_ID):
-        self.str_Experiment_ID = str_Experiment_ID
-
-    def get_Experiment_ID(self):
-        return self.str_Experiment_ID
-
-    def set_All_Template_Data(self, dict_Template_Data):
-        self.dict_Template_Data = dict_Template_Data
-
-    def get_All_Template_Data(self):
-        return self.dict_Template_Data
-
-    def set_Template_Data_By_Key(self, str_Key, str_Value):
-        self.dict_Template_Data[str_Key] = str_Value
-
-    def get_Template_Data_By_Key(self, str_Key):
-        return self.dict_Template_Data[str_Key]
-
-    def set_Equipment_Contents(self, str_Key, str_Equipment_Contents):
-        self.dict_Template_Data["equipment_contents"][
-            str_Key] = str_Equipment_Contents
-
-    def get_Equipment_Contents(self, str_Key):
-        return self.dict_Template_Data["equipment_contents"][str_Key]
-
-    def get_Equipment_Contents_Keys(self):
-        return self.dict_Template_Data["equipment_contents"].keys()
-
-    # Saving Temporary Data
-    def save_To_Temporary(self):
-        dict_To_Save = {}
-        # dict_To_Save["url_diamond"] = self.str_Diamond_URL
-        dict_To_Save["share_directory"] = self.str_Share_Directory
-        dict_To_Save["file_names"] = self.list_file_names
-        dict_To_Save["experiment_id"] = self.str_Experiment_ID
-        dict_To_Save["template_data"] = self.dict_Template_Data
-        dict_To_Save["file_data"] = self.list_Dict_Files_Data
-        json.dump(dict_To_Save,
-                  open("temporary.json", "w", encoding="utf-8"),
-                  indent=4,
-                  ensure_ascii=False)
-
-    def load_From_Temporary(self):
+    def get_Dict_Data_Model(self, key):
         try:
-            dict_Load = json.load(open("temporary.json", "r",
-                                       encoding="utf-8"))
-            # self.str_Diamond_URL = dict_Load["url_diamond"]
-            self.str_Share_Directory = dict_Load["share_directory"]
-            self.list_file_names = dict_Load["file_names"]
-            self.dict_Template_Data = dict_Load["template_data"]
-            self.list_Dict_Files_Data = dict_Load["file_data"]
-            self.is_exist_Temp_File = True
-        except FileNotFoundError:
-            pass
-        except json.decoder.JSONDecodeError:
-            pass
+            return self.dict_Data_Model[key]
         except KeyError:
-            pass
+            return ""
 
-    def remove_Temporary(self):
+    def set_Dict_Data_Model(self, key, value):
+        # print(type(value), type(self.dict_Data_Model[key]))
+        # if isinstance(value, type(self.dict_Data_Model[key])):
+        if type(value) != type(self.dict_Data_Model[key]):
+            raise DataModel_DataMemoTransfer_TypeException
+        self.dict_Data_Model[key] = value
+
+    def get_Number_Of_File(self) -> int:
+        return len(self.dict_Data_Model["list_file_data"])
+
+    def save_To_Temporary(self) -> None:
+        self.dict_Data_Model["is_exist_temp_file"] = True
+        json.dump(self.dict_Data_Model,
+                  open("temporary.json", "w", encoding="utf-8"),
+                  ensure_ascii=False,
+                  indent=4)
+
+    def load_From_Temporary(self) -> None:
         try:
-            os.remove("temporary.json")
+            dict_Data_Model = json.load(
+                open("temporary.json", "r", encoding="utf-8"))
+            if dict_Data_Model == {}:
+                raise FileNotFoundError
+            self.dict_Data_Model = dict_Data_Model
+            self.dict_Data_Model["is_exist_temp_file"] = True
         except FileNotFoundError:
-            pass
+            self.dict_Data_Model["is_exist_temp_file"] = False
+        except json.decoder.JSONDecodeError:
+            self.dict_Data_Model["is_exist_temp_file"] = False
 
-    # Function File Data
-    def set_File_Names(self, list_File_Names):
-        self.list_file_names = list_File_Names
+    def delete_Temporary(self) -> None:
+        os.remove("temporary.json")
+        self.dict_Data_Model["is_exist_temp_file"] = False
 
-    def get_File_Names(self):
-        return self.list_file_names
+    def get_Fili_Information_Clipboard(self) -> dict:
+        return copy.copy(self.dict_Data_Model["dict_clipboard"])
 
-    def get_File_Data_Template(self):
-        return self.list_Dict_Files_Data_Template
+    def get_All_File_Information(self) -> list:
+        return self.dict_Data_Model["list_file_data"]
 
-    def set_File_Data(self, str_File_Name, dict_File_Data):
-        index = self.check_Index_File_Name(str_File_Name)
+    def get_File_Name_List(self) -> list:
+        list_File_Name = []
+        for dict_File_Information in self.dict_Data_Model["list_file_data"]:
+            list_File_Name.append(dict_File_Information["filename"])
+        return list_File_Name
+
+    def reset_File_Data(self) -> None:
+        self.dict_Data_Model["list_file_data"] = []
+
+    def add_File_Information(self, dict_File_Information: dict) -> None:
+        self.dict_Data_Model["list_file_data"].append(dict_File_Information)
+
+    def get_File_Information(self, index: int) -> dict:
         if index == -1:
-            self.list_file_names.append(str_File_Name)
-            self.list_Dict_Files_Data.append(
-                copy.deepcopy(self.list_Dict_Files_Data_Template))
-        for key in dict_File_Data.keys():
-            self.list_Dict_Files_Data[index][key] = dict_File_Data[key]
-
-    def append_File_Data_Without_Check(self, str_File_Name, dict_File_Data):
-        self.list_file_names.append(str_File_Name)
-        self.list_Dict_Files_Data.append(
-            copy.deepcopy(self.list_Dict_Files_Data_Template))
-        for key in dict_File_Data.keys():
-            self.list_Dict_Files_Data[-1][key] = dict_File_Data[key]
-
-    def set_File_Data_By_Index(self, index, dict_File_Data):
-        for key in dict_File_Data.keys():
-            self.list_Dict_Files_Data[index][key] = dict_File_Data[key]
-
-    def set_File_Data_By_Key(self, str_File_Name, str_Key, str_Value):
-        index = self.check_Index_File_Name(str_File_Name)
-        if index == -1:
-            self.list_file_names.append(str_File_Name)
-            self.list_Dict_Files_Data.append(
-                copy.deepcopy(self.list_Dict_Files_Data_Template))
-        self.list_Dict_Files_Data[index][str_Key] = str_Value
-
-    def set_File_Data_By_Index_And_Key(self, index, str_Key, str_Value):
-        self.list_Dict_Files_Data[index][str_Key] = str_Value
-
-    def get_File_Data(self, str_File_Name):
-        index = self.check_Index_File_Name(str_File_Name)
-        if index == -1:
-            return {}
+            return copy.copy(self.dict_Data_Model["dict_clipboard"])
         else:
-            return self.list_Dict_Files_Data[index]
+            return self.dict_Data_Model["list_file_data"][index]
 
-    def get_File_Data_By_Index(self, int_Index):
-        return self.list_Dict_Files_Data[int_Index]
-
-    def get_File_Data_By_Key(self, str_File_Name, str_Key):
-        index = self.check_Index_File_Name(str_File_Name)
+    def set_File_Information(self, index: int,
+                             dict_File_Information: dict) -> None:
         if index == -1:
-            return {}
+            self.dict_Data_Model["dict_clipboard"] = dict_File_Information
         else:
-            return self.list_Dict_Files_Data[index][str_Key]
+            self.dict_Data_Model["list_file_data"][
+                index] = dict_File_Information
 
-    def get_File_Data_By_Index_And_Key(self, int_Index, str_Key):
-        return self.list_Dict_Files_Data[int_Index][str_Key]
-
-    def set_All_File_Data(self, list_Dict_Files_Data):
-        self.list_Dict_Files_Data = list_Dict_Files_Data
-
-    def get_All_File_Data(self):
-        return self.list_Dict_Files_Data
-
-    def set_File_Data_Equipment_Contents(self, str_File_Name, str_Key,
-                                         str_Equipment_Contents):
-        index = self.check_Index_File_Name(str_File_Name)
-        if index == -1:
-            pass
-        else:
-            self.list_Dict_Files_Data[index]["file_equipment_contents"][
-                str_Key] = str_Equipment_Contents
-
-    def get_File_Data_Equipment_Contents(self, str_File_Name, str_Key):
-        index = self.check_Index_File_Name(str_File_Name)
-        if index == -1:
-            return {}
-        else:
-            return self.list_Dict_Files_Data[index]["file_equipment_contents"][
-                str_Key]
-
-    def set_File_Data_Equipment_Contents_By_Index(self, int_index, str_Key,
-                                                  str_Equipment_Contents):
-        self.list_Dict_Files_Data[int_index]["file_equipment_contents"][
-            str_Key] = str_Equipment_Contents
-
-    def get_File_Data_Equipment_Contents_By_Index(self, int_index, str_Key):
-        return self.list_Dict_Files_Data[int_index]["file_equipment_contents"][
-            str_Key]
-
-    def get_File_Data_Equipment_Contents_Keys(self, str_File_Name):
-        index = self.check_Index_File_Name(str_File_Name)
-        if index == -1:
-            return []
-        else:
-            return self.list_Dict_Files_Data[index][
-                "file_equipment_contents"].keys()
-
-    def get_File_Data_Equipment_Contents_Keys_By_Index(self, int_index):
-        return self.list_Dict_Files_Data[int_index][
-            "file_equipment_contents"].keys()
-
-    def reset_File_Data(self):
-        self.list_file_names = []
-        self.list_Dict_Files_Data = []
-
-    def check_Index_File_Name(self, str_File_Name):
-        if str_File_Name in self.list_file_names:
-            return self.list_file_names.index(str_File_Name)
+    def check_Index_File_Name(self, str_File_Name: str) -> int:
+        list_file_names = self.get_File_Name_List()
+        if str_File_Name in list_file_names:
+            return list_file_names.index(str_File_Name)
         else:
             return -1
 
-    # Basic Setter and Getter
-    def set_Title(self, str_Title):
-        self.dict_Template_Data["title"] = str_Title
-
-    def get_Title(self):
-        return self.dict_Template_Data["title"]
-
-    def set_experiment_comment(self, str_experiment_comment):
-        self.dict_Template_Data["experiment_comment"] = str_experiment_comment
-
-    def get_experiment_comment(self):
-        return self.dict_Template_Data["experiment_comment"]
-
-    def set_sample_id(self, str_sample_id):
-        self.dict_Template_Data["sample_id"] = str_sample_id
-
-    def get_sample_id(self):
-        return self.dict_Template_Data["sample_id"]
-
-    def set_sample_name(self, str_sample_name):
-        self.dict_Template_Data["sample_name"] = str_sample_name
-
-    def get_sample_name(self):
-        return self.dict_Template_Data["sample_name"]
-
-    def set_sample_comment(self, str_sample_comment):
-        self.dict_Template_Data["sample_comment"] = str_sample_comment
-
-    def get_sample_comment(self):
-        return self.dict_Template_Data["sample_comment"]
-
     # meta data converter for diamond
-    def get_list_dict_meta_data(self):
+    def get_list_dict_meta_data(self) -> list:
         list_Dict_Meta_Data = []
-        for index, file_Name in enumerate(self.list_file_names):
+        list_file_names = self.get_File_Name_List()
+        for index, file_Name in enumerate(list_file_names):
             dict_Meta_Data = {
                 "titles": [],
                 "identifiers": [],
@@ -301,69 +170,78 @@ class DataModel:
                 "specimens": [],
                 "custom_properties": []
             }
-            dict_Meta_Data["titles"].append(
-                {"title": self.dict_Template_Data["title"]})
+            dict_Meta_Data["titles"].append({
+                "title":
+                self.dict_Data_Model["dict_clipboard"]["experiment"]["title"]
+            })
             dict_Meta_Data["identifiers"].append(
-                {"identifier": self.str_Experiment_ID})
-            dict_Meta_Data["experimental_identifier"] = self.str_Experiment_ID
+                {"identifier": self.dict_Data_Model["str_experiment_id"]})
+            dict_Meta_Data["experimental_identifier"] = self.dict_Data_Model[
+                "str_experiment_id"]
             dict_Meta_Data["resource_type"] = "dataset"
-            dict_Meta_Data["descriptions"].append(
-                {"description": self.dict_Template_Data["experiment_comment"]})
+            dict_Meta_Data["descriptions"].append({
+                "description":
+                self.dict_Data_Model["dict_clipboard"]["experiment"]["comment"]
+            })
 
-            dict_Meta_Data["creators"] = self.dict_User_Information["creators"]
-            created = self.dict_User_Information["experiment_date"][
-                "start_date"] + " " + self.dict_User_Information[
-                    "experiment_date"]["start_time"]
+            dict_Meta_Data["creators"] = self.dict_Data_Model[
+                "dict_user_information"]["creators"]
+            created = self.dict_Data_Model["dict_user_information"][
+                "experiment_date"]["start_date"] + " " + self.dict_Data_Model[
+                    "dict_user_information"]["experiment_date"]["start_time"]
             dict_Meta_Data["created_at"] = created
             current = datetime.datetime.now().strftime("%Y/%m/%d %H:%M")
             dict_Meta_Data["updated_at"] = current
 
             dict_File_Set = {}
             dict_File_Set["filename"] = file_Name
-            dict_File_Set["description"] = self.list_Dict_Files_Data[index][
-                "file_comment"]
-            dict_File_Set["status_valid"] = self.list_Dict_Files_Data[index][
-                "file_is_valid"]
+            dict_File_Set["description"] = self.dict_Data_Model[
+                "list_file_data"][index]["experiment"]["comment"]
+            dict_File_Set["status_valid"] = self.dict_Data_Model[
+                "list_file_data"][index]["valid"]
             dict_Meta_Data["filesets"].append(dict_File_Set)
 
             dict_Instrument = {}
-            dict_Instrument["name"] = self.dict_User_Information["instrument"][
-                "name"]
-            dict_Instrument["identifier"] = self.dict_User_Information[
-                "instrument"]["identifier"]
+            dict_Instrument["name"] = self.dict_Data_Model[
+                "dict_user_information"]["instrument"]["name"]
+            dict_Instrument["identifier"] = self.dict_Data_Model[
+                "dict_user_information"]["instrument"]["identifier"]
             dict_Instrument["instrument_type"] = ""
             dict_Instrument["description"] = ""
             dict_Meta_Data["instruments"].append(dict_Instrument)
 
             dict_Experiment_Method = {}
-            dict_Experiment_Method[
-                "category_description"] = self.list_Dict_Files_Data[index][
-                    "file_equipment_contents"]["experiment_method"]
+            try:
+                dict_Experiment_Method[
+                    "category_description"] = self.dict_Data_Model[
+                        "list_file_data"][index]["equipment"]["method"]
+            except KeyError:
+                dict_Experiment_Method["category_description"] = ""
             dict_Experiment_Method["description"] = ""
             dict_Meta_Data["experimental_methods"].append(
                 dict_Experiment_Method)
 
             dict_Specimens = {}
-            dict_Specimens["name"] = self.list_Dict_Files_Data[index][
-                "file_sample_name"]
-            dict_Specimens["identifier"] = self.list_Dict_Files_Data[index][
-                "file_sample_id"]
-            dict_Specimens["description"] = self.list_Dict_Files_Data[index][
-                "file_sample_comment"]
+            dict_Specimens["name"] = self.dict_Data_Model["list_file_data"][
+                index]["sample"]["name"]
+            dict_Specimens["identifier"] = self.dict_Data_Model[
+                "list_file_data"][index]["sample"]["id"]
+            dict_Specimens["description"] = self.dict_Data_Model[
+                "list_file_data"][index]["sample"]["comment"]
             dict_Meta_Data["specimens"].append(dict_Specimens)
 
-            if len(self.list_Dict_Files_Data[index]
-                   ["file_equipment_contents"]) > 1:
-                keys = self.list_Dict_Files_Data[index][
-                    "file_equipment_contents"].keys()
-                for i in range(
-                        len(self.list_Dict_Files_Data[index]
-                            ["file_equipment_contents"] - 1)):
+            if len(
+                    list(self.dict_Data_Model["list_file_data"][index]
+                         ["equipment"].keys())) > 1:
+                keys = list(self.dict_Data_Model["list_file_data"][index]
+                            ["equipment"].keys())
+                for i, key in enumerate(keys):
+                    if i == 0:
+                        continue
                     dict_Equipment_Information = {}
-                    dict_Equipment_Information["name"] = keys[i + 1]
-                    dict_Equipment_Information[
-                        "value"] = self.list_Dict_Files_Data[index][
-                            "file_equipment_contents"][keys[i + 1]]
+                    dict_Equipment_Information["name"] = key
+                    dict_Equipment_Information["value"] = self.dict_Data_Model[
+                        "list_file_data"][index]["equipment"][key]
                     dict_Meta_Data["custom_properties"].append(
                         dict_Equipment_Information)
             list_Dict_Meta_Data.append(dict_Meta_Data)
@@ -372,23 +250,8 @@ class DataModel:
     def set_from_meta_data_dict(self, list_File_Name, list_Dict_Meta_Data):
         pass
 
-    def get_All_Data_To_Save(self):
-        dict_To_Save = {}
-        # dict_To_Save["url_diamond"] = self.str_Diamond_URL
-        dict_To_Save["share_directory"] = self.str_Share_Directory
-        dict_To_Save["file_names"] = self.list_file_names
-        dict_To_Save["experiment_id"] = self.str_Experiment_ID
-        dict_To_Save["template_data"] = self.dict_Template_Data
-        dict_To_Save["file_data"] = self.list_Dict_Files_Data
-        return dict_To_Save
-
     def save_Initial_Temporary_From_Dict(self, dict_To_Save):
         try:
-            # dict_To_Save["share_directory"] = self.str_Share_Directory
-            # dict_To_Save["file_names"] = self.list_file_names
-            # dict_To_Save["experiment_id"] = self.str_Experiment_ID
-            # dict_To_Save["template_data"] = self.dict_Template_Data
-            # dict_To_Save["file_data"] = self.list_Dict_Files_Data
             json.dump(dict_To_Save,
                       open("temporary.json", "w", encoding="utf-8"),
                       indent=4,

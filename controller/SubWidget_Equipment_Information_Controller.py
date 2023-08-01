@@ -7,7 +7,10 @@ from PyQt5 import QtCore
 
 class Sub_Widget_Equipment_Information(QtWidgets.QWidget):
 
-    def __init__(self, parent=None, data_Model=None):
+    def __init__(self,
+                 parent=None,
+                 data_Model: DataModel = None,
+                 isEditable=True):
         super().__init__(parent)
         self.ui = Ui_Widget_Equipment_Information()
         self.ui.setupUi(self)
@@ -22,40 +25,46 @@ class Sub_Widget_Equipment_Information(QtWidgets.QWidget):
             self.data_Model = data_Model
         else:
             self.data_Model = DataModel()
+        if isEditable is False:
+            self.ui.CMB_Method.setEditable(False)
 
-    # def set_Data_Model(self, data_model):
-    #     self.data_Model = data_model
-
-    def set_All_From_Data_Model(self):
-        self.ui.CMB_Method.setCurrentText(
-            self.data_Model.get_Equipment_Contents("experiment_method"))
-        # self.save_Previous_State()
-
-    def get_All_To_Data_Model(self):
-        self.data_Model.set_Equipment_Contents(
-            "experiment_method", self.ui.CMB_Method.currentText())
-
-    def set_All_From_Data_Model_File_Information(self, index):
-        self.ui.CMB_Method.setCurrentText(
-            self.data_Model.get_File_Data_Equipment_Contents_By_Index(
-                index, "experiment_method"))
-        # self.save_Previous_State()
-
-    def get_All_To_Data_Model_File_Information(self, index):
-        self.data_Model.set_File_Data_Equipment_Contents_By_Index(
-            index, "experiment_method", self.ui.CMB_Method.currentText())
-
-    def set_Data_Model(self, index):
-        if index == -1:
-            self.set_All_From_Data_Model()
+    def get_From_Data_Model(self,
+                            index: int = -1,
+                            is_Template: bool = True) -> None:
+        dict_file_data = {}
+        if is_Template is True:
+            dict_file_data = self.data_Model.get_Dict_Data_Model(
+                "dict_clipboard")
         else:
-            self.set_All_From_Data_Model_File_Information(index)
+            dict_file_data = self.data_Model.get_Dict_Data_Model(
+                "list_file_data")[index]
+        try:
+            self.ui.CMB_Method.setCurrentText(
+                dict_file_data["equipment"]["method"])
+        except KeyError:
+            pass
 
-    def get_Data_Model(self, index):
-        if index == -1:
-            self.get_All_To_Data_Model()
+    def set_To_Data_Model(self,
+                          index: int = -1,
+                          is_Template: bool = True) -> None:
+        dict_file_data = {}
+        if is_Template is True:
+            dict_file_data = self.data_Model.get_Dict_Data_Model(
+                "dict_clipboard")
         else:
-            self.get_All_To_Data_Model_File_Information()
+            dict_file_data = self.data_Model.get_Dict_Data_Model(
+                "list_file_data")[index]
+        dict_equipment = {}
+        dict_equipment["method"] = self.ui.CMB_Method.currentText()
+        dict_file_data["equipment"] = dict_equipment
+
+        if is_Template is True:
+            self.data_Model.set_Dict_Data_Model("dict_clipboard",
+                                                dict_file_data)
+        else:
+            # self.data_Model.set_Dict_Data_Model("dict_clipboard",
+            #                                     dict_file_data)
+            self.data_Model.set_File_Information(index, dict_file_data)
 
     def start_edit_Timer(self):
         self.timer.start(1000)

@@ -18,7 +18,7 @@ class senderMessageToDiamond:
         ]
         pass
 
-    def sendMessage(self, command, args):
+    def sendMessage(self, command: str, args: dict) -> dict:
         try:
             identifier = int(random.random() * 1000000000)
             json_data = json.dumps({
@@ -62,45 +62,54 @@ class senderMessageToDiamond:
             }
         return dictReturnResponse
 
-    def sendRequestCheckID(self, str_Experiment_ID):
+    def sendRequestCheckID(self, str_Experiment_ID: str) -> dict:
         args = {"experiment_id": str_Experiment_ID}
         dictResponse = self.sendMessage(self.commandList[0], args)
         return dictResponse
 
-    def sendRequestFinishExperiment(self, data_Model, isAppendExisting=False):
+    def sendRequestFinishExperiment(self,
+                                    data_Model: DataModel,
+                                    isAppendExisting: bool = False) -> dict:
         self.data_Model = data_Model
         args = {}
-        args["experiment_id"] = self.data_Model.get_Experiment_ID()
-        args["storagePCShareDirectory"] = self.data_Model.get_Share_Directory_In_Storage()
+        args["experiment_id"] = self.data_Model.get_Dict_Data_Model(
+            "str_experiment_id")
+        args["storagePCShareDirectory"] = self.data_Model.get_Dict_Data_Model(
+            "str_share_directory_in_storage")
         args["isAppendExisting"] = isAppendExisting
-        args["file_names"] = self.data_Model.get_File_Names()
+        args["file_names"] = self.data_Model.get_File_Name_List()
         args["meta_data"] = self.data_Model.get_list_dict_meta_data()
-        args["experiment_information"] = self.data_Model.get_All_Data_To_Save()
+        args[
+            "experiment_information"] = self.data_Model.get_All_Dict_Data_Model(
+            )
         print(args)
         dictResponse = self.sendMessage(self.commandList[1], args)
         return dictResponse
 
-    def sendRequestCheckProposal(self, str_Experiment_ID):
+    def sendRequestCheckProposal(self, str_Experiment_ID: str) -> dict:
         args = {"experiment_id": str_Experiment_ID}
         dictResponse = self.sendMessage(self.commandList[3], args)
         return dictResponse
 
-    def sendRequestGetMetaData(self, str_Experiment_ID):
+    def sendRequestGetMetaData(self, str_Experiment_ID: str) -> dict:
         args = {}
         args["experiment_id"] = str_Experiment_ID
         # print(self.commandList[4])
         dictResponse = self.sendMessage(self.commandList[4], args)
         return dictResponse
 
-    def sendRequestCopyOriginal(self, str_Experiment_ID, data_Model):
+    def sendRequestCopyOriginal(self, str_Experiment_ID: str,
+                                data_Model: DataModel) -> dict:
         self.data_Model = data_Model
         args = {}
         args["experiment_id"] = str_Experiment_ID
-        args["storagePC_share_directory"] = self.data_Model.get_Share_Directory_In_Storage()
+        args[
+            "storagePC_share_directory"] = self.data_Model.get_Dict_Data_Model(
+                "str_share_directory_in_storage")
         dictResponse = self.sendMessage(self.commandList[5], args)
         return dictResponse
 
-    def sendRequestStartExperiment(self, str_Experiment_ID):
+    def sendRequestStartExperiment(self, str_Experiment_ID: str) -> dict:
         args = {}
         args["experiment_id"] = str_Experiment_ID
         dictResponse = self.sendMessage(self.commandList[6], args)

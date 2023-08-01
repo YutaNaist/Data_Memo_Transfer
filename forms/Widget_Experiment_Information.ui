@@ -42,6 +42,9 @@
        <pointsize>9</pointsize>
       </font>
      </property>
+     <property name="readOnly">
+      <bool>false</bool>
+     </property>
     </widget>
    </item>
    <item>

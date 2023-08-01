@@ -23,6 +23,9 @@
    </item>
    <item>
     <widget class="QComboBox" name="CMB_Method">
+     <property name="editable">
+      <bool>false</bool>
+     </property>
      <item>
       <property name="text">
        <string>Powder diffraction</string>

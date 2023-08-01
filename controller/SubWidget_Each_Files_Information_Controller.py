@@ -15,12 +15,13 @@ from PyQt5 import QtCore
 
 class Sub_Widget_Each_Files_Information(QtWidgets.QWidget):
     signal_Edit_Sample_Information = QtCore.pyqtSignal()
+    signal_update_to_metadata_clipboard = QtCore.pyqtSignal()
 
-    def __init__(self, parent=None, data_Model=None):
+    # signal_update_text_box
 
+    def __init__(self, parent=None, data_Model: DataModel = None):
         self.timer = QtCore.QTimer()
         self.timer.setSingleShot(True)
-        # self.timer.start(600000)
         super().__init__(parent)
         self.ui = Ui_Widget_Each_Files_Information()
         self.ui.setupUi(self)
@@ -31,6 +32,14 @@ class Sub_Widget_Each_Files_Information(QtWidgets.QWidget):
             self.data_Model = data_Model
         else:
             self.data_Model = DataModel()
+        print()
+        print(self.data_Model.get_All_Dict_Data_Model())
+        print()
+
+        if self.data_Model.get_Dict_Data_Model("is_upload_arim") is False:
+            # self.ui.GB_ARIM_Upload.setVisible(False)
+            self.ui.RB_ARIM_Upload.setVisible(False)
+            self.ui.RB_ARIM_Not_Upload.setVisible(False)
 
         self.set_Signal()
         self.ui.PB_Edit_Equipment_Information.setIcon(
@@ -42,6 +51,8 @@ class Sub_Widget_Each_Files_Information(QtWidgets.QWidget):
         self.ui.RB_Valid.clicked.connect(self.set_Status_Classified)
         self.ui.RB_Not_Valid.clicked.connect(self.set_Status_Classified)
         self.ui.RB_No_Classified.clicked.connect(self.set_Status_Classified)
+        self.ui.RB_ARIM_Upload.clicked.connect(self.set_Status_ARIM_Upload)
+        self.ui.RB_ARIM_Not_Upload.clicked.connect(self.set_Status_ARIM_Upload)
         # self.ui.TE_Free_Comment.cursorPosition.connect(
         #     self.set_File_Comment_To_Data_Model)
         self.ui.TE_Free_Comment.textChanged.connect(self.start_edit_Timer)
@@ -52,6 +63,15 @@ class Sub_Widget_Each_Files_Information(QtWidgets.QWidget):
             self.edit_Equipment_Information)
         self.signal_Edit_Sample_Information.connect(
             self.set_Text_From_Data_Model)
+
+    def set_Signal_Update_To_Metadata_Clipboard(self,
+                                                signal: QtCore.pyqtSignal):
+        self.signal_update_to_metadata_clipboard = signal
+        self.signal_update_to_metadata_clipboard.connect(
+            self.update_Sample_And_Equipment_Information)
+
+        # self.dialog_Edit_Sample_Information.signal_Update_Form.connect(
+        #     self.update_Sample_And_Equipment_Information)
 
     def set_Parent_Widget(self, parent, parent_Index):
         self.parent_Widget = parent
@@ -64,19 +84,19 @@ class Sub_Widget_Each_Files_Information(QtWidgets.QWidget):
         self.file_Name = str_File_Name
 
     def set_Status_Classified(self):
-        dict_File_Data = self.data_Model.get_File_Data_By_Index(self.index)
+        dict_file_data = self.data_Model.get_File_Information(self.index)
         status = self.get_Status_Classified()
         if status == "effective_data":
-            dict_File_Data["file_status_classified"] = "effective_data"
-            dict_File_Data["file_is_valid"] = True
+            dict_file_data["classified"] = "effective_data"
+            dict_file_data["valid"] = True
         elif status == "not_effective_data":
-            dict_File_Data["file_status_classified"] = "not_effective_data"
-            dict_File_Data["file_is_valid"] = False
+            dict_file_data["classified"] = "not_effective_data"
+            dict_file_data["valid"] = False
         else:
-            dict_File_Data["file_status_classified"] = "not_classified"
-            dict_File_Data["file_is_valid"] = False
+            dict_file_data["classified"] = "not_classified"
+            dict_file_data["valid"] = False
         self.update_Title()
-        self.data_Model.set_File_Data_By_Index(self.index, dict_File_Data)
+        self.data_Model.set_File_Information(self.index, dict_file_data)
         self.data_Model.save_To_Temporary()
 
     def get_Status_Classified(self):
@@ -86,6 +106,21 @@ class Sub_Widget_Each_Files_Information(QtWidgets.QWidget):
             return "not_effective_data"
         else:
             return "not_classified"
+
+    def set_Status_ARIM_Upload(self):
+        dict_file_data = self.data_Model.get_File_Information(self.index)
+        if self.ui.RB_ARIM_Upload.isChecked():
+            dict_file_data["arim_upload"] = True
+        else:
+            dict_file_data["arim_upload"] = False
+        self.data_Model.set_File_Information(self.index, dict_file_data)
+        self.data_Model.save_To_Temporary()
+
+    def get_Status_ARIM_Upload(self):
+        if self.ui.RB_ARIM_Upload.isChecked():
+            return True
+        else:
+            return False
 
     def set_Index(self, index):
         self.index = index
@@ -104,13 +139,20 @@ class Sub_Widget_Each_Files_Information(QtWidgets.QWidget):
             self.ui.RB_Not_Valid.setChecked(False)
             self.ui.RB_No_Classified.setChecked(True)
 
+    def set_arim_upload(self, status_arim_upload):
+        if status_arim_upload:
+            self.ui.RB_ARIM_Upload.setChecked(True)
+            self.ui.RB_ARIM_Not_Upload.setChecked(False)
+        else:
+            self.ui.RB_ARIM_Upload.setChecked(False)
+            self.ui.RB_ARIM_Not_Upload.setChecked(True)
+
     def set_Text_From_Data_Model(self):
         # self.index = self.data_Model.check_Index_File_Name(self.file_Name)
-        dict_File_Data = self.data_Model.get_File_Data_By_Index(self.index)
-
-        self.ui.TE_Free_Comment.setPlainText(dict_File_Data["file_comment"])
-        self.set_classified(dict_File_Data["file_status_classified"])
-
+        dict_File_Data = self.data_Model.get_File_Information(self.index)
+        self.ui.TE_Free_Comment.setPlainText(dict_File_Data["comment"])
+        self.set_classified(dict_File_Data["classified"])
+        self.set_arim_upload(dict_File_Data["arim_upload"])
         self.set_Sample_And_Equipment_Information(self.index)
         self.update_Title()
 
@@ -129,8 +171,9 @@ class Sub_Widget_Each_Files_Information(QtWidgets.QWidget):
                 QtGui.QIcon("./icons/FileIcon.png"))
 
     def set_File_Comment_To_Data_Model(self):
-        self.data_Model.set_File_Data_By_Index_And_Key(
-            self.index, "file_comment", self.ui.TE_Free_Comment.toPlainText())
+        dict_file_data = self.data_Model.get_File_Information(self.index)
+        dict_file_data["comment"] = self.ui.TE_Free_Comment.toPlainText()
+        self.data_Model.set_File_Information(self.index, dict_file_data)
         self.data_Model.save_To_Temporary()
 
     def start_edit_Timer(self):
@@ -148,9 +191,12 @@ class Sub_Widget_Each_Files_Information(QtWidgets.QWidget):
             isTemplate=False,
             index=self.index)
         self.dialog_Edit_Sample_Information.set_Input_Form()
+        self.dialog_Edit_Sample_Information.set_Signal_Update_To_Metadata_Clipboard(
+            self.signal_update_to_metadata_clipboard)
         self.dialog_Edit_Sample_Information.show()
-        self.dialog_Edit_Sample_Information.signal_Update_Form.connect(
-            self.update_Sample_And_Equipment_Information)
+        # self.dialog_Edit_Sample_Information.signal_Update_Form.connect(
+        #     self.update_Sample_And_Equipment_Information)
+
         # print("check sample")
         # self.set_Sample_And_Equipment_Information(self.index)
         # self.update_Title()
@@ -161,36 +207,38 @@ class Sub_Widget_Each_Files_Information(QtWidgets.QWidget):
         # self.sub_Window_Edit_Sample_Information.set_Parent_Signal(
         #     self.signal_Edit_Sample_Information)
         # self.sub_Window_Edit_Sample_Information.show()
-        self.dialog_Edit_Sample_Information = Dialog_Edit_Form(
+        self.dialog_Edit_Equipment_Information = Dialog_Edit_Form(
             data_Model=self.data_Model,
             type_Form="equipment_information",
             isTemplate=False,
             index=self.index)
-        self.dialog_Edit_Sample_Information.set_Input_Form()
-        self.dialog_Edit_Sample_Information.signal_Update_Form.connect(
-            self.update_Sample_And_Equipment_Information)
-        self.dialog_Edit_Sample_Information.show()
+        self.dialog_Edit_Equipment_Information.set_Input_Form()
+        self.dialog_Edit_Equipment_Information.set_Signal_Update_To_Metadata_Clipboard(
+            self.signal_update_to_metadata_clipboard)
+        # self.dialog_Edit_Equipment_Information.signal_Update_Form.connect(
+        #     self.update_Sample_And_Equipment_Information)
+        self.dialog_Edit_Equipment_Information.show()
         # print("check equipment")
         # self.set_Sample_And_Equipment_Information(self.index)
         # self.update_Title()
 
     def set_Sample_And_Equipment_Information(self, index):
-        dict_File_Data = self.data_Model.get_File_Data_By_Index(index)
+        dict_File_Data = self.data_Model.get_File_Information(index)
         str_File_Information = ""
         str_File_Information += "Sample Name: {}\n".format(
-            dict_File_Data["file_sample_name"])
+            dict_File_Data["sample"]["name"])
         str_File_Information += "Sample ID: {}\n".format(
-            dict_File_Data["file_sample_id"])
+            dict_File_Data["sample"]["id"])
         str_File_Information += "Sample Comment: {}\n".format(
-            dict_File_Data["file_sample_comment"])
+            dict_File_Data["sample"]["comment"])
         str_Equipment_Information = ""
         str_Equipment_Information += "Experiment Method: {}\n".format(
-            dict_File_Data["file_equipment_contents"]["experiment_method"])
-        if len(dict_File_Data["file_equipment_contents"]) > 1:
-            for i in range(len(dict_File_Data["file_equipment_contents"]) - 1):
-                key = dict_File_Data["file_equipment_contents"].keys()[i + 1]
+            dict_File_Data["equipment"]["method"])
+        if len(dict_File_Data["equipment"].keys()) > 1:
+            for i in range(len(dict_File_Data["equipment"].keys) - 1):
+                key = dict_File_Data["equipment"].keys()[i + 1]
                 str_Equipment_Information += "{}: {}\n".format(
-                    key, dict_File_Data["file_equipment_content"][key])
+                    key, dict_File_Data["equipment"][key])
         self.ui.TE_SampleInfo.setPlainText(str_File_Information)
         self.ui.TE_EquipmentInfo.setPlainText(str_Equipment_Information)
 

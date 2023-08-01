@@ -27,7 +27,7 @@
    <item>
     <widget class="QLabel" name="LAB_Sample_ID_2">
      <property name="text">
-      <string>Sample ID</string>
+      <string>Sample ID (If you have)</string>
      </property>
     </widget>
    </item>

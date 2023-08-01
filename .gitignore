@@ -1,3 +1,4 @@
+build_client_localtest.bat
 temporary.json
 Data_Model copy.py
 Data_Model-02.py
@@ -20,6 +21,7 @@ forms/Window_Edit_Form.ui
 forms/Window_Edit_Form_ui.py
 forms/Test/*
 
+test.lock
 __pycache__
 forms/__pycache__
 controller/__pycache__
