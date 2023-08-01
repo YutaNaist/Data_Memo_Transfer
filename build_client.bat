@@ -17,6 +17,6 @@ set fileContents=SHARE_DIRECTORY_IN_STORAGE=%share%
 echo %fileContents% >> global_variable.py
 
 pyinstaller.exe Data_Memo_transfer.py -F -w
-@REM pyinstaller.exe Data_Memo_transfer.py -w
+@REM pyinstaller.exe Data_Memo_transfer.py -F
 mkdir /y .\dist\icons
 copy /y .\icons\*.png .\dist\icons\

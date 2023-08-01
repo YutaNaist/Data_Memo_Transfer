@@ -150,8 +150,10 @@ class Window_Main(QtWidgets.QMainWindow):
 
     def refresh_Files(self):
         self.ui.LAB_File_List.setText("File List")
+        #save_Directory = self.data_Model.get_Dict_Data_Model(
+        #    "str_share_directory_in_storage")
         save_Directory = self.data_Model.get_Dict_Data_Model(
-            "str_share_directory_in_storage")
+            "str_save_directory")
         list_Files_In_Save_Directory_Original = glob.glob(save_Directory +
                                                           "**",
                                                           recursive=True)
