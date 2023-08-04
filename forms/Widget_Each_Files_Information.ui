@@ -73,6 +73,9 @@
         <property name="text">
          <string>Upload To NIMS</string>
         </property>
+        <property name="checked">
+         <bool>true</bool>
+        </property>
        </widget>
       </item>
       <item>
@@ -81,7 +84,7 @@
          <string>Not Upload</string>
         </property>
         <property name="checked">
-         <bool>true</bool>
+         <bool>false</bool>
         </property>
         <property name="autoRepeat">
          <bool>false</bool>
