@@ -99,6 +99,7 @@ class Dialog_Set_Initial(QtWidgets.QDialog):
         self.setWindowTitle("Set Initial Information 2/3")
 
     def finish_Set(self):
+        self.data_Model.write_to_logger("finish initialization.")
         self.sub_Widget_Equipment_Information.set_To_Data_Model()
         self.data_Model.save_To_Temporary()
         self.window_Main = Window_Main(data_Model=self.data_Model)

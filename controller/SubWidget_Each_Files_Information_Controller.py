@@ -1,4 +1,6 @@
-from forms.Widget_Each_Files_Information_ui import Ui_Form as Ui_Widget_Each_Files_Information
+from forms.Widget_Each_Files_Information_ui import (
+    Ui_Form as Ui_Widget_Each_Files_Information,
+)
 
 # from controller.SubWidget_Sample_Information_Controller import Sub_Widget_Sample_Information
 # from controller.SubWidget_Equipment_Information_Controller import Sub_Widget_Equipment_Information
@@ -32,9 +34,9 @@ class Sub_Widget_Each_Files_Information(QtWidgets.QWidget):
             self.data_Model = data_Model
         else:
             self.data_Model = DataModel()
-        print()
-        print(self.data_Model.get_All_Dict_Data_Model())
-        print()
+        # print()
+        # print(self.data_Model.get_All_Dict_Data_Model())
+        # print()
 
         if self.data_Model.get_Dict_Data_Model("is_upload_arim") is False:
             # self.ui.GB_ARIM_Upload.setVisible(False)
@@ -42,10 +44,8 @@ class Sub_Widget_Each_Files_Information(QtWidgets.QWidget):
             self.ui.RB_ARIM_Not_Upload.setVisible(False)
 
         self.set_Signal()
-        self.ui.PB_Edit_Equipment_Information.setIcon(
-            QtGui.QIcon("./icons/edit.png"))
-        self.ui.PB_Edit_Sample_Information.setIcon(
-            QtGui.QIcon("./icons/edit.png"))
+        self.ui.PB_Edit_Equipment_Information.setIcon(QtGui.QIcon("./icons/edit.png"))
+        self.ui.PB_Edit_Sample_Information.setIcon(QtGui.QIcon("./icons/edit.png"))
 
     def set_Signal(self):
         self.ui.RB_Valid.clicked.connect(self.set_Status_Classified)
@@ -57,18 +57,17 @@ class Sub_Widget_Each_Files_Information(QtWidgets.QWidget):
         #     self.set_File_Comment_To_Data_Model)
         self.ui.TE_Free_Comment.textChanged.connect(self.start_edit_Timer)
         self.timer.timeout.connect(self.set_File_Comment_To_Data_Model)
-        self.ui.PB_Edit_Sample_Information.clicked.connect(
-            self.edit_Sample_Information)
+        self.ui.PB_Edit_Sample_Information.clicked.connect(self.edit_Sample_Information)
         self.ui.PB_Edit_Equipment_Information.clicked.connect(
-            self.edit_Equipment_Information)
-        self.signal_Edit_Sample_Information.connect(
-            self.set_Text_From_Data_Model)
+            self.edit_Equipment_Information
+        )
+        self.signal_Edit_Sample_Information.connect(self.set_Text_From_Data_Model)
 
-    def set_Signal_Update_To_Metadata_Clipboard(self,
-                                                signal: QtCore.pyqtSignal):
+    def set_Signal_Update_To_Metadata_Clipboard(self, signal: QtCore.pyqtSignal):
         self.signal_update_to_metadata_clipboard = signal
         self.signal_update_to_metadata_clipboard.connect(
-            self.update_Sample_And_Equipment_Information)
+            self.update_Sample_And_Equipment_Information
+        )
 
         # self.dialog_Edit_Sample_Information.signal_Update_Form.connect(
         #     self.update_Sample_And_Equipment_Information)
@@ -162,13 +161,15 @@ class Sub_Widget_Each_Files_Information(QtWidgets.QWidget):
             self.parent_Widget.setItemIcon(
                 # self.parent_Index, QtGui.QIcon("./icons/NotClassified.png"))
                 self.parent_Index,
-                QtGui.QIcon("./icons/FileIcon_red.png"))
+                QtGui.QIcon("./icons/FileIcon_red.png"),
+            )
         else:
             self.parent_Widget.setItemText(self.parent_Index, self.file_Name)
             self.parent_Widget.setItemIcon(
                 # self.parent_Index, QtGui.QIcon("./icons/Classified.png"))
                 self.parent_Index,
-                QtGui.QIcon("./icons/FileIcon.png"))
+                QtGui.QIcon("./icons/FileIcon.png"),
+            )
 
     def set_File_Comment_To_Data_Model(self):
         dict_file_data = self.data_Model.get_File_Information(self.index)
@@ -189,10 +190,12 @@ class Sub_Widget_Each_Files_Information(QtWidgets.QWidget):
             data_Model=self.data_Model,
             type_Form="sample_information",
             isTemplate=False,
-            index=self.index)
+            index=self.index,
+        )
         self.dialog_Edit_Sample_Information.set_Input_Form()
         self.dialog_Edit_Sample_Information.set_Signal_Update_To_Metadata_Clipboard(
-            self.signal_update_to_metadata_clipboard)
+            self.signal_update_to_metadata_clipboard
+        )
         self.dialog_Edit_Sample_Information.show()
         # self.dialog_Edit_Sample_Information.signal_Update_Form.connect(
         #     self.update_Sample_And_Equipment_Information)
@@ -211,10 +214,12 @@ class Sub_Widget_Each_Files_Information(QtWidgets.QWidget):
             data_Model=self.data_Model,
             type_Form="equipment_information",
             isTemplate=False,
-            index=self.index)
+            index=self.index,
+        )
         self.dialog_Edit_Equipment_Information.set_Input_Form()
         self.dialog_Edit_Equipment_Information.set_Signal_Update_To_Metadata_Clipboard(
-            self.signal_update_to_metadata_clipboard)
+            self.signal_update_to_metadata_clipboard
+        )
         # self.dialog_Edit_Equipment_Information.signal_Update_Form.connect(
         #     self.update_Sample_And_Equipment_Information)
         self.dialog_Edit_Equipment_Information.show()
@@ -226,19 +231,22 @@ class Sub_Widget_Each_Files_Information(QtWidgets.QWidget):
         dict_File_Data = self.data_Model.get_File_Information(index)
         str_File_Information = ""
         str_File_Information += "Sample Name: {}\n".format(
-            dict_File_Data["sample"]["name"])
-        str_File_Information += "Sample ID: {}\n".format(
-            dict_File_Data["sample"]["id"])
+            dict_File_Data["sample"]["name"]
+        )
+        str_File_Information += "Sample ID: {}\n".format(dict_File_Data["sample"]["id"])
         str_File_Information += "Sample Comment: {}\n".format(
-            dict_File_Data["sample"]["comment"])
+            dict_File_Data["sample"]["comment"]
+        )
         str_Equipment_Information = ""
         str_Equipment_Information += "Experiment Method: {}\n".format(
-            dict_File_Data["equipment"]["method"])
+            dict_File_Data["equipment"]["method"]
+        )
         if len(dict_File_Data["equipment"].keys()) > 1:
             for i in range(len(dict_File_Data["equipment"].keys) - 1):
                 key = dict_File_Data["equipment"].keys()[i + 1]
                 str_Equipment_Information += "{}: {}\n".format(
-                    key, dict_File_Data["equipment"][key])
+                    key, dict_File_Data["equipment"][key]
+                )
         self.ui.TE_SampleInfo.setPlainText(str_File_Information)
         self.ui.TE_EquipmentInfo.setPlainText(str_Equipment_Information)
 

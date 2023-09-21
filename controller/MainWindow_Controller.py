@@ -80,6 +80,7 @@ class Window_Main(QtWidgets.QMainWindow):
         pass
 
     def initialize_Forms(self):
+        self.data_Model.write_to_logger("Start to initialize forms.")
         self.ui.PB_Experiment_Title_Edit.setIcon(
             QtGui.QIcon("./icons/edit.png"))
         self.ui.PB_Sample_ID_Edit.setIcon(QtGui.QIcon("./icons/edit.png"))
@@ -107,6 +108,7 @@ class Window_Main(QtWidgets.QMainWindow):
         self.ui.VL_Equipment.addWidget(self.sub_Widget_Equipment)
 
         self.set_Template_Form_By_Data_Model()
+        self.data_Model.write_to_logger("finish initializing main window forms")
         # if self.data_Model.get_File_Names() != []:
         #     self.refresh_Files()
 
@@ -149,11 +151,13 @@ class Window_Main(QtWidgets.QMainWindow):
         self.window_Edit_Form.show()
 
     def refresh_Files(self):
+        self.data_Model.write_to_logger("start refresh files")
         self.ui.LAB_File_List.setText("File List")
         #save_Directory = self.data_Model.get_Dict_Data_Model(
         #    "str_share_directory_in_storage")
         save_Directory = self.data_Model.get_Dict_Data_Model(
             "str_save_directory")
+        self.data_Model.write_to_logger("Save directory: {}".format(save_Directory))
         list_Files_In_Save_Directory_Original = glob.glob(save_Directory +
                                                           "**",
                                                           recursive=True)
@@ -247,10 +251,12 @@ class Window_Main(QtWidgets.QMainWindow):
         # self.ui.toolBox.currentWidget().setMinimumHeight(300)
         # self.ui.toolBox.widget(i).setMinimumHeight(500)
         self.data_Model.save_To_Temporary()
+        self.data_Model.write_to_logger("end refresh files")
 
     def finish_Experiment(self):
-        experiment_ID = self.data_Model.get_Dict_Data_Model(
-            "str_experiment_id")
+        self.data_Model.write_to_logger("Finish experiment procedure starting.")
+        # experiment_ID = self.data_Model.get_Dict_Data_Model(
+        #     "str_experiment_id")
         self.messageSender = senderMessageToDiamond(
             self.data_Model.get_Dict_Data_Model("str_url_diamond"))
         if self.data_Model.get_Dict_Data_Model("is_upload_arim") is True:
@@ -297,9 +303,13 @@ class Window_Main(QtWidgets.QMainWindow):
                 msgBox.setStandardButtons(QtWidgets.QMessageBox.Ok)
                 retval = msgBox.exec_()
                 os.remove("./temporary.json")
+                self.data_Model.write_to_logger("Finish all procedure.")
                 return True
             else:
                 msgBox.setText(response["message"])
                 msgBox.setStandardButtons(QtWidgets.QMessageBox.Ok)
                 retval = msgBox.exec_()
+                self.data_Model.write_to_logger("any error occurs: {}.".format(response["message"]))
                 return False
+        else:
+            self.data_Model.write_to_logger("canceled.")

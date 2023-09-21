@@ -41,13 +41,13 @@ class Dialog_Ask_ID(QtWidgets.QDialog):
     '''
 
     def log_In_To_Diamond(self):
+        self.data_Model.write_to_logger("Log in to diamond")
         str_Experiment_ID = self.ui.LE_Experiment_ID.text()
         str_Experiment_ID = self.check_ID_Request_To_Diamond(str_Experiment_ID)
         if str_Experiment_ID is not None:
             message_MetaData = self.messageSender.sendRequestCopyOriginal(
                 str_Experiment_ID, self.data_Model)
             self.messageSender.sendRequestStartExperiment(str_Experiment_ID)
-            # print(message_MetaData)
             if self.data_Model.get_Dict_Data_Model(
                     "is_exist_temp_file") is False:
                 experiment_Information = message_MetaData["args"][
@@ -74,7 +74,7 @@ class Dialog_Ask_ID(QtWidgets.QDialog):
         msgBox = QtWidgets.QMessageBox()
         flag_return_experiment_id = False
         if experiment_ID != "":
-            print(experiment_ID)
+            self.data_Model.write_to_logger("Ask experiment ID: {} to diamond".format(experiment_ID))
             reply = self.messageSender.sendRequestCheckID(experiment_ID)
             if reply["status"] is True:
                 if experiment_ID != self.data_Model.get_Dict_Data_Model(
