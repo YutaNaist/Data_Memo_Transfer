@@ -20,7 +20,7 @@ forms/Window_Edit_File_Information_ui.py
 forms/Window_Edit_Form.ui
 forms/Window_Edit_Form_ui.py
 forms/Test/*
-
+build/*
 test.lock
 __pycache__
 forms/__pycache__
