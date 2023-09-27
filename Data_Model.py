@@ -29,6 +29,7 @@ class DataModel:
             "is_exist_temp_file",
             "dict_clipboard",
             "list_file_data",
+            "str_parent_id_in_google_drive",
         ]
         self.list_keys_data = [
             "filename",
@@ -53,6 +54,7 @@ class DataModel:
         self.dict_Data_Model["is_exist_temp_file"] = False
         self.dict_Data_Model["is_upload_arim"] = False
         self.dict_Data_Model["is_share_with_google"] = False
+        self.dict_Data_Model["str_parent_id_in_google_drive"] = ""
         # self.dict_Data_Model["list_file_name"] = []
         self.dict_Data_Model["dict_clipboard"] = {}
         self.dict_Data_Model["list_file_data"] = []
@@ -306,14 +308,14 @@ class DataModel:
     def set_logger(self, logger: logging.Logger) -> None:
         self.logger = logger
 
-    def write_to_logger(self, msg:str, mode:str="debug")-> None:
-        if mode=="error":
+    def write_to_logger(self, msg: str, mode: str = "debug") -> None:
+        if mode == "error":
             self.logger.error(msg)
-        elif mode=="warning":
+        elif mode == "warning":
             self.logger.warning(msg)
-        elif mode=="critical":
+        elif mode == "critical":
             self.logger.critical(msg)
-        elif mode=="info":
+        elif mode == "info":
             self.logger.info(msg)
         else:
             self.logger.debug(msg)
