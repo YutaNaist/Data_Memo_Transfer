@@ -202,3 +202,6 @@
 2023-09-27 09:59:35,308 - DEBUG - Data_Model.py - write_to_logger -38088 - save temporary
 2023-09-27 09:59:35,311 - DEBUG - Data_Model.py - write_to_logger -38088 - save temporary
 2023-09-27 09:59:36,059 - DEBUG - Data_Model.py - write_to_logger -38088 - Finish all procedure.
+2024-02-20 17:12:30,467 - DEBUG - Data_Model.py - write_to_logger -11004 - Start Data Memo Transfer.
+2024-02-20 17:12:58,983 - DEBUG - Data_Model.py - write_to_logger -11004 - Log in to diamond
+2024-02-20 17:12:58,983 - DEBUG - Data_Model.py - write_to_logger -11004 - Ask experiment ID to diamond
