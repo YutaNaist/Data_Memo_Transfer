@@ -16,6 +16,8 @@ class senderMessageToDiamond:
             'Check_And_Get_Single_Proposal', 'Get_Meta_Data',
             'Copy_From_Original_To_Share', 'Start_Experiment'
         ]
+        self.session = requests.Session()
+        self.session.trust_env = False
         pass
 
     def sendMessage(self, command: str, args: dict) -> dict:
@@ -27,9 +29,12 @@ class senderMessageToDiamond:
                 "identifier": identifier
             })
             headers = {'Content-type': 'application/json'}
-            response = requests.post(self._url,
+            # response = requests.post(self._url,
+            #                         data=json_data,
+            #                         headers=headers, proxies={})
+            response = self.session.post(self._url,
                                      data=json_data,
-                                     headers=headers)
+                                     headers=headers, proxies={})
 
             statusCode = response.status_code
             if statusCode == 500:
