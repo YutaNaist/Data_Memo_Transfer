@@ -205,3 +205,6 @@
 2024-02-20 17:12:30,467 - DEBUG - Data_Model.py - write_to_logger -11004 - Start Data Memo Transfer.
 2024-02-20 17:12:58,983 - DEBUG - Data_Model.py - write_to_logger -11004 - Log in to diamond
 2024-02-20 17:12:58,983 - DEBUG - Data_Model.py - write_to_logger -11004 - Ask experiment ID to diamond
+2024-04-05 12:02:50,612 - DEBUG - Data_Model.py - write_to_logger -14252 - Start Data Memo Transfer.
+2024-04-05 12:46:28,319 - DEBUG - Data_Model.py - write_to_logger -2732 - Start Data Memo Transfer.
+2024-04-05 14:51:54,055 - DEBUG - Data_Model.py - write_to_logger -12472 - Start Data Memo Transfer.

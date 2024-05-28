@@ -13,7 +13,7 @@ import portalocker
 # from PyQt5 import QtGui
 from PyQt5 import QtWidgets
 
-import global_variable_NR_101 as global_variable
+import global_variable_NR_301 as global_variable
 
 URL_DIAMOND = global_variable.URL_DIAMOND
 SAVE_DIRECTORY = global_variable.SAVE_DIRECTORY

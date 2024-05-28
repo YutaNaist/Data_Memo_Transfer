@@ -258,7 +258,7 @@ class Window_Main(QtWidgets.QMainWindow):
         # experiment_ID = self.data_Model.get_Dict_Data_Model(
         #     "str_experiment_id")
         self.messageSender = senderMessageToDiamond(
-            self.data_Model.get_Dict_Data_Model("str_url_diamond"))
+            self.data_Model.get_Dict_Data_Model("str_url_diamond"), self.data_Model)
         if self.data_Model.get_Dict_Data_Model("is_upload_arim") is True:
             list_file_data = self.data_Model.get_All_File_Information()
             flag_checked_arim = False
