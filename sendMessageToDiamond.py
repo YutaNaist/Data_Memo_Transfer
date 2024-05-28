@@ -7,9 +7,9 @@ from Data_Model import DataModel
 
 class senderMessageToDiamond:
 
-    def __init__(self, url):
+    def __init__(self, url, dataModel):
         self._url = url
-        self.data_Model = DataModel()
+        self.data_Model = dataModel
         self.commandList = [
             'Check_UsageID', 'Finish_Experiment',
             'read_Use_Information_From_Shared_Excel',
@@ -20,8 +20,10 @@ class senderMessageToDiamond:
         self.session.trust_env = False
         pass
 
+
     def sendMessage(self, command: str, args: dict) -> dict:
         try:
+            print("check")
             identifier = int(random.random() * 1000000000)
             json_data = json.dumps({
                 "command": command,
@@ -32,9 +34,13 @@ class senderMessageToDiamond:
             # response = requests.post(self._url,
             #                         data=json_data,
             #                         headers=headers, proxies={})
+            #self.data_Model.write_to_logger(data)
+            print(json_data)
             response = self.session.post(self._url,
                                      data=json_data,
                                      headers=headers, proxies={})
+            #self.data_Model.write_to_logger(response)
+            print(response)
 
             statusCode = response.status_code
             if statusCode == 500:

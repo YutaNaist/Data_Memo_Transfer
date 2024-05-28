@@ -1,5 +1,5 @@
-(['C:\\Users\\yamamoto.yuta\\Data_Memo_Transfer\\Data_Memo_transfer.py'],
- ['C:\\Users\\yamamoto.yuta\\Data_Memo_Transfer'],
+(['C:\\Program Files\\Data_Memo_Transfer\\Data_Memo_transfer.py'],
+ ['C:\\Program Files\\Data_Memo_Transfer'],
  ['codecs'],
  ['C:\\Program Files\\Python310\\Lib\\site-packages\\numpy\\_pyinstaller',
   'C:\\Program Files\\Python310\\lib\\site-packages\\pydrive2\\__pyinstaller',
@@ -41,7 +41,7 @@
    'Files\\Python310\\Lib\\site-packages\\_pyinstaller_hooks_contrib\\hooks\\rthooks\\pyi_rth_pywintypes.py',
    'PYSOURCE'),
   ('Data_Memo_Transfer',
-   'C:\\Users\\yamamoto.yuta\\Data_Memo_Transfer\\Data_Memo_Transfer.py',
+   'C:\\Program Files\\Data_Memo_Transfer\\Data_Memo_Transfer.py',
    'PYSOURCE')],
  [('pkgutil', 'C:\\Program Files\\Python310\\lib\\pkgutil.py', 'PYMODULE'),
   ('zipimport', 'C:\\Program Files\\Python310\\lib\\zipimport.py', 'PYMODULE'),
@@ -213,6 +213,14 @@
    'C:\\Program Files\\Python310\\lib\\importlib\\_adapters.py',
    'PYMODULE'),
   ('tempfile', 'C:\\Program Files\\Python310\\lib\\tempfile.py', 'PYMODULE'),
+  ('stringprep',
+   'C:\\Program Files\\Python310\\lib\\stringprep.py',
+   'PYMODULE'),
+  ('_py_abc', 'C:\\Program Files\\Python310\\lib\\_py_abc.py', 'PYMODULE'),
+  ('subprocess',
+   'C:\\Program Files\\Python310\\lib\\subprocess.py',
+   'PYMODULE'),
+  ('signal', 'C:\\Program Files\\Python310\\lib\\signal.py', 'PYMODULE'),
   ('tracemalloc',
    'C:\\Program Files\\Python310\\lib\\tracemalloc.py',
    'PYMODULE'),
@@ -223,14 +231,6 @@
    'PYMODULE'),
   ('_compat_pickle',
    'C:\\Program Files\\Python310\\lib\\_compat_pickle.py',
-   'PYMODULE'),
-  ('_py_abc', 'C:\\Program Files\\Python310\\lib\\_py_abc.py', 'PYMODULE'),
-  ('subprocess',
-   'C:\\Program Files\\Python310\\lib\\subprocess.py',
-   'PYMODULE'),
-  ('signal', 'C:\\Program Files\\Python310\\lib\\signal.py', 'PYMODULE'),
-  ('stringprep',
-   'C:\\Program Files\\Python310\\lib\\stringprep.py',
    'PYMODULE'),
   ('getpass', 'C:\\Program Files\\Python310\\lib\\getpass.py', 'PYMODULE'),
   ('nturl2path',
@@ -248,27 +248,24 @@
   ('http.client',
    'C:\\Program Files\\Python310\\lib\\http\\client.py',
    'PYMODULE'),
-  ('global_variable_NR_101',
-   'C:\\Users\\yamamoto.yuta\\Data_Memo_Transfer\\global_variable_NR_101.py',
-   'PYMODULE'),
   ('PyQt5',
    'C:\\Program Files\\Python310\\lib\\site-packages\\PyQt5\\__init__.py',
    'PYMODULE'),
   ('portalocker',
-   'C:\\Users\\yamamoto.yuta\\Data_Memo_Transfer\\portalocker.py',
+   'C:\\Program Files\\Data_Memo_Transfer\\portalocker.py',
    'PYMODULE'),
   ('pywintypes',
-   'C:\\Users\\yamamoto.yuta\\AppData\\Roaming\\Python\\Python310\\site-packages\\win32\\lib\\pywintypes.py',
+   'C:\\Users\\xrd-sl-str-admin\\AppData\\Roaming\\Python\\Python310\\site-packages\\win32\\lib\\pywintypes.py',
    'PYMODULE'),
   ('pywin32_system32', '-', 'PYMODULE'),
   ('win32con',
-   'C:\\Users\\yamamoto.yuta\\AppData\\Roaming\\Python\\Python310\\site-packages\\win32\\lib\\win32con.py',
+   'C:\\Users\\xrd-sl-str-admin\\AppData\\Roaming\\Python\\Python310\\site-packages\\win32\\lib\\win32con.py',
    'PYMODULE'),
   ('logging',
    'C:\\Program Files\\Python310\\lib\\logging\\__init__.py',
    'PYMODULE'),
   ('Data_Model',
-   'C:\\Users\\yamamoto.yuta\\Data_Memo_Transfer\\Data_Model.py',
+   'C:\\Program Files\\Data_Memo_Transfer\\Data_Model.py',
    'PYMODULE'),
   ('json', 'C:\\Program Files\\Python310\\lib\\json\\__init__.py', 'PYMODULE'),
   ('json.encoder',
@@ -281,11 +278,12 @@
    'C:\\Program Files\\Python310\\lib\\json\\scanner.py',
    'PYMODULE'),
   ('controller.Dialog_Ask_Experiment_Controller',
-   'C:\\Users\\yamamoto.yuta\\Data_Memo_Transfer\\controller\\Dialog_Ask_Experiment_Controller.py',
+   'C:\\Program '
+   'Files\\Data_Memo_Transfer\\controller\\Dialog_Ask_Experiment_Controller.py',
    'PYMODULE'),
   ('controller', '-', 'PYMODULE'),
   ('sendMessageToDiamond',
-   'C:\\Users\\yamamoto.yuta\\Data_Memo_Transfer\\sendMessageToDiamond.py',
+   'C:\\Program Files\\Data_Memo_Transfer\\sendMessageToDiamond.py',
    'PYMODULE'),
   ('requests',
    'C:\\Program Files\\Python310\\lib\\site-packages\\requests\\__init__.py',
@@ -759,59 +757,122 @@
    'C:\\Program Files\\Python310\\lib\\site-packages\\urllib3\\__init__.py',
    'PYMODULE'),
   ('controller.Dialog_Set_Initial_Controller',
-   'C:\\Users\\yamamoto.yuta\\Data_Memo_Transfer\\controller\\Dialog_Set_Initial_Controller.py',
+   'C:\\Program '
+   'Files\\Data_Memo_Transfer\\controller\\Dialog_Set_Initial_Controller.py',
    'PYMODULE'),
   ('controller.MainWindow_Controller',
-   'C:\\Users\\yamamoto.yuta\\Data_Memo_Transfer\\controller\\MainWindow_Controller.py',
+   'C:\\Program '
+   'Files\\Data_Memo_Transfer\\controller\\MainWindow_Controller.py',
    'PYMODULE'),
   ('glob', 'C:\\Program Files\\Python310\\lib\\glob.py', 'PYMODULE'),
   ('controller.SubWidget_Each_Files_Information_Controller',
-   'C:\\Users\\yamamoto.yuta\\Data_Memo_Transfer\\controller\\SubWidget_Each_Files_Information_Controller.py',
+   'C:\\Program '
+   'Files\\Data_Memo_Transfer\\controller\\SubWidget_Each_Files_Information_Controller.py',
    'PYMODULE'),
   ('forms.Widget_Each_Files_Information_ui',
-   'C:\\Users\\yamamoto.yuta\\Data_Memo_Transfer\\forms\\Widget_Each_Files_Information_ui.py',
+   'C:\\Program '
+   'Files\\Data_Memo_Transfer\\forms\\Widget_Each_Files_Information_ui.py',
    'PYMODULE'),
   ('forms', '-', 'PYMODULE'),
   ('controller.Dialog_Edit_Form_Controller',
-   'C:\\Users\\yamamoto.yuta\\Data_Memo_Transfer\\controller\\Dialog_Edit_Form_Controller.py',
+   'C:\\Program '
+   'Files\\Data_Memo_Transfer\\controller\\Dialog_Edit_Form_Controller.py',
    'PYMODULE'),
   ('forms.Dialog_Edit_Form_ui',
-   'C:\\Users\\yamamoto.yuta\\Data_Memo_Transfer\\forms\\Dialog_Edit_Form_ui.py',
+   'C:\\Program Files\\Data_Memo_Transfer\\forms\\Dialog_Edit_Form_ui.py',
    'PYMODULE'),
   ('forms.MainWindow_ui',
-   'C:\\Users\\yamamoto.yuta\\Data_Memo_Transfer\\forms\\MainWindow_ui.py',
+   'C:\\Program Files\\Data_Memo_Transfer\\forms\\MainWindow_ui.py',
    'PYMODULE'),
   ('controller.SubWidget_Equipment_Information_Controller',
-   'C:\\Users\\yamamoto.yuta\\Data_Memo_Transfer\\controller\\SubWidget_Equipment_Information_Controller.py',
+   'C:\\Program '
+   'Files\\Data_Memo_Transfer\\controller\\SubWidget_Equipment_Information_Controller.py',
    'PYMODULE'),
   ('forms.Widget_Equipment_Information_ui',
-   'C:\\Users\\yamamoto.yuta\\Data_Memo_Transfer\\forms\\Widget_Equipment_Information_ui.py',
+   'C:\\Program '
+   'Files\\Data_Memo_Transfer\\forms\\Widget_Equipment_Information_ui.py',
    'PYMODULE'),
   ('controller.SubWidget_Sample_Information_Controller',
-   'C:\\Users\\yamamoto.yuta\\Data_Memo_Transfer\\controller\\SubWidget_Sample_Information_Controller.py',
+   'C:\\Program '
+   'Files\\Data_Memo_Transfer\\controller\\SubWidget_Sample_Information_Controller.py',
    'PYMODULE'),
   ('forms.Widget_Sample_Information_ui',
-   'C:\\Users\\yamamoto.yuta\\Data_Memo_Transfer\\forms\\Widget_Sample_Information_ui.py',
+   'C:\\Program '
+   'Files\\Data_Memo_Transfer\\forms\\Widget_Sample_Information_ui.py',
    'PYMODULE'),
   ('controller.SubWidget_Experiment_Information_Controller',
-   'C:\\Users\\yamamoto.yuta\\Data_Memo_Transfer\\controller\\SubWidget_Experiment_Information_Controller.py',
+   'C:\\Program '
+   'Files\\Data_Memo_Transfer\\controller\\SubWidget_Experiment_Information_Controller.py',
    'PYMODULE'),
   ('forms.Widget_Experiment_Information_ui',
-   'C:\\Users\\yamamoto.yuta\\Data_Memo_Transfer\\forms\\Widget_Experiment_Information_ui.py',
+   'C:\\Program '
+   'Files\\Data_Memo_Transfer\\forms\\Widget_Experiment_Information_ui.py',
    'PYMODULE'),
   ('forms.Dialog_Set_Initial_ui',
-   'C:\\Users\\yamamoto.yuta\\Data_Memo_Transfer\\forms\\Dialog_Set_Initial_ui.py',
+   'C:\\Program Files\\Data_Memo_Transfer\\forms\\Dialog_Set_Initial_ui.py',
    'PYMODULE'),
   ('forms.Dialog_Ask_Experiment_ID_ui',
-   'C:\\Users\\yamamoto.yuta\\Data_Memo_Transfer\\forms\\Dialog_Ask_Experiment_ID_ui.py',
+   'C:\\Program '
+   'Files\\Data_Memo_Transfer\\forms\\Dialog_Ask_Experiment_ID_ui.py',
    'PYMODULE')],
  [('VCRUNTIME140.dll',
    'C:\\Program Files\\Python310\\VCRUNTIME140.dll',
    'BINARY'),
   ('python310.dll', 'C:\\Program Files\\Python310\\python310.dll', 'BINARY'),
+  ('PyQt5\\Qt5\\plugins\\imageformats\\qwebp.dll',
+   'C:\\Program '
+   'Files\\Python310\\lib\\site-packages\\PyQt5\\Qt5\\plugins\\imageformats\\qwebp.dll',
+   'BINARY'),
+  ('PyQt5\\Qt5\\plugins\\imageformats\\qicns.dll',
+   'C:\\Program '
+   'Files\\Python310\\lib\\site-packages\\PyQt5\\Qt5\\plugins\\imageformats\\qicns.dll',
+   'BINARY'),
+  ('pywin32_system32\\pywintypes310.dll',
+   'C:\\Users\\xrd-sl-str-admin\\AppData\\Roaming\\Python\\Python310\\site-packages\\pywin32_system32\\pywintypes310.dll',
+   'BINARY'),
+  ('PyQt5\\Qt5\\plugins\\platformthemes\\qxdgdesktopportal.dll',
+   'C:\\Program '
+   'Files\\Python310\\lib\\site-packages\\PyQt5\\Qt5\\plugins\\platformthemes\\qxdgdesktopportal.dll',
+   'BINARY'),
   ('PyQt5\\Qt5\\bin\\d3dcompiler_47.dll',
    'C:\\Program '
    'Files\\Python310\\Lib\\site-packages\\PyQt5\\Qt5\\bin\\d3dcompiler_47.dll',
+   'BINARY'),
+  ('PyQt5\\Qt5\\plugins\\platforms\\qwebgl.dll',
+   'C:\\Program '
+   'Files\\Python310\\lib\\site-packages\\PyQt5\\Qt5\\plugins\\platforms\\qwebgl.dll',
+   'BINARY'),
+  ('PyQt5\\Qt5\\plugins\\imageformats\\qwbmp.dll',
+   'C:\\Program '
+   'Files\\Python310\\lib\\site-packages\\PyQt5\\Qt5\\plugins\\imageformats\\qwbmp.dll',
+   'BINARY'),
+  ('PyQt5\\Qt5\\plugins\\imageformats\\qtiff.dll',
+   'C:\\Program '
+   'Files\\Python310\\lib\\site-packages\\PyQt5\\Qt5\\plugins\\imageformats\\qtiff.dll',
+   'BINARY'),
+  ('PyQt5\\Qt5\\plugins\\platforms\\qoffscreen.dll',
+   'C:\\Program '
+   'Files\\Python310\\lib\\site-packages\\PyQt5\\Qt5\\plugins\\platforms\\qoffscreen.dll',
+   'BINARY'),
+  ('PyQt5\\Qt5\\plugins\\platforms\\qminimal.dll',
+   'C:\\Program '
+   'Files\\Python310\\lib\\site-packages\\PyQt5\\Qt5\\plugins\\platforms\\qminimal.dll',
+   'BINARY'),
+  ('PyQt5\\Qt5\\plugins\\generic\\qtuiotouchplugin.dll',
+   'C:\\Program '
+   'Files\\Python310\\lib\\site-packages\\PyQt5\\Qt5\\plugins\\generic\\qtuiotouchplugin.dll',
+   'BINARY'),
+  ('PyQt5\\Qt5\\bin\\opengl32sw.dll',
+   'C:\\Program '
+   'Files\\Python310\\Lib\\site-packages\\PyQt5\\Qt5\\bin\\opengl32sw.dll',
+   'BINARY'),
+  ('PyQt5\\Qt5\\plugins\\imageformats\\qsvg.dll',
+   'C:\\Program '
+   'Files\\Python310\\lib\\site-packages\\PyQt5\\Qt5\\plugins\\imageformats\\qsvg.dll',
+   'BINARY'),
+  ('PyQt5\\Qt5\\bin\\libGLESv2.dll',
+   'C:\\Program '
+   'Files\\Python310\\Lib\\site-packages\\PyQt5\\Qt5\\bin\\libGLESv2.dll',
    'BINARY'),
   ('PyQt5\\Qt5\\plugins\\imageformats\\qtga.dll',
    'C:\\Program '
@@ -821,80 +882,29 @@
    'C:\\Program '
    'Files\\Python310\\lib\\site-packages\\PyQt5\\Qt5\\plugins\\imageformats\\qjpeg.dll',
    'BINARY'),
-  ('PyQt5\\Qt5\\plugins\\imageformats\\qtiff.dll',
-   'C:\\Program '
-   'Files\\Python310\\lib\\site-packages\\PyQt5\\Qt5\\plugins\\imageformats\\qtiff.dll',
-   'BINARY'),
-  ('PyQt5\\Qt5\\plugins\\iconengines\\qsvgicon.dll',
-   'C:\\Program '
-   'Files\\Python310\\lib\\site-packages\\PyQt5\\Qt5\\plugins\\iconengines\\qsvgicon.dll',
-   'BINARY'),
-  ('PyQt5\\Qt5\\plugins\\imageformats\\qicns.dll',
-   'C:\\Program '
-   'Files\\Python310\\lib\\site-packages\\PyQt5\\Qt5\\plugins\\imageformats\\qicns.dll',
-   'BINARY'),
-  ('PyQt5\\Qt5\\bin\\libGLESv2.dll',
-   'C:\\Program '
-   'Files\\Python310\\Lib\\site-packages\\PyQt5\\Qt5\\bin\\libGLESv2.dll',
-   'BINARY'),
-  ('PyQt5\\Qt5\\plugins\\platforms\\qminimal.dll',
-   'C:\\Program '
-   'Files\\Python310\\lib\\site-packages\\PyQt5\\Qt5\\plugins\\platforms\\qminimal.dll',
-   'BINARY'),
-  ('PyQt5\\Qt5\\plugins\\imageformats\\qgif.dll',
-   'C:\\Program '
-   'Files\\Python310\\lib\\site-packages\\PyQt5\\Qt5\\plugins\\imageformats\\qgif.dll',
-   'BINARY'),
   ('PyQt5\\Qt5\\plugins\\imageformats\\qico.dll',
    'C:\\Program '
    'Files\\Python310\\lib\\site-packages\\PyQt5\\Qt5\\plugins\\imageformats\\qico.dll',
-   'BINARY'),
-  ('PyQt5\\Qt5\\plugins\\platforms\\qoffscreen.dll',
-   'C:\\Program '
-   'Files\\Python310\\lib\\site-packages\\PyQt5\\Qt5\\plugins\\platforms\\qoffscreen.dll',
-   'BINARY'),
-  ('PyQt5\\Qt5\\plugins\\imageformats\\qwbmp.dll',
-   'C:\\Program '
-   'Files\\Python310\\lib\\site-packages\\PyQt5\\Qt5\\plugins\\imageformats\\qwbmp.dll',
-   'BINARY'),
-  ('PyQt5\\Qt5\\plugins\\platforms\\qwebgl.dll',
-   'C:\\Program '
-   'Files\\Python310\\lib\\site-packages\\PyQt5\\Qt5\\plugins\\platforms\\qwebgl.dll',
-   'BINARY'),
-  ('PyQt5\\Qt5\\plugins\\platformthemes\\qxdgdesktopportal.dll',
-   'C:\\Program '
-   'Files\\Python310\\lib\\site-packages\\PyQt5\\Qt5\\plugins\\platformthemes\\qxdgdesktopportal.dll',
-   'BINARY'),
-  ('PyQt5\\Qt5\\plugins\\imageformats\\qwebp.dll',
-   'C:\\Program '
-   'Files\\Python310\\lib\\site-packages\\PyQt5\\Qt5\\plugins\\imageformats\\qwebp.dll',
-   'BINARY'),
-  ('pywin32_system32\\pywintypes310.dll',
-   'C:\\Users\\yamamoto.yuta\\AppData\\Roaming\\Python\\Python310\\site-packages\\pywin32_system32\\pywintypes310.dll',
-   'BINARY'),
-  ('PyQt5\\Qt5\\plugins\\imageformats\\qsvg.dll',
-   'C:\\Program '
-   'Files\\Python310\\lib\\site-packages\\PyQt5\\Qt5\\plugins\\imageformats\\qsvg.dll',
-   'BINARY'),
-  ('PyQt5\\Qt5\\bin\\libEGL.dll',
-   'C:\\Program '
-   'Files\\Python310\\Lib\\site-packages\\PyQt5\\Qt5\\bin\\libEGL.dll',
-   'BINARY'),
-  ('PyQt5\\Qt5\\bin\\opengl32sw.dll',
-   'C:\\Program '
-   'Files\\Python310\\Lib\\site-packages\\PyQt5\\Qt5\\bin\\opengl32sw.dll',
    'BINARY'),
   ('PyQt5\\Qt5\\plugins\\platforms\\qwindows.dll',
    'C:\\Program '
    'Files\\Python310\\lib\\site-packages\\PyQt5\\Qt5\\plugins\\platforms\\qwindows.dll',
    'BINARY'),
+  ('PyQt5\\Qt5\\plugins\\iconengines\\qsvgicon.dll',
+   'C:\\Program '
+   'Files\\Python310\\lib\\site-packages\\PyQt5\\Qt5\\plugins\\iconengines\\qsvgicon.dll',
+   'BINARY'),
   ('PyQt5\\Qt5\\plugins\\styles\\qwindowsvistastyle.dll',
    'C:\\Program '
    'Files\\Python310\\lib\\site-packages\\PyQt5\\Qt5\\plugins\\styles\\qwindowsvistastyle.dll',
    'BINARY'),
-  ('PyQt5\\Qt5\\plugins\\generic\\qtuiotouchplugin.dll',
+  ('PyQt5\\Qt5\\bin\\libEGL.dll',
    'C:\\Program '
-   'Files\\Python310\\lib\\site-packages\\PyQt5\\Qt5\\plugins\\generic\\qtuiotouchplugin.dll',
+   'Files\\Python310\\Lib\\site-packages\\PyQt5\\Qt5\\bin\\libEGL.dll',
+   'BINARY'),
+  ('PyQt5\\Qt5\\plugins\\imageformats\\qgif.dll',
+   'C:\\Program '
+   'Files\\Python310\\lib\\site-packages\\PyQt5\\Qt5\\plugins\\imageformats\\qgif.dll',
    'BINARY'),
   ('_decimal.pyd',
    'C:\\Program Files\\Python310\\DLLs\\_decimal.pyd',
@@ -915,21 +925,21 @@
   ('PyQt5\\QtWidgets.pyd',
    'C:\\Program Files\\Python310\\lib\\site-packages\\PyQt5\\QtWidgets.pyd',
    'EXTENSION'),
-  ('PyQt5\\QtCore.pyd',
-   'C:\\Program Files\\Python310\\lib\\site-packages\\PyQt5\\QtCore.pyd',
-   'EXTENSION'),
   ('PyQt5\\QtGui.pyd',
    'C:\\Program Files\\Python310\\lib\\site-packages\\PyQt5\\QtGui.pyd',
+   'EXTENSION'),
+  ('PyQt5\\QtCore.pyd',
+   'C:\\Program Files\\Python310\\lib\\site-packages\\PyQt5\\QtCore.pyd',
    'EXTENSION'),
   ('PyQt5\\sip.cp310-win_amd64.pyd',
    'C:\\Program '
    'Files\\Python310\\lib\\site-packages\\PyQt5\\sip.cp310-win_amd64.pyd',
    'EXTENSION'),
   ('win32\\_win32sysloader.pyd',
-   'C:\\Users\\yamamoto.yuta\\AppData\\Roaming\\Python\\Python310\\site-packages\\win32\\_win32sysloader.pyd',
+   'C:\\Users\\xrd-sl-str-admin\\AppData\\Roaming\\Python\\Python310\\site-packages\\win32\\_win32sysloader.pyd',
    'EXTENSION'),
   ('win32\\win32file.pyd',
-   'C:\\Users\\yamamoto.yuta\\AppData\\Roaming\\Python\\Python310\\site-packages\\win32\\win32file.pyd',
+   'C:\\Users\\xrd-sl-str-admin\\AppData\\Roaming\\Python\\Python310\\site-packages\\win32\\win32file.pyd',
    'EXTENSION'),
   ('_queue.pyd', 'C:\\Program Files\\Python310\\DLLs\\_queue.pyd', 'EXTENSION'),
   ('_cffi_backend.cp310-win_amd64.pyd',
@@ -948,13 +958,36 @@
    'C:\\Program '
    'Files\\Python310\\lib\\site-packages\\charset_normalizer\\md.cp310-win_amd64.pyd',
    'EXTENSION'),
+  ('PyQt5\\Qt5\\bin\\Qt5Gui.dll',
+   'C:\\Program '
+   'Files\\Python310\\lib\\site-packages\\PyQt5\\Qt5\\bin\\Qt5Gui.dll',
+   'BINARY'),
   ('PyQt5\\Qt5\\bin\\Qt5Core.dll',
    'C:\\Program '
    'Files\\Python310\\lib\\site-packages\\PyQt5\\Qt5\\bin\\Qt5Core.dll',
    'BINARY'),
-  ('PyQt5\\Qt5\\bin\\Qt5Gui.dll',
+  ('VCRUNTIME140_1.dll',
+   'C:\\Program Files\\Python310\\VCRUNTIME140_1.dll',
+   'BINARY'),
+  ('PyQt5\\Qt5\\bin\\Qt5DBus.dll',
    'C:\\Program '
-   'Files\\Python310\\lib\\site-packages\\PyQt5\\Qt5\\bin\\Qt5Gui.dll',
+   'Files\\Python310\\lib\\site-packages\\PyQt5\\Qt5\\bin\\Qt5DBus.dll',
+   'BINARY'),
+  ('PyQt5\\Qt5\\bin\\MSVCP140.dll',
+   'C:\\Program '
+   'Files\\Python310\\lib\\site-packages\\PyQt5\\Qt5\\bin\\MSVCP140.dll',
+   'BINARY'),
+  ('PyQt5\\Qt5\\bin\\Qt5WebSockets.dll',
+   'C:\\Program '
+   'Files\\Python310\\lib\\site-packages\\PyQt5\\Qt5\\bin\\Qt5WebSockets.dll',
+   'BINARY'),
+  ('PyQt5\\Qt5\\bin\\Qt5Quick.dll',
+   'C:\\Program '
+   'Files\\Python310\\lib\\site-packages\\PyQt5\\Qt5\\bin\\Qt5Quick.dll',
+   'BINARY'),
+  ('PyQt5\\Qt5\\bin\\Qt5Network.dll',
+   'C:\\Program '
+   'Files\\Python310\\lib\\site-packages\\PyQt5\\Qt5\\bin\\Qt5Network.dll',
    'BINARY'),
   ('PyQt5\\Qt5\\bin\\Qt5Svg.dll',
    'C:\\Program '
@@ -963,29 +996,6 @@
   ('PyQt5\\Qt5\\bin\\VCRUNTIME140_1.dll',
    'C:\\Program '
    'Files\\Python310\\Lib\\site-packages\\PyQt5\\Qt5\\bin\\VCRUNTIME140_1.dll',
-   'BINARY'),
-  ('PyQt5\\Qt5\\bin\\MSVCP140.dll',
-   'C:\\Program '
-   'Files\\Python310\\Lib\\site-packages\\PyQt5\\Qt5\\bin\\MSVCP140.dll',
-   'BINARY'),
-  ('PyQt5\\Qt5\\bin\\Qt5WebSockets.dll',
-   'C:\\Program '
-   'Files\\Python310\\lib\\site-packages\\PyQt5\\Qt5\\bin\\Qt5WebSockets.dll',
-   'BINARY'),
-  ('PyQt5\\Qt5\\bin\\Qt5Network.dll',
-   'C:\\Program '
-   'Files\\Python310\\lib\\site-packages\\PyQt5\\Qt5\\bin\\Qt5Network.dll',
-   'BINARY'),
-  ('PyQt5\\Qt5\\bin\\Qt5Quick.dll',
-   'C:\\Program '
-   'Files\\Python310\\lib\\site-packages\\PyQt5\\Qt5\\bin\\Qt5Quick.dll',
-   'BINARY'),
-  ('PyQt5\\Qt5\\bin\\Qt5DBus.dll',
-   'C:\\Program '
-   'Files\\Python310\\lib\\site-packages\\PyQt5\\Qt5\\bin\\Qt5DBus.dll',
-   'BINARY'),
-  ('VCRUNTIME140_1.dll',
-   'C:\\Program Files\\Python310\\VCRUNTIME140_1.dll',
    'BINARY'),
   ('PyQt5\\Qt5\\bin\\Qt5Widgets.dll',
    'C:\\Program '
@@ -1002,355 +1012,356 @@
    'C:\\Program '
    'Files\\Python310\\lib\\site-packages\\PyQt5\\Qt5\\bin\\MSVCP140_1.dll',
    'BINARY'),
-  ('PyQt5\\Qt5\\bin\\Qt5Qml.dll',
-   'C:\\Program '
-   'Files\\Python310\\lib\\site-packages\\PyQt5\\Qt5\\bin\\Qt5Qml.dll',
-   'BINARY'),
   ('PyQt5\\Qt5\\bin\\Qt5QmlModels.dll',
    'C:\\Program '
    'Files\\Python310\\lib\\site-packages\\PyQt5\\Qt5\\bin\\Qt5QmlModels.dll',
+   'BINARY'),
+  ('PyQt5\\Qt5\\bin\\Qt5Qml.dll',
+   'C:\\Program '
+   'Files\\Python310\\lib\\site-packages\\PyQt5\\Qt5\\bin\\Qt5Qml.dll',
    'BINARY')],
  [],
  [],
  [('base_library.zip',
-   'C:\\Users\\yamamoto.yuta\\Data_Memo_Transfer\\build\\Data_Memo_transfer\\base_library.zip',
-   'DATA'),
-  ('PyQt5\\Qt5\\translations\\qt_ja.qm',
    'C:\\Program '
-   'Files\\Python310\\lib\\site-packages\\PyQt5\\Qt5\\translations\\qt_ja.qm',
-   'DATA'),
-  ('PyQt5\\Qt5\\translations\\qtbase_de.qm',
-   'C:\\Program '
-   'Files\\Python310\\lib\\site-packages\\PyQt5\\Qt5\\translations\\qtbase_de.qm',
-   'DATA'),
-  ('PyQt5\\Qt5\\translations\\qt_lt.qm',
-   'C:\\Program '
-   'Files\\Python310\\lib\\site-packages\\PyQt5\\Qt5\\translations\\qt_lt.qm',
-   'DATA'),
-  ('PyQt5\\Qt5\\translations\\qt_help_ru.qm',
-   'C:\\Program '
-   'Files\\Python310\\lib\\site-packages\\PyQt5\\Qt5\\translations\\qt_help_ru.qm',
-   'DATA'),
-  ('PyQt5\\Qt5\\translations\\qt_fi.qm',
-   'C:\\Program '
-   'Files\\Python310\\lib\\site-packages\\PyQt5\\Qt5\\translations\\qt_fi.qm',
-   'DATA'),
-  ('PyQt5\\Qt5\\translations\\qt_de.qm',
-   'C:\\Program '
-   'Files\\Python310\\lib\\site-packages\\PyQt5\\Qt5\\translations\\qt_de.qm',
-   'DATA'),
-  ('PyQt5\\Qt5\\translations\\qt_hu.qm',
-   'C:\\Program '
-   'Files\\Python310\\lib\\site-packages\\PyQt5\\Qt5\\translations\\qt_hu.qm',
-   'DATA'),
-  ('PyQt5\\Qt5\\translations\\qt_da.qm',
-   'C:\\Program '
-   'Files\\Python310\\lib\\site-packages\\PyQt5\\Qt5\\translations\\qt_da.qm',
-   'DATA'),
-  ('PyQt5\\Qt5\\translations\\qtbase_tr.qm',
-   'C:\\Program '
-   'Files\\Python310\\lib\\site-packages\\PyQt5\\Qt5\\translations\\qtbase_tr.qm',
-   'DATA'),
-  ('cryptography-41.0.1.dist-info\\LICENSE',
-   'c:\\program '
-   'files\\python310\\lib\\site-packages\\cryptography-41.0.1.dist-info\\LICENSE',
-   'DATA'),
-  ('PyQt5\\Qt5\\translations\\qt_help_sl.qm',
-   'C:\\Program '
-   'Files\\Python310\\lib\\site-packages\\PyQt5\\Qt5\\translations\\qt_help_sl.qm',
-   'DATA'),
-  ('PyQt5\\Qt5\\translations\\qt_sv.qm',
-   'C:\\Program '
-   'Files\\Python310\\lib\\site-packages\\PyQt5\\Qt5\\translations\\qt_sv.qm',
-   'DATA'),
-  ('PyQt5\\Qt5\\translations\\qtbase_lv.qm',
-   'C:\\Program '
-   'Files\\Python310\\lib\\site-packages\\PyQt5\\Qt5\\translations\\qtbase_lv.qm',
-   'DATA'),
-  ('PyQt5\\Qt5\\translations\\qt_fa.qm',
-   'C:\\Program '
-   'Files\\Python310\\lib\\site-packages\\PyQt5\\Qt5\\translations\\qt_fa.qm',
-   'DATA'),
-  ('PyQt5\\Qt5\\translations\\qtbase_ar.qm',
-   'C:\\Program '
-   'Files\\Python310\\lib\\site-packages\\PyQt5\\Qt5\\translations\\qtbase_ar.qm',
-   'DATA'),
-  ('PyQt5\\Qt5\\translations\\qtbase_fr.qm',
-   'C:\\Program '
-   'Files\\Python310\\lib\\site-packages\\PyQt5\\Qt5\\translations\\qtbase_fr.qm',
-   'DATA'),
-  ('PyQt5\\Qt5\\translations\\qtbase_en.qm',
-   'C:\\Program '
-   'Files\\Python310\\lib\\site-packages\\PyQt5\\Qt5\\translations\\qtbase_en.qm',
-   'DATA'),
-  ('cryptography-41.0.1.dist-info\\RECORD',
-   'c:\\program '
-   'files\\python310\\lib\\site-packages\\cryptography-41.0.1.dist-info\\RECORD',
-   'DATA'),
-  ('PyQt5\\Qt5\\translations\\qt_gl.qm',
-   'C:\\Program '
-   'Files\\Python310\\lib\\site-packages\\PyQt5\\Qt5\\translations\\qt_gl.qm',
-   'DATA'),
-  ('PyQt5\\Qt5\\translations\\qt_pt.qm',
-   'C:\\Program '
-   'Files\\Python310\\lib\\site-packages\\PyQt5\\Qt5\\translations\\qt_pt.qm',
-   'DATA'),
-  ('PyQt5\\Qt5\\translations\\qt_help_pl.qm',
-   'C:\\Program '
-   'Files\\Python310\\lib\\site-packages\\PyQt5\\Qt5\\translations\\qt_help_pl.qm',
-   'DATA'),
-  ('PyQt5\\Qt5\\translations\\qt_fr.qm',
-   'C:\\Program '
-   'Files\\Python310\\lib\\site-packages\\PyQt5\\Qt5\\translations\\qt_fr.qm',
-   'DATA'),
-  ('cryptography-41.0.1.dist-info\\METADATA',
-   'c:\\program '
-   'files\\python310\\lib\\site-packages\\cryptography-41.0.1.dist-info\\METADATA',
-   'DATA'),
-  ('PyQt5\\Qt5\\translations\\qt_ru.qm',
-   'C:\\Program '
-   'Files\\Python310\\lib\\site-packages\\PyQt5\\Qt5\\translations\\qt_ru.qm',
-   'DATA'),
-  ('PyQt5\\Qt5\\translations\\qt_he.qm',
-   'C:\\Program '
-   'Files\\Python310\\lib\\site-packages\\PyQt5\\Qt5\\translations\\qt_he.qm',
-   'DATA'),
-  ('PyQt5\\Qt5\\translations\\qtbase_gd.qm',
-   'C:\\Program '
-   'Files\\Python310\\lib\\site-packages\\PyQt5\\Qt5\\translations\\qtbase_gd.qm',
-   'DATA'),
-  ('PyQt5\\Qt5\\translations\\qt_it.qm',
-   'C:\\Program '
-   'Files\\Python310\\lib\\site-packages\\PyQt5\\Qt5\\translations\\qt_it.qm',
-   'DATA'),
-  ('PyQt5\\Qt5\\translations\\qt_help_tr.qm',
-   'C:\\Program '
-   'Files\\Python310\\lib\\site-packages\\PyQt5\\Qt5\\translations\\qt_help_tr.qm',
-   'DATA'),
-  ('PyQt5\\Qt5\\translations\\qtbase_es.qm',
-   'C:\\Program '
-   'Files\\Python310\\lib\\site-packages\\PyQt5\\Qt5\\translations\\qtbase_es.qm',
-   'DATA'),
-  ('PyQt5\\Qt5\\translations\\qtbase_zh_TW.qm',
-   'C:\\Program '
-   'Files\\Python310\\lib\\site-packages\\PyQt5\\Qt5\\translations\\qtbase_zh_TW.qm',
-   'DATA'),
-  ('PyQt5\\Qt5\\translations\\qtbase_ca.qm',
-   'C:\\Program '
-   'Files\\Python310\\lib\\site-packages\\PyQt5\\Qt5\\translations\\qtbase_ca.qm',
-   'DATA'),
-  ('PyQt5\\Qt5\\translations\\qt_sl.qm',
-   'C:\\Program '
-   'Files\\Python310\\lib\\site-packages\\PyQt5\\Qt5\\translations\\qt_sl.qm',
-   'DATA'),
-  ('PyQt5\\Qt5\\translations\\qtbase_sk.qm',
-   'C:\\Program '
-   'Files\\Python310\\lib\\site-packages\\PyQt5\\Qt5\\translations\\qtbase_sk.qm',
-   'DATA'),
-  ('PyQt5\\Qt5\\translations\\qt_ko.qm',
-   'C:\\Program '
-   'Files\\Python310\\lib\\site-packages\\PyQt5\\Qt5\\translations\\qt_ko.qm',
-   'DATA'),
-  ('PyQt5\\Qt5\\translations\\qtbase_hu.qm',
-   'C:\\Program '
-   'Files\\Python310\\lib\\site-packages\\PyQt5\\Qt5\\translations\\qtbase_hu.qm',
-   'DATA'),
-  ('PyQt5\\Qt5\\translations\\qt_help_it.qm',
-   'C:\\Program '
-   'Files\\Python310\\lib\\site-packages\\PyQt5\\Qt5\\translations\\qt_help_it.qm',
-   'DATA'),
-  ('PyQt5\\Qt5\\translations\\qt_lv.qm',
-   'C:\\Program '
-   'Files\\Python310\\lib\\site-packages\\PyQt5\\Qt5\\translations\\qt_lv.qm',
-   'DATA'),
-  ('cryptography-41.0.1.dist-info\\LICENSE.BSD',
-   'c:\\program '
-   'files\\python310\\lib\\site-packages\\cryptography-41.0.1.dist-info\\LICENSE.BSD',
-   'DATA'),
-  ('PyQt5\\Qt5\\translations\\qt_uk.qm',
-   'C:\\Program '
-   'Files\\Python310\\lib\\site-packages\\PyQt5\\Qt5\\translations\\qt_uk.qm',
-   'DATA'),
-  ('PyQt5\\Qt5\\translations\\qt_pl.qm',
-   'C:\\Program '
-   'Files\\Python310\\lib\\site-packages\\PyQt5\\Qt5\\translations\\qt_pl.qm',
-   'DATA'),
-  ('cryptography-41.0.1.dist-info\\INSTALLER',
-   'c:\\program '
-   'files\\python310\\lib\\site-packages\\cryptography-41.0.1.dist-info\\INSTALLER',
-   'DATA'),
-  ('PyQt5\\Qt5\\translations\\qt_ar.qm',
-   'C:\\Program '
-   'Files\\Python310\\lib\\site-packages\\PyQt5\\Qt5\\translations\\qt_ar.qm',
-   'DATA'),
-  ('PyQt5\\Qt5\\translations\\qtbase_bg.qm',
-   'C:\\Program '
-   'Files\\Python310\\lib\\site-packages\\PyQt5\\Qt5\\translations\\qtbase_bg.qm',
+   'Files\\Data_Memo_Transfer\\build\\Data_Memo_transfer\\base_library.zip',
    'DATA'),
   ('PyQt5\\Qt5\\translations\\qt_cs.qm',
    'C:\\Program '
    'Files\\Python310\\lib\\site-packages\\PyQt5\\Qt5\\translations\\qt_cs.qm',
    'DATA'),
-  ('PyQt5\\Qt5\\translations\\qt_help_ko.qm',
+  ('PyQt5\\Qt5\\translations\\qtbase_da.qm',
    'C:\\Program '
-   'Files\\Python310\\lib\\site-packages\\PyQt5\\Qt5\\translations\\qt_help_ko.qm',
-   'DATA'),
-  ('PyQt5\\Qt5\\translations\\qt_help_uk.qm',
-   'C:\\Program '
-   'Files\\Python310\\lib\\site-packages\\PyQt5\\Qt5\\translations\\qt_help_uk.qm',
-   'DATA'),
-  ('PyQt5\\Qt5\\translations\\qtbase_cs.qm',
-   'C:\\Program '
-   'Files\\Python310\\lib\\site-packages\\PyQt5\\Qt5\\translations\\qtbase_cs.qm',
-   'DATA'),
-  ('PyQt5\\Qt5\\translations\\qt_help_ca.qm',
-   'C:\\Program '
-   'Files\\Python310\\lib\\site-packages\\PyQt5\\Qt5\\translations\\qt_help_ca.qm',
-   'DATA'),
-  ('PyQt5\\Qt5\\translations\\qt_help_fr.qm',
-   'C:\\Program '
-   'Files\\Python310\\lib\\site-packages\\PyQt5\\Qt5\\translations\\qt_help_fr.qm',
-   'DATA'),
-  ('PyQt5\\Qt5\\translations\\qt_es.qm',
-   'C:\\Program '
-   'Files\\Python310\\lib\\site-packages\\PyQt5\\Qt5\\translations\\qt_es.qm',
-   'DATA'),
-  ('PyQt5\\Qt5\\translations\\qt_help_da.qm',
-   'C:\\Program '
-   'Files\\Python310\\lib\\site-packages\\PyQt5\\Qt5\\translations\\qt_help_da.qm',
-   'DATA'),
-  ('PyQt5\\Qt5\\translations\\qt_help_zh_TW.qm',
-   'C:\\Program '
-   'Files\\Python310\\lib\\site-packages\\PyQt5\\Qt5\\translations\\qt_help_zh_TW.qm',
+   'Files\\Python310\\lib\\site-packages\\PyQt5\\Qt5\\translations\\qtbase_da.qm',
    'DATA'),
   ('PyQt5\\Qt5\\translations\\qtbase_fi.qm',
    'C:\\Program '
    'Files\\Python310\\lib\\site-packages\\PyQt5\\Qt5\\translations\\qtbase_fi.qm',
    'DATA'),
-  ('PyQt5\\Qt5\\translations\\qt_gd.qm',
+  ('PyQt5\\Qt5\\translations\\qtbase_he.qm',
    'C:\\Program '
-   'Files\\Python310\\lib\\site-packages\\PyQt5\\Qt5\\translations\\qt_gd.qm',
-   'DATA'),
-  ('PyQt5\\Qt5\\translations\\qt_help_zh_CN.qm',
-   'C:\\Program '
-   'Files\\Python310\\lib\\site-packages\\PyQt5\\Qt5\\translations\\qt_help_zh_CN.qm',
-   'DATA'),
-  ('PyQt5\\Qt5\\translations\\qt_help_gl.qm',
-   'C:\\Program '
-   'Files\\Python310\\lib\\site-packages\\PyQt5\\Qt5\\translations\\qt_help_gl.qm',
-   'DATA'),
-  ('PyQt5\\Qt5\\translations\\qt_en.qm',
-   'C:\\Program '
-   'Files\\Python310\\lib\\site-packages\\PyQt5\\Qt5\\translations\\qt_en.qm',
-   'DATA'),
-  ('PyQt5\\Qt5\\translations\\qt_help_de.qm',
-   'C:\\Program '
-   'Files\\Python310\\lib\\site-packages\\PyQt5\\Qt5\\translations\\qt_help_de.qm',
-   'DATA'),
-  ('PyQt5\\Qt5\\translations\\qt_help_sk.qm',
-   'C:\\Program '
-   'Files\\Python310\\lib\\site-packages\\PyQt5\\Qt5\\translations\\qt_help_sk.qm',
-   'DATA'),
-  ('PyQt5\\Qt5\\translations\\qt_tr.qm',
-   'C:\\Program '
-   'Files\\Python310\\lib\\site-packages\\PyQt5\\Qt5\\translations\\qt_tr.qm',
-   'DATA'),
-  ('certifi\\cacert.pem',
-   'C:\\Program Files\\Python310\\lib\\site-packages\\certifi\\cacert.pem',
-   'DATA'),
-  ('PyQt5\\Qt5\\translations\\qtbase_da.qm',
-   'C:\\Program '
-   'Files\\Python310\\lib\\site-packages\\PyQt5\\Qt5\\translations\\qtbase_da.qm',
+   'Files\\Python310\\lib\\site-packages\\PyQt5\\Qt5\\translations\\qtbase_he.qm',
    'DATA'),
   ('PyQt5\\Qt5\\translations\\qt_zh_CN.qm',
    'C:\\Program '
    'Files\\Python310\\lib\\site-packages\\PyQt5\\Qt5\\translations\\qt_zh_CN.qm',
    'DATA'),
-  ('PyQt5\\Qt5\\translations\\qt_bg.qm',
+  ('PyQt5\\Qt5\\translations\\qtbase_de.qm',
    'C:\\Program '
-   'Files\\Python310\\lib\\site-packages\\PyQt5\\Qt5\\translations\\qt_bg.qm',
+   'Files\\Python310\\lib\\site-packages\\PyQt5\\Qt5\\translations\\qtbase_de.qm',
    'DATA'),
-  ('PyQt5\\Qt5\\translations\\qtbase_pl.qm',
+  ('PyQt5\\Qt5\\translations\\qt_uk.qm',
    'C:\\Program '
-   'Files\\Python310\\lib\\site-packages\\PyQt5\\Qt5\\translations\\qtbase_pl.qm',
+   'Files\\Python310\\lib\\site-packages\\PyQt5\\Qt5\\translations\\qt_uk.qm',
    'DATA'),
-  ('PyQt5\\Qt5\\translations\\qtbase_uk.qm',
+  ('cryptography-41.0.1.dist-info\\RECORD',
+   'c:\\program '
+   'files\\python310\\lib\\site-packages\\cryptography-41.0.1.dist-info\\RECORD',
+   'DATA'),
+  ('PyQt5\\Qt5\\translations\\qt_help_zh_TW.qm',
    'C:\\Program '
-   'Files\\Python310\\lib\\site-packages\\PyQt5\\Qt5\\translations\\qtbase_uk.qm',
+   'Files\\Python310\\lib\\site-packages\\PyQt5\\Qt5\\translations\\qt_help_zh_TW.qm',
    'DATA'),
-  ('certifi\\py.typed',
-   'C:\\Program Files\\Python310\\lib\\site-packages\\certifi\\py.typed',
-   'DATA'),
-  ('PyQt5\\Qt5\\translations\\qt_ca.qm',
+  ('PyQt5\\Qt5\\translations\\qt_fr.qm',
    'C:\\Program '
-   'Files\\Python310\\lib\\site-packages\\PyQt5\\Qt5\\translations\\qt_ca.qm',
-   'DATA'),
-  ('PyQt5\\Qt5\\translations\\qt_help_ja.qm',
-   'C:\\Program '
-   'Files\\Python310\\lib\\site-packages\\PyQt5\\Qt5\\translations\\qt_help_ja.qm',
+   'Files\\Python310\\lib\\site-packages\\PyQt5\\Qt5\\translations\\qt_fr.qm',
    'DATA'),
   ('PyQt5\\Qt5\\translations\\qt_help_ar.qm',
    'C:\\Program '
    'Files\\Python310\\lib\\site-packages\\PyQt5\\Qt5\\translations\\qt_help_ar.qm',
    'DATA'),
-  ('PyQt5\\Qt5\\translations\\qt_help_hu.qm',
+  ('PyQt5\\Qt5\\translations\\qt_ko.qm',
    'C:\\Program '
-   'Files\\Python310\\lib\\site-packages\\PyQt5\\Qt5\\translations\\qt_help_hu.qm',
+   'Files\\Python310\\lib\\site-packages\\PyQt5\\Qt5\\translations\\qt_ko.qm',
    'DATA'),
-  ('PyQt5\\Qt5\\translations\\qtbase_it.qm',
+  ('PyQt5\\Qt5\\translations\\qt_help_sl.qm',
    'C:\\Program '
-   'Files\\Python310\\lib\\site-packages\\PyQt5\\Qt5\\translations\\qtbase_it.qm',
+   'Files\\Python310\\lib\\site-packages\\PyQt5\\Qt5\\translations\\qt_help_sl.qm',
    'DATA'),
-  ('cryptography-41.0.1.dist-info\\top_level.txt',
+  ('cryptography-41.0.1.dist-info\\LICENSE.BSD',
    'c:\\program '
-   'files\\python310\\lib\\site-packages\\cryptography-41.0.1.dist-info\\top_level.txt',
+   'files\\python310\\lib\\site-packages\\cryptography-41.0.1.dist-info\\LICENSE.BSD',
    'DATA'),
-  ('PyQt5\\Qt5\\translations\\qt_help_en.qm',
+  ('PyQt5\\Qt5\\translations\\qt_hu.qm',
    'C:\\Program '
-   'Files\\Python310\\lib\\site-packages\\PyQt5\\Qt5\\translations\\qt_help_en.qm',
+   'Files\\Python310\\lib\\site-packages\\PyQt5\\Qt5\\translations\\qt_hu.qm',
    'DATA'),
-  ('PyQt5\\Qt5\\translations\\qt_help_bg.qm',
+  ('PyQt5\\Qt5\\translations\\qtbase_en.qm',
    'C:\\Program '
-   'Files\\Python310\\lib\\site-packages\\PyQt5\\Qt5\\translations\\qt_help_bg.qm',
+   'Files\\Python310\\lib\\site-packages\\PyQt5\\Qt5\\translations\\qtbase_en.qm',
    'DATA'),
-  ('PyQt5\\Qt5\\translations\\qt_help_es.qm',
-   'C:\\Program '
-   'Files\\Python310\\lib\\site-packages\\PyQt5\\Qt5\\translations\\qt_help_es.qm',
-   'DATA'),
-  ('PyQt5\\Qt5\\translations\\qtbase_ru.qm',
-   'C:\\Program '
-   'Files\\Python310\\lib\\site-packages\\PyQt5\\Qt5\\translations\\qtbase_ru.qm',
-   'DATA'),
-  ('PyQt5\\Qt5\\translations\\qtbase_ja.qm',
-   'C:\\Program '
-   'Files\\Python310\\lib\\site-packages\\PyQt5\\Qt5\\translations\\qtbase_ja.qm',
-   'DATA'),
-  ('PyQt5\\Qt5\\translations\\qt_help_cs.qm',
-   'C:\\Program '
-   'Files\\Python310\\lib\\site-packages\\PyQt5\\Qt5\\translations\\qt_help_cs.qm',
-   'DATA'),
-  ('cryptography-41.0.1.dist-info\\WHEEL',
-   'c:\\program '
-   'files\\python310\\lib\\site-packages\\cryptography-41.0.1.dist-info\\WHEEL',
-   'DATA'),
-  ('cryptography-41.0.1.dist-info\\LICENSE.APACHE',
-   'c:\\program '
-   'files\\python310\\lib\\site-packages\\cryptography-41.0.1.dist-info\\LICENSE.APACHE',
+  ('certifi\\py.typed',
+   'C:\\Program Files\\Python310\\lib\\site-packages\\certifi\\py.typed',
    'DATA'),
   ('PyQt5\\Qt5\\translations\\qt_sk.qm',
    'C:\\Program '
    'Files\\Python310\\lib\\site-packages\\PyQt5\\Qt5\\translations\\qt_sk.qm',
    'DATA'),
-  ('PyQt5\\Qt5\\translations\\qtbase_he.qm',
+  ('PyQt5\\Qt5\\translations\\qtbase_es.qm',
    'C:\\Program '
-   'Files\\Python310\\lib\\site-packages\\PyQt5\\Qt5\\translations\\qtbase_he.qm',
+   'Files\\Python310\\lib\\site-packages\\PyQt5\\Qt5\\translations\\qtbase_es.qm',
    'DATA'),
   ('PyQt5\\Qt5\\translations\\qtbase_ko.qm',
    'C:\\Program '
    'Files\\Python310\\lib\\site-packages\\PyQt5\\Qt5\\translations\\qtbase_ko.qm',
    'DATA'),
+  ('PyQt5\\Qt5\\translations\\qt_pt.qm',
+   'C:\\Program '
+   'Files\\Python310\\lib\\site-packages\\PyQt5\\Qt5\\translations\\qt_pt.qm',
+   'DATA'),
+  ('PyQt5\\Qt5\\translations\\qtbase_ru.qm',
+   'C:\\Program '
+   'Files\\Python310\\lib\\site-packages\\PyQt5\\Qt5\\translations\\qtbase_ru.qm',
+   'DATA'),
+  ('cryptography-41.0.1.dist-info\\LICENSE',
+   'c:\\program '
+   'files\\python310\\lib\\site-packages\\cryptography-41.0.1.dist-info\\LICENSE',
+   'DATA'),
+  ('PyQt5\\Qt5\\translations\\qt_pl.qm',
+   'C:\\Program '
+   'Files\\Python310\\lib\\site-packages\\PyQt5\\Qt5\\translations\\qt_pl.qm',
+   'DATA'),
+  ('PyQt5\\Qt5\\translations\\qt_ca.qm',
+   'C:\\Program '
+   'Files\\Python310\\lib\\site-packages\\PyQt5\\Qt5\\translations\\qt_ca.qm',
+   'DATA'),
+  ('PyQt5\\Qt5\\translations\\qt_fa.qm',
+   'C:\\Program '
+   'Files\\Python310\\lib\\site-packages\\PyQt5\\Qt5\\translations\\qt_fa.qm',
+   'DATA'),
+  ('PyQt5\\Qt5\\translations\\qtbase_lv.qm',
+   'C:\\Program '
+   'Files\\Python310\\lib\\site-packages\\PyQt5\\Qt5\\translations\\qtbase_lv.qm',
+   'DATA'),
+  ('cryptography-41.0.1.dist-info\\INSTALLER',
+   'c:\\program '
+   'files\\python310\\lib\\site-packages\\cryptography-41.0.1.dist-info\\INSTALLER',
+   'DATA'),
+  ('PyQt5\\Qt5\\translations\\qt_help_ko.qm',
+   'C:\\Program '
+   'Files\\Python310\\lib\\site-packages\\PyQt5\\Qt5\\translations\\qt_help_ko.qm',
+   'DATA'),
+  ('PyQt5\\Qt5\\translations\\qtbase_hu.qm',
+   'C:\\Program '
+   'Files\\Python310\\lib\\site-packages\\PyQt5\\Qt5\\translations\\qtbase_hu.qm',
+   'DATA'),
+  ('PyQt5\\Qt5\\translations\\qt_tr.qm',
+   'C:\\Program '
+   'Files\\Python310\\lib\\site-packages\\PyQt5\\Qt5\\translations\\qt_tr.qm',
+   'DATA'),
+  ('PyQt5\\Qt5\\translations\\qt_help_de.qm',
+   'C:\\Program '
+   'Files\\Python310\\lib\\site-packages\\PyQt5\\Qt5\\translations\\qt_help_de.qm',
+   'DATA'),
+  ('cryptography-41.0.1.dist-info\\top_level.txt',
+   'c:\\program '
+   'files\\python310\\lib\\site-packages\\cryptography-41.0.1.dist-info\\top_level.txt',
+   'DATA'),
+  ('PyQt5\\Qt5\\translations\\qt_help_sk.qm',
+   'C:\\Program '
+   'Files\\Python310\\lib\\site-packages\\PyQt5\\Qt5\\translations\\qt_help_sk.qm',
+   'DATA'),
+  ('PyQt5\\Qt5\\translations\\qtbase_ca.qm',
+   'C:\\Program '
+   'Files\\Python310\\lib\\site-packages\\PyQt5\\Qt5\\translations\\qtbase_ca.qm',
+   'DATA'),
+  ('PyQt5\\Qt5\\translations\\qtbase_uk.qm',
+   'C:\\Program '
+   'Files\\Python310\\lib\\site-packages\\PyQt5\\Qt5\\translations\\qtbase_uk.qm',
+   'DATA'),
+  ('PyQt5\\Qt5\\translations\\qtbase_tr.qm',
+   'C:\\Program '
+   'Files\\Python310\\lib\\site-packages\\PyQt5\\Qt5\\translations\\qtbase_tr.qm',
+   'DATA'),
+  ('PyQt5\\Qt5\\translations\\qt_help_ru.qm',
+   'C:\\Program '
+   'Files\\Python310\\lib\\site-packages\\PyQt5\\Qt5\\translations\\qt_help_ru.qm',
+   'DATA'),
+  ('PyQt5\\Qt5\\translations\\qt_help_en.qm',
+   'C:\\Program '
+   'Files\\Python310\\lib\\site-packages\\PyQt5\\Qt5\\translations\\qt_help_en.qm',
+   'DATA'),
   ('PyQt5\\Qt5\\translations\\qt_zh_TW.qm',
    'C:\\Program '
    'Files\\Python310\\lib\\site-packages\\PyQt5\\Qt5\\translations\\qt_zh_TW.qm',
+   'DATA'),
+  ('PyQt5\\Qt5\\translations\\qt_de.qm',
+   'C:\\Program '
+   'Files\\Python310\\lib\\site-packages\\PyQt5\\Qt5\\translations\\qt_de.qm',
+   'DATA'),
+  ('PyQt5\\Qt5\\translations\\qtbase_ja.qm',
+   'C:\\Program '
+   'Files\\Python310\\lib\\site-packages\\PyQt5\\Qt5\\translations\\qtbase_ja.qm',
+   'DATA'),
+  ('PyQt5\\Qt5\\translations\\qt_help_ja.qm',
+   'C:\\Program '
+   'Files\\Python310\\lib\\site-packages\\PyQt5\\Qt5\\translations\\qt_help_ja.qm',
+   'DATA'),
+  ('PyQt5\\Qt5\\translations\\qt_ja.qm',
+   'C:\\Program '
+   'Files\\Python310\\lib\\site-packages\\PyQt5\\Qt5\\translations\\qt_ja.qm',
+   'DATA'),
+  ('PyQt5\\Qt5\\translations\\qt_fi.qm',
+   'C:\\Program '
+   'Files\\Python310\\lib\\site-packages\\PyQt5\\Qt5\\translations\\qt_fi.qm',
+   'DATA'),
+  ('PyQt5\\Qt5\\translations\\qt_help_it.qm',
+   'C:\\Program '
+   'Files\\Python310\\lib\\site-packages\\PyQt5\\Qt5\\translations\\qt_help_it.qm',
+   'DATA'),
+  ('PyQt5\\Qt5\\translations\\qt_help_zh_CN.qm',
+   'C:\\Program '
+   'Files\\Python310\\lib\\site-packages\\PyQt5\\Qt5\\translations\\qt_help_zh_CN.qm',
+   'DATA'),
+  ('PyQt5\\Qt5\\translations\\qt_help_cs.qm',
+   'C:\\Program '
+   'Files\\Python310\\lib\\site-packages\\PyQt5\\Qt5\\translations\\qt_help_cs.qm',
+   'DATA'),
+  ('PyQt5\\Qt5\\translations\\qtbase_gd.qm',
+   'C:\\Program '
+   'Files\\Python310\\lib\\site-packages\\PyQt5\\Qt5\\translations\\qtbase_gd.qm',
+   'DATA'),
+  ('cryptography-41.0.1.dist-info\\WHEEL',
+   'c:\\program '
+   'files\\python310\\lib\\site-packages\\cryptography-41.0.1.dist-info\\WHEEL',
+   'DATA'),
+  ('PyQt5\\Qt5\\translations\\qtbase_fr.qm',
+   'C:\\Program '
+   'Files\\Python310\\lib\\site-packages\\PyQt5\\Qt5\\translations\\qtbase_fr.qm',
+   'DATA'),
+  ('PyQt5\\Qt5\\translations\\qt_da.qm',
+   'C:\\Program '
+   'Files\\Python310\\lib\\site-packages\\PyQt5\\Qt5\\translations\\qt_da.qm',
+   'DATA'),
+  ('PyQt5\\Qt5\\translations\\qtbase_pl.qm',
+   'C:\\Program '
+   'Files\\Python310\\lib\\site-packages\\PyQt5\\Qt5\\translations\\qtbase_pl.qm',
+   'DATA'),
+  ('PyQt5\\Qt5\\translations\\qt_es.qm',
+   'C:\\Program '
+   'Files\\Python310\\lib\\site-packages\\PyQt5\\Qt5\\translations\\qt_es.qm',
+   'DATA'),
+  ('PyQt5\\Qt5\\translations\\qtbase_it.qm',
+   'C:\\Program '
+   'Files\\Python310\\lib\\site-packages\\PyQt5\\Qt5\\translations\\qtbase_it.qm',
+   'DATA'),
+  ('PyQt5\\Qt5\\translations\\qt_en.qm',
+   'C:\\Program '
+   'Files\\Python310\\lib\\site-packages\\PyQt5\\Qt5\\translations\\qt_en.qm',
+   'DATA'),
+  ('PyQt5\\Qt5\\translations\\qt_lv.qm',
+   'C:\\Program '
+   'Files\\Python310\\lib\\site-packages\\PyQt5\\Qt5\\translations\\qt_lv.qm',
+   'DATA'),
+  ('PyQt5\\Qt5\\translations\\qtbase_sk.qm',
+   'C:\\Program '
+   'Files\\Python310\\lib\\site-packages\\PyQt5\\Qt5\\translations\\qtbase_sk.qm',
+   'DATA'),
+  ('PyQt5\\Qt5\\translations\\qt_help_hu.qm',
+   'C:\\Program '
+   'Files\\Python310\\lib\\site-packages\\PyQt5\\Qt5\\translations\\qt_help_hu.qm',
+   'DATA'),
+  ('PyQt5\\Qt5\\translations\\qtbase_zh_TW.qm',
+   'C:\\Program '
+   'Files\\Python310\\lib\\site-packages\\PyQt5\\Qt5\\translations\\qtbase_zh_TW.qm',
+   'DATA'),
+  ('PyQt5\\Qt5\\translations\\qt_he.qm',
+   'C:\\Program '
+   'Files\\Python310\\lib\\site-packages\\PyQt5\\Qt5\\translations\\qt_he.qm',
+   'DATA'),
+  ('PyQt5\\Qt5\\translations\\qtbase_bg.qm',
+   'C:\\Program '
+   'Files\\Python310\\lib\\site-packages\\PyQt5\\Qt5\\translations\\qtbase_bg.qm',
+   'DATA'),
+  ('PyQt5\\Qt5\\translations\\qt_ar.qm',
+   'C:\\Program '
+   'Files\\Python310\\lib\\site-packages\\PyQt5\\Qt5\\translations\\qt_ar.qm',
+   'DATA'),
+  ('PyQt5\\Qt5\\translations\\qt_ru.qm',
+   'C:\\Program '
+   'Files\\Python310\\lib\\site-packages\\PyQt5\\Qt5\\translations\\qt_ru.qm',
+   'DATA'),
+  ('certifi\\cacert.pem',
+   'C:\\Program Files\\Python310\\lib\\site-packages\\certifi\\cacert.pem',
+   'DATA'),
+  ('PyQt5\\Qt5\\translations\\qt_help_da.qm',
+   'C:\\Program '
+   'Files\\Python310\\lib\\site-packages\\PyQt5\\Qt5\\translations\\qt_help_da.qm',
+   'DATA'),
+  ('PyQt5\\Qt5\\translations\\qt_help_ca.qm',
+   'C:\\Program '
+   'Files\\Python310\\lib\\site-packages\\PyQt5\\Qt5\\translations\\qt_help_ca.qm',
+   'DATA'),
+  ('PyQt5\\Qt5\\translations\\qt_help_es.qm',
+   'C:\\Program '
+   'Files\\Python310\\lib\\site-packages\\PyQt5\\Qt5\\translations\\qt_help_es.qm',
+   'DATA'),
+  ('PyQt5\\Qt5\\translations\\qt_help_gl.qm',
+   'C:\\Program '
+   'Files\\Python310\\lib\\site-packages\\PyQt5\\Qt5\\translations\\qt_help_gl.qm',
+   'DATA'),
+  ('PyQt5\\Qt5\\translations\\qt_lt.qm',
+   'C:\\Program '
+   'Files\\Python310\\lib\\site-packages\\PyQt5\\Qt5\\translations\\qt_lt.qm',
+   'DATA'),
+  ('PyQt5\\Qt5\\translations\\qt_sl.qm',
+   'C:\\Program '
+   'Files\\Python310\\lib\\site-packages\\PyQt5\\Qt5\\translations\\qt_sl.qm',
+   'DATA'),
+  ('cryptography-41.0.1.dist-info\\LICENSE.APACHE',
+   'c:\\program '
+   'files\\python310\\lib\\site-packages\\cryptography-41.0.1.dist-info\\LICENSE.APACHE',
+   'DATA'),
+  ('PyQt5\\Qt5\\translations\\qt_sv.qm',
+   'C:\\Program '
+   'Files\\Python310\\lib\\site-packages\\PyQt5\\Qt5\\translations\\qt_sv.qm',
+   'DATA'),
+  ('PyQt5\\Qt5\\translations\\qt_it.qm',
+   'C:\\Program '
+   'Files\\Python310\\lib\\site-packages\\PyQt5\\Qt5\\translations\\qt_it.qm',
+   'DATA'),
+  ('PyQt5\\Qt5\\translations\\qt_gl.qm',
+   'C:\\Program '
+   'Files\\Python310\\lib\\site-packages\\PyQt5\\Qt5\\translations\\qt_gl.qm',
+   'DATA'),
+  ('PyQt5\\Qt5\\translations\\qtbase_ar.qm',
+   'C:\\Program '
+   'Files\\Python310\\lib\\site-packages\\PyQt5\\Qt5\\translations\\qtbase_ar.qm',
+   'DATA'),
+  ('PyQt5\\Qt5\\translations\\qt_help_pl.qm',
+   'C:\\Program '
+   'Files\\Python310\\lib\\site-packages\\PyQt5\\Qt5\\translations\\qt_help_pl.qm',
+   'DATA'),
+  ('PyQt5\\Qt5\\translations\\qtbase_cs.qm',
+   'C:\\Program '
+   'Files\\Python310\\lib\\site-packages\\PyQt5\\Qt5\\translations\\qtbase_cs.qm',
+   'DATA'),
+  ('PyQt5\\Qt5\\translations\\qt_help_bg.qm',
+   'C:\\Program '
+   'Files\\Python310\\lib\\site-packages\\PyQt5\\Qt5\\translations\\qt_help_bg.qm',
+   'DATA'),
+  ('PyQt5\\Qt5\\translations\\qt_help_fr.qm',
+   'C:\\Program '
+   'Files\\Python310\\lib\\site-packages\\PyQt5\\Qt5\\translations\\qt_help_fr.qm',
+   'DATA'),
+  ('PyQt5\\Qt5\\translations\\qt_bg.qm',
+   'C:\\Program '
+   'Files\\Python310\\lib\\site-packages\\PyQt5\\Qt5\\translations\\qt_bg.qm',
+   'DATA'),
+  ('cryptography-41.0.1.dist-info\\METADATA',
+   'c:\\program '
+   'files\\python310\\lib\\site-packages\\cryptography-41.0.1.dist-info\\METADATA',
+   'DATA'),
+  ('PyQt5\\Qt5\\translations\\qt_help_tr.qm',
+   'C:\\Program '
+   'Files\\Python310\\lib\\site-packages\\PyQt5\\Qt5\\translations\\qt_help_tr.qm',
+   'DATA'),
+  ('PyQt5\\Qt5\\translations\\qt_gd.qm',
+   'C:\\Program '
+   'Files\\Python310\\lib\\site-packages\\PyQt5\\Qt5\\translations\\qt_gd.qm',
+   'DATA'),
+  ('PyQt5\\Qt5\\translations\\qt_help_uk.qm',
+   'C:\\Program '
+   'Files\\Python310\\lib\\site-packages\\PyQt5\\Qt5\\translations\\qt_help_uk.qm',
    'DATA')],
  [])

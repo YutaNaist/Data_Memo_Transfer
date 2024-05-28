@@ -26,7 +26,7 @@ class Dialog_Ask_ID(QtWidgets.QDialog):
         else:
             self.data_Model = DataModel()
         url = self.data_Model.get_Dict_Data_Model("str_url_diamond")
-        self.messageSender = senderMessageToDiamond(url)
+        self.messageSender = senderMessageToDiamond(url, self.data_Model)
         # self.window_Main = Window_Main(data_Model=data_Model)
 
     def set_Signal(self):
