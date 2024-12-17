@@ -23,7 +23,7 @@ forms/Window_Edit_Form.ui
 forms/Window_Edit_Form_ui.py
 forms/Test/*
 build/*
-build* 
+build*
 dist*
 dist/*
 dist-NR*
@@ -31,3 +31,4 @@ test.lock
 __pycache__
 forms/__pycache__
 controller/__pycache__
+log/*
