@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>400</width>
-    <height>295</height>
+    <width>398</width>
+    <height>287</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -17,7 +17,7 @@
    <item>
     <widget class="QStackedWidget" name="stackedWidget">
      <property name="currentIndex">
-      <number>2</number>
+      <number>0</number>
      </property>
      <widget class="QWidget" name="Widget_Page1">
       <layout class="QVBoxLayout" name="verticalLayout_2">
@@ -53,7 +53,10 @@
            </property>
            <property name="icon">
             <iconset>
-             <normaloff>../icons/GoNext.png</normaloff>../icons/GoNext.png</iconset>
+             <normaloff>../../../Users/yutay/.designer/icons/GoNext.png</normaloff>../../../Users/yutay/.designer/icons/GoNext.png</iconset>
+           </property>
+           <property name="default">
+            <bool>true</bool>
            </property>
           </widget>
          </item>
@@ -95,7 +98,13 @@
            </property>
            <property name="icon">
             <iconset>
-             <normaloff>../icons/GoPrevious.png</normaloff>../icons/GoPrevious.png</iconset>
+             <normaloff>../../../Users/yutay/.designer/icons/GoPrevious.png</normaloff>../../../Users/yutay/.designer/icons/GoPrevious.png</iconset>
+           </property>
+           <property name="autoDefault">
+            <bool>false</bool>
+           </property>
+           <property name="default">
+            <bool>false</bool>
            </property>
           </widget>
          </item>
@@ -106,7 +115,10 @@
            </property>
            <property name="icon">
             <iconset>
-             <normaloff>../icons/GoNext.png</normaloff>../icons/GoNext.png</iconset>
+             <normaloff>../../../Users/yutay/.designer/icons/GoNext.png</normaloff>../../../Users/yutay/.designer/icons/GoNext.png</iconset>
+           </property>
+           <property name="default">
+            <bool>true</bool>
            </property>
           </widget>
          </item>
@@ -148,7 +160,10 @@
            </property>
            <property name="icon">
             <iconset>
-             <normaloff>../icons/GoPrevious.png</normaloff>../icons/GoPrevious.png</iconset>
+             <normaloff>../../../Users/yutay/.designer/icons/GoPrevious.png</normaloff>../../../Users/yutay/.designer/icons/GoPrevious.png</iconset>
+           </property>
+           <property name="autoDefault">
+            <bool>false</bool>
            </property>
           </widget>
          </item>
@@ -159,7 +174,13 @@
            </property>
            <property name="icon">
             <iconset>
-             <normaloff>../icons/Start.png</normaloff>../icons/Start.png</iconset>
+             <normaloff>../../../Users/yutay/.designer/icons/Start.png</normaloff>../../../Users/yutay/.designer/icons/Start.png</iconset>
+           </property>
+           <property name="autoDefault">
+            <bool>true</bool>
+           </property>
+           <property name="default">
+            <bool>true</bool>
            </property>
           </widget>
          </item>

@@ -1,4 +1,4 @@
-from sendMessageToDiamond import senderMessageToDiamond
+from TyMessageSender import TyMessageSender
 
 
 class MetaDataConverter:
@@ -16,7 +16,7 @@ class MetaDataConverter:
             "instrument": [],
             "experimental_methods": [],
             "specimens": [],
-            "custom_properties": []
+            "custom_properties": [],
         }
 
     def setTitle(self, title=""):
@@ -42,12 +42,9 @@ class MetaDataConverter:
         descriptions.append({"description": description})
         self.metaData["descriptions"] = descriptions
 
-    def setCreators(self,
-                    name="",
-                    affiliation="",
-                    email="",
-                    identifier="",
-                    identifierType=""):
+    def setCreators(
+        self, name="", affiliation="", email="", identifier="", identifierType=""
+    ):
         creators = self.metaData["creators"]
         for i in range(len(creators)):
             if creators[i]["name"] == name:
@@ -81,11 +78,7 @@ class MetaDataConverter:
         self.metaData["filesets"] = filesets
         return 0
 
-    def setInstrument(self,
-                      name="",
-                      identifier="",
-                      description="",
-                      instrumentType=""):
+    def setInstrument(self, name="", identifier="", description="", instrumentType=""):
         instruments = self.metaData["instrument"]
         for i in range(len(instruments)):
             if instruments[i]["name"] == name:
@@ -142,7 +135,6 @@ class MetaDataConverter:
     def get_Meta_Data_From_Diamond(self, usageID, url=""):
         if url != "":
             self.url_To_Diamond = url
-        message_Sender = senderMessageToDiamond(self.url_To_Diamond)
+        message_Sender = TyMessageSender(self.url_To_Diamond)
         metaData = message_Sender.sendRequestGetMetaData(usageID)
         return metaData
-

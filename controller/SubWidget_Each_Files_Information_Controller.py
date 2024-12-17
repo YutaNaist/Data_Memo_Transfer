@@ -1,15 +1,13 @@
+from __future__ import annotations
+from typing import TYPE_CHECKING
+
+if TYPE_CHECKING:
+    from TyDocDataMemoTransfer import TyDocDataMemoTransfer
+
 from forms.Widget_Each_Files_Information_ui import (
     Ui_Form as Ui_Widget_Each_Files_Information,
 )
-
-# from controller.SubWidget_Sample_Information_Controller import Sub_Widget_Sample_Information
-# from controller.SubWidget_Equipment_Information_Controller import Sub_Widget_Equipment_Information
-# from controller.Window_Edit_File_Information_Controller import Sub_Window_Edit_File_Information
-
 from controller.Dialog_Edit_Form_Controller import Dialog_Edit_Form
-
-from Data_Model import DataModel
-
 from PyQt5 import QtWidgets
 from PyQt5 import QtGui
 from PyQt5 import QtCore
@@ -21,7 +19,7 @@ class Sub_Widget_Each_Files_Information(QtWidgets.QWidget):
 
     # signal_update_text_box
 
-    def __init__(self, parent=None, data_Model: DataModel = None):
+    def __init__(self, parent=None, data_Model: TyDocDataMemoTransfer = None):
         self.timer = QtCore.QTimer()
         self.timer.setSingleShot(True)
         super().__init__(parent)
@@ -33,12 +31,12 @@ class Sub_Widget_Each_Files_Information(QtWidgets.QWidget):
         if data_Model is not None:
             self.data_Model = data_Model
         else:
-            self.data_Model = DataModel()
+            self.data_Model = TyDocDataMemoTransfer()
         # print()
         # print(self.data_Model.get_All_Dict_Data_Model())
         # print()
 
-        if self.data_Model.get_Dict_Data_Model("is_upload_arim") is False:
+        if self.data_Model.getDictExperimentInformation("is_upload_arim") is False:
             # self.ui.GB_ARIM_Upload.setVisible(False)
             self.ui.RB_ARIM_Upload.setVisible(False)
             self.ui.RB_ARIM_Not_Upload.setVisible(False)
@@ -83,7 +81,7 @@ class Sub_Widget_Each_Files_Information(QtWidgets.QWidget):
         self.file_Name = str_File_Name
 
     def set_Status_Classified(self):
-        dict_file_data = self.data_Model.get_File_Information(self.index)
+        dict_file_data = self.data_Model.getFileInformation(self.index)
         status = self.get_Status_Classified()
         if status == "effective_data":
             dict_file_data["classified"] = "effective_data"
@@ -95,8 +93,8 @@ class Sub_Widget_Each_Files_Information(QtWidgets.QWidget):
             dict_file_data["classified"] = "not_classified"
             dict_file_data["valid"] = False
         self.update_Title()
-        self.data_Model.set_File_Information(self.index, dict_file_data)
-        self.data_Model.save_To_Temporary()
+        self.data_Model.setFileInformation(self.index, dict_file_data)
+        self.data_Model.saveToTemporary()
 
     def get_Status_Classified(self):
         if self.ui.RB_Valid.isChecked():
@@ -107,13 +105,13 @@ class Sub_Widget_Each_Files_Information(QtWidgets.QWidget):
             return "not_classified"
 
     def set_Status_ARIM_Upload(self):
-        dict_file_data = self.data_Model.get_File_Information(self.index)
+        dict_file_data = self.data_Model.getFileInformation(self.index)
         if self.ui.RB_ARIM_Upload.isChecked():
             dict_file_data["arim_upload"] = True
         else:
             dict_file_data["arim_upload"] = False
-        self.data_Model.set_File_Information(self.index, dict_file_data)
-        self.data_Model.save_To_Temporary()
+        self.data_Model.setFileInformation(self.index, dict_file_data)
+        self.data_Model.saveToTemporary()
 
     def get_Status_ARIM_Upload(self):
         if self.ui.RB_ARIM_Upload.isChecked():
@@ -148,7 +146,7 @@ class Sub_Widget_Each_Files_Information(QtWidgets.QWidget):
 
     def set_Text_From_Data_Model(self):
         # self.index = self.data_Model.check_Index_File_Name(self.file_Name)
-        dict_File_Data = self.data_Model.get_File_Information(self.index)
+        dict_File_Data = self.data_Model.getFileInformation(self.index)
         self.ui.TE_Free_Comment.setPlainText(dict_File_Data["comment"])
         self.set_classified(dict_File_Data["classified"])
         self.set_arim_upload(dict_File_Data["arim_upload"])
@@ -172,10 +170,10 @@ class Sub_Widget_Each_Files_Information(QtWidgets.QWidget):
             )
 
     def set_File_Comment_To_Data_Model(self):
-        dict_file_data = self.data_Model.get_File_Information(self.index)
+        dict_file_data = self.data_Model.getFileInformation(self.index)
         dict_file_data["comment"] = self.ui.TE_Free_Comment.toPlainText()
-        self.data_Model.set_File_Information(self.index, dict_file_data)
-        self.data_Model.save_To_Temporary()
+        self.data_Model.setFileInformation(self.index, dict_file_data)
+        self.data_Model.saveToTemporary()
 
     def start_edit_Timer(self):
         self.timer.start(5000)
@@ -228,7 +226,7 @@ class Sub_Widget_Each_Files_Information(QtWidgets.QWidget):
         # self.update_Title()
 
     def set_Sample_And_Equipment_Information(self, index):
-        dict_File_Data = self.data_Model.get_File_Information(index)
+        dict_File_Data = self.data_Model.getFileInformation(index)
         str_File_Information = ""
         str_File_Information += "Sample Name: {}\n".format(
             dict_File_Data["sample"]["name"]
