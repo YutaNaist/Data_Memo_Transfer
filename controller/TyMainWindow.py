@@ -317,12 +317,6 @@ class TyMainWindow(QtWidgets.QMainWindow):
                 msgBox.exec_()
                 return False
 
-        # if experiment_ID == "":
-        #     msgBox = QtWidgets.QMessageBox()
-        #     msgBox.setText("Please input ID.")
-        #     msgBox.setStandardButtons(QtWidgets.QMessageBox.Ok)
-        #     msgBox.exec_()
-        # else:
         msgBox = QtWidgets.QMessageBox()
         strSetText = ""
         strSetText += "実を終了しますか？\n"
@@ -339,9 +333,6 @@ class TyMainWindow(QtWidgets.QMainWindow):
         )
         retval = msgBox.exec_()
         if retval == 1024:
-            # response = self.messageSender.sendRequestFinishExperiment(
-            #     self.doc, isAppendExisting=True
-            # )
             response = self.doc.messageSender.sendRequestFinishExperiment(
                 self.doc, isAppendExisting=True
             )
