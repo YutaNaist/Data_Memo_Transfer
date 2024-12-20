@@ -24,7 +24,7 @@ foreach ($condition in $buildConditions) {
     Copy-Item .\settings\ .\dist\settings\ -Recurse -Force
     Copy-Item .\icons\ .\dist\icons\ -Recurse -Force
     Copy-Item .\forms\ .\dist\forms\ -Recurse -Force
-    New-Item .\dist\logs -ItemType Directory -Force > $null
+    New-Item .\dist\Log -ItemType Directory -Force > $null
 
     $outputFolder = ".\Output\"
     if (-Not (Test-Path $outputFolder)) {

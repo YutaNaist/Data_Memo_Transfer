@@ -17,7 +17,7 @@
             "class": "logging.handlers.TimedRotatingFileHandler",
             "level": "INFO",
             "formatter": "simple",
-            "filename": "log/logDataMemoTransfer.log",
+            "filename": "Log/logDataMemoTransfer.log",
             "when": "MIDNIGHT",
             "interval": 1,
             "backupCount": 30,
