@@ -24,24 +24,32 @@ foreach ($condition in $buildConditions) {
     Copy-Item .\settings\ .\dist\settings\ -Recurse -Force
     Copy-Item .\icons\ .\dist\icons\ -Recurse -Force
     Copy-Item .\forms\ .\dist\forms\ -Recurse -Force
+    New-Item .\dist\logs -ItemType Directory -Force
 
-    $outputDistFolder = ".\Data_Memo_Transfer_$versionName"
+    $outputFolder = ".\Output\"
+    if (-Not (Test-Path $outputFolder)) {
+        New-Item $outputFolder -ItemType Directory -Force
+    }
+
+    $outputDistFolder = "Data_Memo_Transfer_$versionName"
     if (Test-Path ".\dist") {
-        if (Test-Path $outputDistFolder) {
-            Remove-Item -Recurse -Force $outputDistFolder
+        if (Test-Path $outputFolder$outputDistFolder) {
+            Remove-Item -Recurse -Force $outputFolder$outputDistFolder
         }
         Rename-Item -Path ".\dist" -NewName $outputDistFolder
+        Move-Item -Path $outputDistFolder -Destination $outputFolder$outputDistFolder -Force
     }
     else {
         Write-Error "No 'dist' folder found after build!"
         continue
     }
-    $outputBuildFolder = ".\Build_Data_Memo_Transfer_$versionName"
+    $outputBuildFolder = "Build_Data_Memo_Transfer_$versionName"
     if (Test-Path ".\build") {
-        if (Test-Path $outputBuildFolder) {
-            Remove-Item -Recurse -Force $outputBuildFolder
+        if (Test-Path $outputFolder$outputBuildFolder) {
+            Remove-Item -Recurse -Force $outputFolder$outputBuildFolder
         }
         Rename-Item -Path ".\build" -NewName $outputBuildFolder
+        Move-Item -Path $outputBuildFolder -Destination $outputFolder$outputBuildFolder -Force
     }
     else {
         Write-Error "No 'build' folder found after build!"
