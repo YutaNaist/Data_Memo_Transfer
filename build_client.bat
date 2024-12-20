@@ -1,13 +1,17 @@
 @echo off
-setlocal enabledelayedexpansion
-@REM .\compileUiToPy.bat
+@REM setlocal enabledelayedexpansion
+@REM @REM .\compileUiToPy.bat
 
-pyinstaller.exe Data_Memo_transfer.py -F -w
-mkdir .\dist\icons
-copy /y .\icons\*.png .\dist\icons\
-mkdir .\dist\forms
-copy /y .\forms\*.ui .\dist\forms\
-mkdir .\dist\settings
-copy /y .\settings\*.json .\dist\settings\
-echo "Succeed to build"
-pause 60
+@REM pyinstaller.exe Data_Memo_transfer.py -F -w
+@REM mkdir .\dist\icons
+@REM copy /y .\icons\*.png .\dist\icons\
+@REM mkdir .\dist\forms
+@REM copy /y .\forms\*.ui .\dist\forms\
+@REM mkdir .\dist\settings
+@REM copy /y .\settings\*.json .\dist\settings\
+@REM echo "Succeed to build"
+@REM pause 60
+
+powershell -ExecutionPolicy Bypass -File "build_client.ps1"
+
+pause
