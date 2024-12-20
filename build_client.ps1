@@ -24,11 +24,11 @@ foreach ($condition in $buildConditions) {
     Copy-Item .\settings\ .\dist\settings\ -Recurse -Force
     Copy-Item .\icons\ .\dist\icons\ -Recurse -Force
     Copy-Item .\forms\ .\dist\forms\ -Recurse -Force
-    New-Item .\dist\logs -ItemType Directory -Force
+    New-Item .\dist\logs -ItemType Directory -Force > $null
 
     $outputFolder = ".\Output\"
     if (-Not (Test-Path $outputFolder)) {
-        New-Item $outputFolder -ItemType Directory -Force
+        New-Item $outputFolder -ItemType Directory -Force > $null
     }
 
     $outputDistFolder = "Data_Memo_Transfer_$versionName"
