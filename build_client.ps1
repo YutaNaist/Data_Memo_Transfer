@@ -1,4 +1,4 @@
-
+$isDebugMode = 0
 # PowerShell script to build multiple versions using JSON configuration
 $conditionFile = ".\buildConfig\build_client_config.json"
 if (-Not (Test-Path $conditionFile)) {
@@ -6,6 +6,9 @@ if (-Not (Test-Path $conditionFile)) {
     exit 1
 }
 $buildConditions = Get-Content -Path $conditionFile | ConvertFrom-Json
+if ( -Not ( 0 -eq $isDebugMode ) ){
+    Write-Host "`nDebug mode is: Activated" -ForegroundColor Cyan
+}
 
 # Loop through each build condition
 foreach ($condition in $buildConditions) {
@@ -20,10 +23,16 @@ foreach ($condition in $buildConditions) {
         Write-Error "Source file '$globalVariableFile' not found!"
         continue
     }
-    pyinstaller.exe .\Data_Memo_Transfer.py -F -w
+    if ( 0 -eq $isDebugMode ){
+        pyinstaller.exe .\Data_Memo_Transfer.py -F -w
+    }
+    else{pyinstaller.exe .\Data_Memo_Transfer.py -F
+    }
+    
     Copy-Item .\settings\ .\dist\settings\ -Recurse -Force
     Copy-Item .\icons\ .\dist\icons\ -Recurse -Force
     Copy-Item .\forms\ .\dist\forms\ -Recurse -Force
+    Copy-Item C:\mingw64\bin\libmcfgthread-1.dll .\dist\libmcfgthread-1.dll -Force
     New-Item .\dist\Log -ItemType Directory -Force > $null
 
     $outputFolder = ".\Output\"
