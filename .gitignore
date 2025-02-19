@@ -11,3 +11,7 @@ test.lock
 test.json
 pyinstaller/*
 pyinstaller/
+*.exe
+*.build/
+*.dist/
+*.onefile-build/
