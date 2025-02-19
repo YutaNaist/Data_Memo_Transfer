@@ -141,7 +141,7 @@ class TyMessageSender:
     def sendRequestSendOneTimePassword(
         self, strExperimentId: str, isSuperVisor: bool = False
     ) -> dict:
-        args = {"experiment_id": strExperimentId, "is_supervisor": isSuperVisor}
+        args = {"experiment_id": strExperimentId, "is_send_to_supervisor": isSuperVisor}
         url = self._urlBase + "/request_one_time_password"
         dictResponse = self.sendMessage(url, args)
         return dictResponse
