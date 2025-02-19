@@ -43,15 +43,13 @@ class TyDialogSendOneTimePassword(QtWidgets.QDialog):
 
     def sendOneTimePassword(self):
         experimentId = self.ui.LE_Experiment_ID.text()
-        isSendSupervisor = self.ui.CHB_Send_To_Supervisor.isChecked()
+        # isSendSupervisor = self.ui.CHB_Send_To_Supervisor.isChecked()
+        isSendSupervisor = self.ui.RB_Send_To_Supervisor.isChecked()
         self.doc.setExperimentId(experimentId)
         response = self.doc.messageSender.sendRequestSendOneTimePassword(
             experimentId, isSendSupervisor
         )
         if response["status"] is True:
-            # self.doc.setExperimentId(experimentId)
-            # self.doc.changeView("experiment_information")
-            # self.doc.writeToLogger(response["message"], "info")
             mailAddress = response["args"]["mail_address"]
             self.doc.setMailAddress(mailAddress)
             self.doc.changeView("register_password")
