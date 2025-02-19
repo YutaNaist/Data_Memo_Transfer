@@ -1,4 +1,4 @@
-$isDebugMode = 1
+$isDebugMode = 0
 # PowerShell script to build multiple versions using JSON configuration
 $conditionFile = ".\buildConfig\build_client_config.json"
 if (-Not (Test-Path $conditionFile)) {
@@ -32,6 +32,7 @@ foreach ($condition in $buildConditions) {
     Copy-Item .\settings\ .\dist\settings\ -Recurse -Force
     Copy-Item .\icons\ .\dist\icons\ -Recurse -Force
     Copy-Item .\forms\ .\dist\forms\ -Recurse -Force
+    Copy-Item C:\mingw64\bin\libmcfgthread-1.dll .\dist\libmcfgthread-1.dll -Force
     New-Item .\dist\Log -ItemType Directory -Force > $null
 
     $outputFolder = ".\Output\"
