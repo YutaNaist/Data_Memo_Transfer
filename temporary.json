@@ -1,0 +1,60 @@
+{
+    "str_url_diamond": "https://192.168.150.10:5426",
+    "str_save_directory": "D:\\Share\\NR-000",
+    "str_share_directory_in_storage": "D:\\Share\\NR-000",
+    "str_experiment_id": "0000-0000-0000",
+    "dict_user_information": {
+        "arim": {
+            "id": "TEST",
+            "is_arim": "1. 自身でアップロード",
+            "is_uploaded": false
+        },
+        "date": {
+            "end": "2024/10/30 10:00:00",
+            "start": "2024/10/30 0:00:00"
+        },
+        "edit_url": "Enable",
+        "experiment_id": "0000-0000-0000",
+        "instrument": {
+            "id": "NR-301",
+            "name": "X線構造解析装置"
+        },
+        "share": {
+            "gmail": "yuta.yamamoto@g.ext.naist.jp",
+            "is_share": "1. Googleでアップロード"
+        },
+        "user": {
+            "address": "",
+            "affiliation": "",
+            "mail_address": "yuta.yamamoto@ms.naist.jp",
+            "name": "山本裕太",
+            "phone_number": ""
+        }
+    },
+    "is_exist_temp_file": true,
+    "is_upload_arim": true,
+    "is_share_with_google": true,
+    "str_parent_id_in_google_drive": "",
+    "str_mail_address": "yuta.yamamoto@ms.naist.jp",
+    "dict_clipboard": {
+        "filename": "",
+        "index": -1,
+        "classified": "Unclassified",
+        "valid": false,
+        "arim_upload": false,
+        "comment": "",
+        "experiment": {
+            "title": "",
+            "comment": ""
+        },
+        "sample": {
+            "id": "",
+            "name": "",
+            "comment": ""
+        },
+        "equipment": {
+            "method": ""
+        }
+    },
+    "list_file_data": []
+}
