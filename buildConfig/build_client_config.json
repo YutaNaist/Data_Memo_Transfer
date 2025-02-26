@@ -1,6 +1,30 @@
 [
     {
+        "version_name": "Local",
+        "global_variable_file": "buildConfig/global_variable_Local.py"
+    },
+    {
         "version_name": "NR-000",
         "global_variable_file": "buildConfig/global_variable_NR-000.py"
+    },
+    {
+        "version_name": "NR-301",
+        "global_variable_file": "buildConfig/global_variable_NR-301.py"
+    },
+    {
+        "version_name": "NR-401",
+        "global_variable_file": "buildConfig/global_variable_NR-401.py"
+    },
+    {
+        "version_name": "NR-101",
+        "global_variable_file": "buildConfig/global_variable_NR-101.py"
+    },
+    {
+        "version_name": "NR-102",
+        "global_variable_file": "buildConfig/global_variable_NR-102.py"
+    },
+    {
+        "version_name": "NR-103",
+        "global_variable_file": "buildConfig/global_variable_NR-103.py"
     }
 ]
