@@ -35,8 +35,8 @@ foreach ($condition in $buildConditions) {
     Copy-Item C:\mingw64\bin\libmcfgthread-1.dll .\dist\libmcfgthread-1.dll -Force
     New-Item .\dist\Log -ItemType Directory -Force > $null
 
-    $outputFolder = ".\Output\"
     if (-Not (Test-Path $outputFolder)) {
+    $outputFolder = ".\BuildExe\"
         New-Item $outputFolder -ItemType Directory -Force > $null
     }
 
