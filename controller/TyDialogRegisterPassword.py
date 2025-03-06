@@ -36,8 +36,13 @@ class TyDialogRegisterPassword(QtWidgets.QDialog):
         # self.LAB_Experiment_ID.setText(experimentId)
         # self.LAB_Email_Address.setText(userMailAddress)
         self.LAB_Experiment_ID.setText(self.experimentId)
-        strMailAddressHide = self.userMailAddress[:3] + "*" * 5 + "@" + self.userMailAddress.split("@")[1]
-        self.LAB_Email_Address.setText(self.userMailAddress)
+        strMailAddressHide = (
+            self.userMailAddress[:3]
+            + "*" * 5
+            + "@"
+            + self.userMailAddress.split("@")[1]
+        )
+        self.LAB_Email_Address.setText(strMailAddressHide)
         # self.window_Main = Window_Main(data_Model=data_Model)
 
     def loadUi(self):
