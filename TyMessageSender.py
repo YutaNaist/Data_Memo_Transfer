@@ -71,6 +71,13 @@ class TyMessageSender:
                     "message": "Bad Request. Please contact the administrator.",
                     "args": {},
                 }
+            if statusCode == 450:
+                message = response.json()["message"]
+                return {
+                    "status": False,
+                    "message": message,
+                    "args": {},
+                }
             # dictReturnResponse = json.loads(response.text)
             dictReturnResponse = response.json()
             print(dictReturnResponse)
