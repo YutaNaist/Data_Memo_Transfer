@@ -16,3 +16,4 @@ pyinstaller/
 *.dist/
 *.onefile-build/
 test/
+Data_Memo_transfer.spec
