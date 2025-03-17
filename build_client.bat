@@ -12,6 +12,6 @@
 @REM echo "Succeed to build"
 @REM pause 60
 
-powershell -ExecutionPolicy Bypass -File "build_client.ps1"
+powershell -ExecutionPolicy Bypass -File "%~dp0build_client.ps1"
 
 pause
