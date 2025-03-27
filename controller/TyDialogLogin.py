@@ -128,11 +128,13 @@ class TyDialogLogin(QtWidgets.QDialog):
                     retval = self.doc.messageBox("Warning", message, 2)
                     if retval == 1024:
                         dictExperimentInformation["dict_user_information"] = dictProposal
+                        dictExperimentInformation["str_share_directory_in_storage"] = self.doc.getDictExperimentInformation("str_share_directory_in_storage")
                         self.doc.setAllDictExperimentInformation(dictExperimentInformation)
                     else:
                         return False
                 else:
                     dictExperimentInformation["dict_user_information"] = dictProposal
+                    dictExperimentInformation["str_share_directory_in_storage"] = self.doc.getDictExperimentInformation("str_share_directory_in_storage")
                     self.doc.setAllDictExperimentInformation(dictExperimentInformation)
             else:
                 self.doc.setDiCtExperimentInformation(
