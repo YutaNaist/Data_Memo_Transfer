@@ -31,6 +31,7 @@ class DataModel_DataMemoTransfer_TypeException(DataModel_DataMemoTransfer_Except
 
 class TyDocDataMemoTransfer:
     def __init__(self):
+        self.isBuild = False
         self.dictExperimentInformation = {}
         self.list_keys = [
             "str_url_diamond",

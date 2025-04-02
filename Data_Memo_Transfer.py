@@ -2,35 +2,55 @@
 import PyQt5.Qt
 from TyDocDataMemoTransfer import TyDocDataMemoTransfer
 import sys
+import os
 import portalocker
+import subprocess
+import platform
 from PyQt5 import QtWidgets
 
-import global_variable as global_variable
-
-URL_DIAMOND = global_variable.URL_DIAMOND
-SAVE_DIRECTORY = global_variable.SAVE_DIRECTORY
-SHARE_DIRECTORY_IN_STORAGE = global_variable.SHARE_DIRECTORY_IN_STORAGE
-# URL_DIAMOND = 'http://192.168.0.10:5462/request'
-# SAVE_DIRECTORY = "Z:/"
-# SHARE_DIRECTORY_IN_STORAGE = "C:/Share/SmartLab/"
-# URL_DIAMOND = 'http://localhost:5462/request'
-# SAVE_DIRECTORY = "C:/Test/Share/"
-# SHARE_DIRECTORY_IN_STORAGE = "C:/Test/Share/"
-
 def main():
+    #* build_client.ps1から実行されたかどうかを判別。
+    #* global_variable.pyが存在する場合はbuild_client.ps1から実行されたと判断。
+    #* テストする場合はglobal_variable_Local.pyを使用。(global_variable.pyは削除する)
+    if os.path.exists("global_variable.py"):
+        import global_variable as global_variable
+        isBuild = True
+    else:
+        import buildConfig.global_variable_Local as global_variable
+        isBuild = False
+
+    URL_DIAMOND = global_variable.URL_DIAMOND
+    SAVE_DIRECTORY = global_variable.SAVE_DIRECTORY
+    SHARE_DIRECTORY_IN_STORAGE = global_variable.SHARE_DIRECTORY_IN_STORAGE
+
     doc = TyDocDataMemoTransfer()
     doc.makeLogger("settings/logDataMemoTransfer.json", name=__name__)
-
+    doc.isBuild = isBuild
     app = QtWidgets.QApplication(sys.argv)
-    lock_file = open("./test.lock", mode="a+")
-    # try:
-    #     portalocker.lock(lock_file, portalocker.LOCK_EX | portalocker.LOCK_NB)
-    # except IOError:
-    #     msgBox = QtWidgets.QMessageBox()
-    #     msgBox.setText("Another Data_Memo_Transfer is running")
-    #     msgBox.setStandardButtons(QtWidgets.QMessageBox.Ok)
-    #     msgBox.exec_()
-    #     return False
+
+    lock_file_path = "./test.lock"
+    process_lock = portalocker.ProcessLock(lock_file_path)
+
+    # 古いロックファイルのチェック
+    if os.path.exists(lock_file_path):
+        if not process_lock.check_and_remove_stale_lock():
+            msgBox = QtWidgets.QMessageBox()
+            msgBox.setText("Another Data_Memo_Transfer is running")
+            msgBox.setStandardButtons(QtWidgets.QMessageBox.Ok)
+            msgBox.exec_()
+            return False
+
+    # 新しいロックファイルの作成
+    lock_file = open(lock_file_path, mode="w")
+    try:
+        portalocker.lock(lock_file, portalocker.LOCK_EX | portalocker.LOCK_NB)
+        process_lock.write_lock_info()
+    except IOError:
+        msgBox = QtWidgets.QMessageBox()
+        msgBox.setText("Another Data_Memo_Transfer is running")
+        msgBox.setStandardButtons(QtWidgets.QMessageBox.Ok)
+        msgBox.exec_()
+        return False
 
     doc.loadFromTemporary()
     # doc.setDiCtExperimentInformation("str_url_diamond", URL_DIAMOND)

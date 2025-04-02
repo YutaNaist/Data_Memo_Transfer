@@ -5,7 +5,7 @@ $isDebugMode = 0
 # PowerShell script to build multiple versions using JSON configuration
 $conditionFile = "buildConfig\build_client_config.json"
 if (-Not (Test-Path $conditionFile)) {
-    Write-Error "JSON file '$conditionFile' not found!" -ForegroundColor Red 
+    Write-Error "JSON file '$conditionFile' not found!" -ForegroundColor Red
     exit 1
 }
 $buildConditions = Get-Content -Path $conditionFile | ConvertFrom-Json
@@ -32,7 +32,7 @@ foreach ($condition in $buildConditions) {
     }
     else{pyinstaller.exe .\Data_Memo_Transfer.py -F
     }
-    
+
     Copy-Item .\settings\ .\dist\settings\ -Recurse -Force
     Copy-Item .\icons\ .\dist\icons\ -Recurse -Force
     Copy-Item .\forms\ .\dist\forms\ -Recurse -Force
@@ -73,5 +73,5 @@ foreach ($condition in $buildConditions) {
     }
     Write-Host "Build completed for: $versionName" -ForegroundColor Green
 }
-
+Remove-Item -Force global_variable.py
 Write-Host "`nAll builds completed successfully!" -ForegroundColor Magenta
