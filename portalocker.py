@@ -107,3 +107,6 @@ elif os.name == 'posix':
 
     def unlock(file):
         fcntl.flock(file.fileno(), fcntl.LOCK_UN)
+
+if __name__ == "__main__":
+    print(os.name)
