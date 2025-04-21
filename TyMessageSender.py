@@ -1,6 +1,7 @@
 from __future__ import annotations
 from typing import TYPE_CHECKING
-from typing import TypedDict, Dict, Any
+from typing import TypedDict, Any, Optional, Union, cast
+# from typing import Dict
 
 import requests
 import urllib3
@@ -19,6 +20,23 @@ class TyMessageSenderResponce(TypedDict):
     message: str
     status_code: int
     # args: Dict[str, Any]
+
+
+class TyProposalInfo(TypedDict):
+    arim: dict[str, Optional[str]]
+    date: dict[str, str]
+    edit_url: str
+    experiment_id: str
+    instrument: dict[str, str]
+    share: dict[str, Optional[str]]
+    user: dict[str, Optional[str]]
+
+
+class TyLoginResponse(TypedDict):
+    message: str
+    proposal: Union[TyProposalInfo, dict]
+    status: bool
+    status_code: int
 
 
 class TyMessageSender:
@@ -55,7 +73,7 @@ class TyMessageSender:
     def sendMessage(
         self,
         url: str,
-        json_data: dict[str, Any] = {},
+        jsonData: dict[str, Any] = {},
         methods: str = "POST",
         sendCount: int = 0,
     ) -> dict[str, Any]:
@@ -75,22 +93,23 @@ class TyMessageSender:
             message = f"Send Message to Server: {url}"
             # self.doc.writeToLogger(message, "info")
             self.logger.info(message)
-            self.logger.debug(f"json data: {json_data}")
+            self.logger.debug(f"json data: {jsonData}")
+            jsonDataSend = json.dumps(jsonData, ensure_ascii=False).encode("utf-8")
             if methods == "GET":
                 response = self.session.get(
-                    url, data=json_data, headers=headers, proxies={}
+                    url, data=jsonDataSend, headers=headers, proxies={}
                 )
             elif methods == "POST":
                 response = self.session.post(
-                    url, data=json_data, headers=headers, proxies={}
+                    url, data=jsonDataSend, headers=headers, proxies={}
                 )
             elif methods == "PUT":
                 response = self.session.put(
-                    url, data=json_data, headers=headers, proxies={}
+                    url, data=jsonDataSend, headers=headers, proxies={}
                 )
             elif methods == "DELETE":
                 response = self.session.delete(
-                    url, data=json_data, headers=headers, proxies={}
+                    url, data=jsonDataSend, headers=headers, proxies={}
                 )
             else:
                 raise ValueError("Invalid method.")
@@ -143,7 +162,7 @@ class TyMessageSender:
                     f"Identifier mismatch: {identifier} != {returnIdentifier}\nResend Message"
                 )
                 dictReturnResponse = self.sendMessage(
-                    url, json_data, methods, sendCount + 1
+                    url, jsonData, methods, sendCount + 1
                 )
         except requests.exceptions.ConnectTimeout as e:
             self.logger.warning(e)
@@ -163,17 +182,26 @@ class TyMessageSender:
             }
         return dictReturnResponse
 
-    def sendRequestCheckID(self, strExperimentId: str) -> dict:
+    def sendRequestCheckID(self, strExperimentId: str) -> dict[str, Any]:
         args = {"experiment_id": strExperimentId}
         url = self._urlBase + "/check_usage_id"
         dictResponse = self.sendMessage(url, args)
         return dictResponse
 
-    def sendRequestLogin(self, strExperimentId: str, password: str) -> dict:
-        args = {"experiment_id": strExperimentId, "password": password}
-        url = self._urlBase + "/login"
-        dictResponse = self.sendMessage(url, args)
-        return dictResponse
+    def sendRequestLogin(self, strExperimentId: str, password: str) -> TyLoginResponse:
+        # args = {"experiment_id": strExperimentId, "password": password}
+        jsonData = {"password": password}
+        url = self._urlBase + f"/login/{strExperimentId}"
+        dictResponse = self.sendMessage(url, jsonData, "POST")
+
+        # 実行時に型チェックを行う
+        if not all(
+            key in dictResponse
+            for key in ["message", "proposal", "status", "status_code"]
+        ):
+            raise ValueError("Invalid response format for sendRequestLogin")
+
+        return cast(TyLoginResponse, dictResponse)
 
     def sendRequestFinishExperiment(
         self, doc: TyDocDataMemoTransfer, isAppendExisting: bool = False
