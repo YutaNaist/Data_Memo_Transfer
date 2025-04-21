@@ -28,8 +28,8 @@ if exist "%USERPROFILE%\miniconda3\envs\data-memo-transfer-PyQt5" (
     "%USERPROFILE%\miniconda3\condabin\conda.bat" env create -f "%CD%\environment_data-memo-transfer.yaml"
 )
 
-echo "Finish to install diamond system."
-echo "Next step: run ./run-diamond.bat"
+echo "Finish installing environment for data-memo-transfer-PyQt5."
+echo "Next step: run build_client.bat to build the client."
 
 
 @REM REM To install with this script, MinGW and python with pip is required before running bat file.
