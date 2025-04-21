@@ -5,21 +5,21 @@ from typing import TYPE_CHECKING
 if TYPE_CHECKING:
     from TyDocDataMemoTransfer import TyDocDataMemoTransfer
 
-from forms.Dialog_Edit_Form_ui import Ui_Dialog as Ui_Dialog_Edit_Form
+# from forms.Dialog_Edit_Form_ui import Ui_Dialog as Ui_Dialog_Edit_Form
 
-from controller.SubWidget_Experiment_Information_Controller import (
-    Sub_Widget_Experiment_Information,
+from controller.TySubWidgetExperimentInformation import (
+    TySubWidgetExperimentInformation,
 )
-from controller.SubWidget_Sample_Information_Controller import (
-    Sub_Widget_Sample_Information,
+from controller.TySubWidgetSampleInformation import (
+    TySubWidgetSampleInformation,
 )
-from controller.SubWidget_Equipment_Information_Controller import (
-    Sub_Widget_Equipment_Information,
+from controller.TySubWidgetEquipmentInformation import (
+    TySubWidgetEquipmentInformation,
 )
 
 from PyQt5 import QtCore
 from PyQt5 import QtWidgets
-
+from PyQt5 import uic
 
 
 class Dialog_Edit_Form(QtWidgets.QDialog):
@@ -29,8 +29,9 @@ class Dialog_Edit_Form(QtWidgets.QDialog):
         self, parent=None, data_Model=None, type_Form=None, isTemplate=True, index=-1
     ):
         super().__init__(parent)
-        self.ui = Ui_Dialog_Edit_Form()
-        self.ui.setupUi(self)
+        # self.ui = Ui_Dialog_Edit_Form()
+        self.__loadUi()
+        # self.ui.setupUi(self)
         # if isTemplate is True:
         # self.ui.PB_OK.setVisible(False)
 
@@ -60,6 +61,10 @@ class Dialog_Edit_Form(QtWidgets.QDialog):
 
         self.set_Signals()
 
+    def __loadUi(self):
+        uic.loadUi(r"forms\Dialog_Edit_Form.ui", self)
+        self.ui = self
+
     def set_Signals(self):
         self.ui.PB_OK.clicked.connect(self.save_Update)
         self.ui.PB_Cancel.clicked.connect(self.cancel_Update)
@@ -81,25 +86,21 @@ class Dialog_Edit_Form(QtWidgets.QDialog):
         if self.index_Form_Type == 0:
             self.setWindowTitle("Edit Experiment")
             self.ui.LAB_Title.setText("Your Experiment")
-            self.sub_Widget = Sub_Widget_Experiment_Information(
-                data_Model=self.data_Model
-            )
+            self.sub_Widget = TySubWidgetExperimentInformation(doc=self.data_Model)
             self.sub_Widget.get_From_Data_Model(
                 index=self.index, is_Template=self.isTemplate
             )
         elif self.index_Form_Type == 1:
             self.setWindowTitle("Edit Current Sample")
             self.ui.LAB_Title.setText("Current Sample")
-            self.sub_Widget = Sub_Widget_Sample_Information(data_Model=self.data_Model)
+            self.sub_Widget = TySubWidgetSampleInformation(doc=self.data_Model)
             self.sub_Widget.get_From_Data_Model(
                 index=self.index, is_Template=self.isTemplate
             )
         elif self.index_Form_Type == 2:
             self.setWindowTitle("Edit Current Equipment")
             self.ui.LAB_Title.setText("Current Equipment")
-            self.sub_Widget = Sub_Widget_Equipment_Information(
-                data_Model=self.data_Model
-            )
+            self.sub_Widget = TySubWidgetEquipmentInformation(doc=self.data_Model)
             self.sub_Widget.get_From_Data_Model(
                 index=self.index, is_Template=self.isTemplate
             )

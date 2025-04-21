@@ -4,14 +4,14 @@ from typing import TYPE_CHECKING
 if TYPE_CHECKING:
     from TyDocDataMemoTransfer import TyDocDataMemoTransfer
 
-from controller.SubWidget_Experiment_Information_Controller import (
-    Sub_Widget_Experiment_Information,
+from controller.TySubWidgetExperimentInformation import (
+    TySubWidgetExperimentInformation,
 )
-from controller.SubWidget_Sample_Information_Controller import (
-    Sub_Widget_Sample_Information,
+from controller.TySubWidgetSampleInformation import (
+    TySubWidgetSampleInformation,
 )
-from controller.SubWidget_Equipment_Information_Controller import (
-    Sub_Widget_Equipment_Information,
+from controller.TySubWidgetEquipmentInformation import (
+    TySubWidgetEquipmentInformation,
 )
 from controller.TyMainWindow import TyMainWindow
 
@@ -39,19 +39,17 @@ class TyDialogSetInitial(QtWidgets.QDialog):
         self.__loadUi()
         self.__setSignal()
 
-        self.sub_Widget_Experiment_Information = Sub_Widget_Experiment_Information(
-            data_Model=self.doc
+        self.subWidgetExperimentInformation = TySubWidgetExperimentInformation(
+            doc=self.doc
         )
-        self.sub_Widget_Sample_Information = Sub_Widget_Sample_Information(
-            data_Model=self.doc
-        )
-        self.sub_Widget_Equipment_Information = Sub_Widget_Equipment_Information(
-            data_Model=self.doc
+        self.subWidgetSampleInformation = TySubWidgetSampleInformation(doc=self.doc)
+        self.subWidgetEquipmentInformation = TySubWidgetEquipmentInformation(
+            doc=self.doc
         )
         self.state = "experiment_information"
-        self.ui.HL_Page1.addWidget(self.sub_Widget_Experiment_Information)
-        self.ui.HL_Page2.addWidget(self.sub_Widget_Sample_Information)
-        self.ui.HL_Page3.addWidget(self.sub_Widget_Equipment_Information)
+        self.ui.HL_Page1.addWidget(self.subWidgetExperimentInformation)
+        self.ui.HL_Page2.addWidget(self.subWidgetSampleInformation)
+        self.ui.HL_Page3.addWidget(self.subWidgetEquipmentInformation)
 
         self.initializeFromDocument()
 
@@ -59,8 +57,14 @@ class TyDialogSetInitial(QtWidgets.QDialog):
         self.setWindowTitle("Set Initial Information 1/3")
 
     def __loadUi(self):
-        uic.loadUi(r"forms\FromDialogSetInitial.ui", self)
-        self.ui = self
+        if self.doc.isBuild:
+            from views.FormDialogSetInitial import Ui_Dialog
+
+            self.ui = Ui_Dialog()
+            self.ui.setupUi(self)
+        else:
+            uic.loadUi(r"forms/FormDialogSetInitial.ui", self)
+            self.ui = self
 
     def set_Icon(self):
         icon_next = QtGui.QIcon()
@@ -127,25 +131,25 @@ class TyDialogSetInitial(QtWidgets.QDialog):
     def checkState(self):
         currentState = self.state
         if currentState == "experiment_information":
-            if self.sub_Widget_Experiment_Information.ui.LE_Title.text() == "":
+            if self.subWidgetExperimentInformation.ui.LE_Title.text() == "":
                 msgBox = QtWidgets.QMessageBox()
                 msgBox.setText("Experiment Title is empty")
                 msgBox.exec_()
                 return False
             else:
-                self.sub_Widget_Experiment_Information.set_To_Data_Model()
+                self.subWidgetExperimentInformation.set_To_Data_Model()
                 return True
         if currentState == "sample_information":
-            if self.sub_Widget_Sample_Information.ui.LE_Sample_Name.text() == "":
+            if self.subWidgetSampleInformation.ui.LE_Sample_Name.text() == "":
                 msgBox = QtWidgets.QMessageBox()
                 msgBox.setText("Sample Name is empty")
                 msgBox.exec_()
                 return False
             else:
-                self.sub_Widget_Sample_Information.set_To_Data_Model()
+                self.subWidgetSampleInformation.set_To_Data_Model()
                 return True
         elif currentState == "equipment_information":
-            self.sub_Widget_Equipment_Information.set_To_Data_Model()
+            self.subWidgetEquipmentInformation.set_To_Data_Model()
             return True
         elif currentState == "finish":
             self.doc.writeToLogger("Initialization finished.", "info")
@@ -189,6 +193,6 @@ class TyDialogSetInitial(QtWidgets.QDialog):
     #     self.close()
 
     def initializeFromDocument(self):
-        self.sub_Widget_Experiment_Information.get_From_Data_Model()
-        self.sub_Widget_Sample_Information.get_From_Data_Model()
-        self.sub_Widget_Equipment_Information.get_From_Data_Model()
+        self.subWidgetExperimentInformation.get_From_Data_Model()
+        self.subWidgetSampleInformation.get_From_Data_Model()
+        self.subWidgetEquipmentInformation.get_From_Data_Model()

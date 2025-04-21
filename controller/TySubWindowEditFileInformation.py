@@ -2,11 +2,11 @@ from forms.Window_Edit_File_Information_ui import (
     Ui_MainWindow as Ui_Window_Edit_File_Information,
 )
 
-from controller.SubWidget_Sample_Information_Controller import (
-    Sub_Widget_Sample_Information,
+from controller.TySubWidgetSampleInformation import (
+    TySubWidgetSampleInformation,
 )
-from controller.SubWidget_Equipment_Information_Controller import (
-    Sub_Widget_Equipment_Information,
+from controller.TySubWidgetEquipmentInformation import (
+    TySubWidgetEquipmentInformation,
 )
 
 from TyDocDataMemoTransfer import TyDocDataMemoTransfer
@@ -14,7 +14,7 @@ from TyDocDataMemoTransfer import TyDocDataMemoTransfer
 from PyQt5 import QtWidgets
 
 
-class Sub_Window_Edit_File_Information(QtWidgets.QMainWindow):
+class TySubWindowEditFileInformation(QtWidgets.QMainWindow):
     def __init__(self, parent=None, data_Model=None, index_File_Information=0):
         if data_Model is not None:
             self.data_Model = data_Model
@@ -26,11 +26,11 @@ class Sub_Window_Edit_File_Information(QtWidgets.QMainWindow):
         self.ui.setupUi(self)
 
         self.index_File_Information = index_File_Information
-        self.sub_Widget_Equipment_Information = Sub_Widget_Equipment_Information(
-            data_Model=self.data_Model
+        self.sub_Widget_Equipment_Information = TySubWidgetEquipmentInformation(
+            doc=self.data_Model
         )
-        self.sub_Widget_Sample_Information = Sub_Widget_Sample_Information(
-            data_Model=self.data_Model
+        self.sub_Widget_Sample_Information = TySubWidgetSampleInformation(
+            doc=self.data_Model
         )
         self.file_Name = self.data_Model.get_File_Data_By_Index_And_Key(
             self.index_File_Information, "file_name"

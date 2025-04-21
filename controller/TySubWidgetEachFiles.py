@@ -4,16 +4,17 @@ from typing import TYPE_CHECKING
 if TYPE_CHECKING:
     from TyDocDataMemoTransfer import TyDocDataMemoTransfer
 
-from forms.Widget_Each_Files_Information_ui import (
-    Ui_Form as Ui_Widget_Each_Files_Information,
-)
-from controller.Dialog_Edit_Form_Controller import Dialog_Edit_Form
+# from forms.Widget_Each_Files_Information_ui import (
+#     Ui_Form as Ui_Widget_Each_Files_Information,
+# )
+from controller.TyDialogEditForm import Dialog_Edit_Form
 from PyQt5 import QtWidgets
 from PyQt5 import QtGui
 from PyQt5 import QtCore
+from PyQt5 import uic
 
 
-class Sub_Widget_Each_Files_Information(QtWidgets.QWidget):
+class TySubWidgetEachFiles(QtWidgets.QWidget):
     signal_Edit_Sample_Information = QtCore.pyqtSignal()
     signal_update_to_metadata_clipboard = QtCore.pyqtSignal()
 
@@ -23,8 +24,10 @@ class Sub_Widget_Each_Files_Information(QtWidgets.QWidget):
         self.timer = QtCore.QTimer()
         self.timer.setSingleShot(True)
         super().__init__(parent)
-        self.ui = Ui_Widget_Each_Files_Information()
-        self.ui.setupUi(self)
+
+        # self.ui = Ui_Widget_Each_Files_Information()
+        # self.ui.setupUi(self)
+        self.__loadUi()
         self.file_Name = ""
         self.index = 0
 
@@ -44,6 +47,10 @@ class Sub_Widget_Each_Files_Information(QtWidgets.QWidget):
         self.set_Signal()
         self.ui.PB_Edit_Equipment_Information.setIcon(QtGui.QIcon("./icons/edit.png"))
         self.ui.PB_Edit_Sample_Information.setIcon(QtGui.QIcon("./icons/edit.png"))
+
+    def __loadUi(self):
+        uic.loadUi(r"forms\Widget_Each_Files_Information.ui", self)
+        self.ui = self
 
     def set_Signal(self):
         self.ui.RB_Valid.clicked.connect(self.set_Status_Classified)

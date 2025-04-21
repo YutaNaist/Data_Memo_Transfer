@@ -1,21 +1,24 @@
 from __future__ import annotations
 from typing import TYPE_CHECKING
 
-from forms.Widget_Sample_Information_ui import Ui_Form as Ui_Widget_Sample_Information
+# from forms.Widget_Sample_Information_ui import Ui_Form as Ui_Widget_Sample_Information
 if TYPE_CHECKING:
     from TyDocDataMemoTransfer import TyDocDataMemoTransfer
 from PyQt5 import QtWidgets
 from PyQt5 import QtCore
+from PyQt5 import uic
 
 
-class Sub_Widget_Sample_Information(QtWidgets.QWidget):
+class TySubWidgetSampleInformation(QtWidgets.QWidget):
 
-    def __init__(
-        self, parent=None, data_Model: TyDocDataMemoTransfer = None, isEditable=True
-    ):
+    def __init__(self, parent=None, doc: TyDocDataMemoTransfer = None, isEditable=True):
         super().__init__(parent)
-        self.ui = Ui_Widget_Sample_Information()
-        self.ui.setupUi(self)
+        if doc is not None:
+            self.doc = doc
+        else:
+            self.doc = TyDocDataMemoTransfer()
+        self.__loadUi()
+        # self.ui.setupUi(self)
         self.timer = QtCore.QTimer()
         self.timer.setSingleShot(True)
         self.ui.LE_Sample_ID.textChanged.connect(self.start_edit_Timer)
@@ -24,26 +27,29 @@ class Sub_Widget_Sample_Information(QtWidgets.QWidget):
         self.timer.timeout.connect(self.save_Previous_State)
         self.previousState = []
 
-        if data_Model is not None:
-            self.data_Model = data_Model
-        else:
-            self.data_Model = TyDocDataMemoTransfer()
-
         if isEditable is False:
             self.ui.LE_Sample_ID.setReadOnly(True)
             self.ui.LE_Sample_Name.setReadOnly(True)
             self.ui.TE_Sample_Comment.setReadOnly(True)
 
+    def __loadUi(self):
+        if self.doc.isBuild:
+            from views.FormSubWidgetSampleInformation import Ui_Form
+
+            self.ui = Ui_Form()
+            self.ui.setupUi(self)
+        else:
+            uic.loadUi(r"forms/FormSubWidgetSampleInformation.ui", self)
+            self.ui = self
+
     def get_From_Data_Model(self, index: int = -1, is_Template: bool = True) -> None:
         dict_file_data = {}
         if is_Template is True:
-            dict_file_data = self.data_Model.getDictExperimentInformation(
-                "dict_clipboard"
-            )
+            dict_file_data = self.doc.getDictExperimentInformation("dict_clipboard")
         else:
-            dict_file_data = self.data_Model.getDictExperimentInformation(
-                "list_file_data"
-            )[index]
+            dict_file_data = self.doc.getDictExperimentInformation("list_file_data")[
+                index
+            ]
         try:
             self.ui.LE_Sample_ID.setText(dict_file_data["sample"]["id"])
             self.ui.LE_Sample_Name.setText(dict_file_data["sample"]["name"])
@@ -54,26 +60,22 @@ class Sub_Widget_Sample_Information(QtWidgets.QWidget):
     def set_To_Data_Model(self, index: int = -1, is_Template: bool = True) -> None:
         dict_file_data = {}
         if is_Template is True:
-            dict_file_data = self.data_Model.getDictExperimentInformation(
-                "dict_clipboard"
-            )
+            dict_file_data = self.doc.getDictExperimentInformation("dict_clipboard")
         else:
-            dict_file_data = self.data_Model.getDictExperimentInformation(
-                "list_file_data"
-            )[index]
+            dict_file_data = self.doc.getDictExperimentInformation("list_file_data")[
+                index
+            ]
         dict_sample = {}
         dict_sample["name"] = self.ui.LE_Sample_Name.text()
         dict_sample["id"] = self.ui.LE_Sample_ID.text()
         dict_sample["comment"] = self.ui.TE_Sample_Comment.toPlainText()
         dict_file_data["sample"] = dict_sample
         if is_Template is True:
-            self.data_Model.setDiCtExperimentInformation(
-                "dict_clipboard", dict_file_data
-            )
+            self.doc.setDiCtExperimentInformation("dict_clipboard", dict_file_data)
         else:
             # self.data_Model.set_Dict_Data_Model("dict_clipboard",
             #                                     dict_file_data)
-            self.data_Model.setFileInformation(index, dict_file_data)
+            self.doc.setFileInformation(index, dict_file_data)
 
     def start_edit_Timer(self):
         self.timer.start(1000)

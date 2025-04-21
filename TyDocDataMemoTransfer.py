@@ -32,6 +32,13 @@ class DataModel_DataMemoTransfer_TypeException(DataModel_DataMemoTransfer_Except
 class TyDocDataMemoTransfer:
     def __init__(self):
         self.isBuild = False
+        self.initLogger("settings/logDataMemoTransfer.json")
+        if self.isBuild:
+            self.logger = logging.getLogger("data_memo_transfer")
+        else:
+            self.logger = logging.getLogger("data_memo_transfer_debug")
+            self.logger.setLevel(logging.DEBUG)
+
         self.dictExperimentInformation = {}
         self.list_keys = [
             "str_url_diamond",
@@ -58,7 +65,8 @@ class TyDocDataMemoTransfer:
             "sample",
             "equipment",
         ]
-        self._logger = logging.getLogger(__name__)
+        self.salt = "abcd"
+        # self._logger = logging.getLogger(__name__)
         self.initializeExperimentInformation()
         urlBase = self.getDictExperimentInformation("str_url_diamond")
         self.messageSender = TyMessageSender(urlBase, self)
@@ -106,6 +114,14 @@ class TyDocDataMemoTransfer:
     def getAllDictExperimentInformation(self):
         return self.dictExperimentInformation
 
+    def setIsBuild(self, isBuild: bool) -> None:
+        self.isBuild = isBuild
+        if self.isBuild:
+            self.logger = logging.getLogger("data_memo_transfer")
+        else:
+            self.logger = logging.getLogger("data_memo_transfer_debug")
+            self.logger.setLevel(logging.DEBUG)
+
     def setAllDictExperimentInformation(self, dictExperimentInformation):
         for key, value in dictExperimentInformation.items():
             if key not in self.list_keys:
@@ -136,7 +152,8 @@ class TyDocDataMemoTransfer:
             ensure_ascii=False,
             indent=4,
         )
-        self.writeToLogger("save temporary")
+        # self.writeToLogger("save temporary")
+        self.logger.info("save temporary")
 
     def loadFromTemporary(self) -> bool:
         try:
@@ -145,21 +162,25 @@ class TyDocDataMemoTransfer:
                 raise FileNotFoundError
             self.dictExperimentInformation = docLoad
             self.dictExperimentInformation["is_exist_temp_file"] = True
-            self.writeToLogger("load temporary")
+            # self.writeToLogger("load temporary")
+            self.logger.info("load temporary")
             return True
         except FileNotFoundError:
             self.dictExperimentInformation["is_exist_temp_file"] = False
-            self.writeToLogger("Temporary file not found")
+            # self.writeToLogger("Temporary file not found")
+            self.logger.error("Temporary file not found")
             return False
         except json.decoder.JSONDecodeError:
             self.dictExperimentInformation["is_exist_temp_file"] = False
-            self.writeToLogger("Temporary file can't read")
+            # self.writeToLogger("Temporary file can't read")
+            self.logger.error("Temporary file can't read")
             return False
 
     def deleteTemporary(self) -> None:
         os.remove("temporary.json")
         self.dictExperimentInformation["is_exist_temp_file"] = False
-        self.writeToLogger("delete temporary file")
+        # self.writeToLogger("delete temporary file")
+        self.logger.info("delete temporary file")
 
     def getFillClipboard(self) -> dict:
         return copy.copy(self.dictExperimentInformation["dict_clipboard"])
@@ -347,49 +368,47 @@ class TyDocDataMemoTransfer:
                 ensure_ascii=False,
             )
             self.loadFromTemporary()
-            self.writeToLogger("save temporary")
+            # self.writeToLogger("save temporary")
+            self.logger.info("save temporary")
         except BaseException:
-            self.writeToLogger("failed to save temporary")
-            pass
+            # self.writeToLogger("failed to save temporary")
+            self.logger.error("failed to save temporary")
 
     def setLogger(self, logger: logging.Logger) -> None:
         self._logger = logger
 
-    def makeLogger(self, strLogConfigName: str = "", name: str = "") -> logging.Logger:
-        if strLogConfigName == "":
-            self._logger = logging.getLogger(__name__)
-            if name != "":
-                self._logger = logging.getLogger(name)
-            self._logger.setLevel(logging.DEBUG)
-            log_Stream_Handler = logging.StreamHandler()
-            sh_formatter = logging.Formatter(
-                "%(asctime)s - %(levelname)s - %(process)d - %(message)s",
-                "%Y/%m/%d %H:%M:%S",
-            )
-            log_Stream_Handler.setFormatter(sh_formatter)
-            self._logger.addHandler(log_Stream_Handler)
-        else:
-            log_config = json.load(open(strLogConfigName, mode="r"))
-            logging.config.dictConfig(log_config)
-            self._logger = logging.getLogger(__name__)
-            if name != "":
-                self._logger = logging.getLogger(name)
-        return self._logger
+    def initLogger(self, loggerConfigPath) -> None:
+        # if self.isBuild is False:
+        #     self._logger = logging.getLogger()
+        #     self._logger.setLevel(logging.DEBUG)
+        #     log_Stream_Handler = logging.StreamHandler()
+        #     sh_formatter = logging.Formatter(
+        #         "%(asctime)s - %(levelname)s - %(process)d - %(message)s",
+        #         "%Y/%m/%d %H:%M:%S",
+        #     )
+        #     log_Stream_Handler.setFormatter(sh_formatter)
+        #     self._logger.addHandler(log_Stream_Handler)
+        # else:
+        log_config = json.load(open(loggerConfigPath, mode="r"))
+        logging.config.dictConfig(log_config)
+        return None
 
     def writeToLogger(self, msg: str, mode: str = "debug") -> None:
         if mode == "error":
-            self._logger.error(msg)
+            self.logger.error(msg)
         elif mode == "warning":
-            self._logger.warning(msg)
+            self.logger.warning(msg)
         elif mode == "critical":
-            self._logger.critical(msg)
+            self.logger.critical(msg)
         elif mode == "info":
-            self._logger.info(msg)
+            self.logger.info(msg)
         else:
-            self._logger.debug(msg)
+            self.logger.debug(msg)
 
     def makeHashFromString(self, string: str) -> str:
-        salt = "abcd".encode("utf-8")
+        # salt = "abcd".encode("utf-8")
+        self.logger.debug("Make Hash")
+        salt = self.salt.encode("utf-8")
         hashPass = hashlib.pbkdf2_hmac("sha256", string.encode("utf-8"), salt, 100000)
         strHashPass = str(base64.standard_b64encode(hashPass).decode("utf-8"))
         return strHashPass
@@ -416,28 +435,37 @@ class TyDocDataMemoTransfer:
     def getMailAddress(self) -> str:
         return self.dictExperimentInformation["str_mail_address"]
 
-    def changeView(self, state: str):
-        viewStateTemp = self.viewState
+    def changeView(self, state: str, isTest: bool = False) -> bool:
+        currentState = self.viewState
+        self.logger.info(f"Change View from {currentState} to {state}")
         self.viewState = state
         newWindow = self.__setView(state)
         if newWindow is None:
-            self.viewState = viewStateTemp
+            self.logger.debug(f"View State: {state} is not defined.")
+            self.viewState = currentState
             return False
-        self.__changeViewMain(newWindow)
+        if not (isTest):
+            self.__changeViewMain(newWindow)
+        else:
+            self.messageBox("Test", f"View is changed to {state}", 1)
         return True
 
     def createView(self, state: str):
+        self.logger.info(f"Create View To: {state}")
         newWindow = self.__setView(state)
         self.__changeViewMain(newWindow, isChange=False)
         return
 
     def __setView(self, state: str):
+        self.logger.debug(f"Set View: {state}")
         if state == "log_in":
             newWindow = TyDialogLogin(doc=self)
         elif state == "send_one_time_password":
             newWindow = TyDialogSendOneTimePassword(doc=self)
         elif state == "register_password":
-            print(self.getExperimentId())
+            self.logger.debug(
+                f"Register Password, Experiment ID: {self.getExperimentId()}"
+            )
             newWindow = TyDialogRegisterPassword(
                 doc=self,
             )
@@ -450,13 +478,17 @@ class TyDocDataMemoTransfer:
         return newWindow
 
     def __changeViewMain(self, viewNext, isChange: bool = True):
+        self.logger.debug("Change View Main")
         if self.currentWindow is not None and isChange:
+            self.logger.debug("Close View")
             self.currentWindow.close()
         self.currentWindow = viewNext
         self.currentWindow.show()
         self.currentWindow.activateWindow()
 
     def messageBox(self, title: str, message: str, buttonNo: int = 1):
+        self.logger.debug("Create Message Box")
+        self.logger.debug(f"message: {message}")
         msg = QtWidgets.QMessageBox()
         msg.setWindowTitle(title)
         msg.setText(message)

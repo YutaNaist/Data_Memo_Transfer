@@ -12,23 +12,30 @@ if TYPE_CHECKING:
 # from PyQt5 import QtGui
 from PyQt5 import QtWidgets
 from PyQt5 import uic
+import logging
+import traceback  # tracebackモジュールをインポート
 
 
 class TyDialogLogin(QtWidgets.QDialog):
     def __init__(self, parent=None, doc: TyDocDataMemoTransfer = None):
+        self.isTest = False
         super().__init__(parent)
         if doc is not None:
             self.doc = doc
         else:
             self.doc = TyDocDataMemoTransfer()
+        if self.doc.isBuild:
+            self.logger = logging.getLogger("data_memo_transfer")
+        else:
+            self.logger = logging.getLogger("data_memo_transfer_debug")
+            self.logger.setLevel(logging.DEBUG)
+        self.logger.info("----------Dialog Log in----------")
         # self.ui = Dialog_Ask_Experiment_ID_ui.Ui_Dialog()
         # self.ui.setupUi(self)
-
         # uic.loadUi(r"C:\Project\Data_Memo_Transfer_dev\forms\Dialog_Ask_Experiment_ID.ui", self)
 
         self.__loadUi()
         self.__setSignal()
-        self.setWindowTitle("Log in")
 
         self.experimentId = self.doc.getExperimentId()
         self.ui.LE_Experiment_ID.setText(self.experimentId)
@@ -36,36 +43,43 @@ class TyDialogLogin(QtWidgets.QDialog):
         # self.window_Main = Window_Main(data_Model=data_Model)
 
     def __loadUi(self):
-        uic.loadUi(r"forms\FormDialogLogin.ui", self)
-        self.ui = self
+        if self.doc.isBuild:
+            # if True:
+            from views.FormDiamondLogin import Ui_Dialog
+
+            self.ui = Ui_Dialog()
+            self.ui.setupUi(self)
+            self.setWindowTitle("Log in")
+        else:
+            uic.loadUi(r"forms\FormDialogLogin.ui", self)
+            self.ui = self
+            self.ui.setWindowTitle("Log in")
 
     def __setSignal(self):
         self.ui.PB_Log_In.clicked.connect(self.logInToDiamond)
         self.ui.PB_Reset_Password.clicked.connect(self.resetPassword)
 
-    def logInToDiamond(self):
-        msgBox = QtWidgets.QMessageBox()
-        message = ""
+    def logInToDiamond(self) -> tuple[bool, str]:
         try:
-            self.doc.writeToLogger("Log in to diamond")
+            self.logger.info("Log in to diamond")
             strExperimentId = self.ui.LE_Experiment_ID.text()
             if strExperimentId == "":
                 message = "Please input Experiment ID."
                 self.doc.messageBox("Error", message)
-                return False
+                return (False, "Please input Experiment ID.")
             strPassword = self.ui.LE_Password.text()
             if strPassword == "":
                 message = "Please input Password."
                 self.doc.messageBox("Error", message)
-                return False
+                return (False, "Please input Password.")
             hashPassword = self.doc.makeHashFromString(strPassword)
-            # self.doc.setHashPassword(hashPassword)
-            # strExperimentId = self.CheckIdRequestToDiamond(strExperimentId)
             response = self.doc.messageSender.sendRequestLogin(
                 strExperimentId, hashPassword
             )
             if response["status"] is True:
                 self.proposal = response["args"]["dict_proposal"]
+                if self.isTest:
+                    return (True, "Success")
                 strSetText = ""
                 strSetText += response["message"] + "\n"
                 strSetText += (
@@ -80,34 +94,40 @@ class TyDialogLogin(QtWidgets.QDialog):
                 )
                 strSetText += "Are you sure to start experiment?"
 
-                # msgBox.setWindowTitle("Your Experiment ID")
-                # msgBox.setText(strSetText)
-                # msgBox.setStandardButtons(
-                #     QtWidgets.QMessageBox.Ok | QtWidgets.QMessageBox.Cancel
-                # )
-                # retval = msgBox.exec_()
                 retval = self.doc.messageBox("Your Experiment ID", strSetText, 2)
                 if retval == 1024:
+                    self.doc.setHashPassword(hashPassword)
                     self.startExperiment(strExperimentId, self.proposal)
+                    return (True, "Success")
+                else:
+                    return (True, "Cancel")
             else:
                 message = response["message"]
-                msgBox.setWindowTitle("Warning")
                 message = "Warning!\n" + message
                 self.doc.messageBox("Warning", message)
-                return False
-        except BaseException as e:
-            self.doc.writeToLogger(e, "warning")
+                return (False, message)
+        except Exception as e:
+            errorMessage = f"Error: {e}"
+            self.logger.error(errorMessage)
+            stackTrace = traceback.format_exc()  # スタックトレースを取得
+            self.logger.debug(f"Stack Trace:\n{stackTrace}")
+            return (False, errorMessage)
 
-    def resetPassword(self):
+    def resetPassword(self) -> tuple[bool, str]:
         experimentId = self.ui.LE_Experiment_ID.text()
         self.doc.setExperimentId(experimentId)
-        self.doc.changeView("send_one_time_password")
+        self.doc.changeView("send_one_time_password", isTest=self.isTest)
+        return (True, "Success")
 
-    def startExperiment(self, strExperimentId: str, dictProposal: dict):
+    def startExperiment(
+        self, strExperimentId: str, dictProposal: dict
+    ) -> tuple[bool, str]:
         self.doc.setExperimentId(strExperimentId)
         response = self.doc.messageSender.sendRequestStartExperiment(
             strExperimentId, self.doc
         )
+        if response["status"] is False:
+            pass
         if dictProposal["arim"]["is_arim"][0] != "0":
             self.doc.setDiCtExperimentInformation("is_upload_arim", True)
         if dictProposal["share"]["is_share"][0] == "1":
@@ -116,123 +136,82 @@ class TyDialogLogin(QtWidgets.QDialog):
         if self.doc.loadFromTemporary():
             self.doc.setExperimentId(strExperimentId)
             self.doc.setDiCtExperimentInformation("dict_user_information", dictProposal)
-            # dictExperimentInformation = self.doc.getAllDictExperimentInformation()
-            # dictExperimentInformation["dict_user_information"] = self.proposal
         else:
             if dictExperimentInformation != {}:
-                oldExperimentId = self.doc.getDictExperimentInformation("str_experiment_id")
+                oldExperimentId = self.doc.getDictExperimentInformation(
+                    "str_experiment_id"
+                )
                 if oldExperimentId != strExperimentId:
                     message = "Warning!\n"
                     message += f"Previous experiment ID : {oldExperimentId} is different from current experiment ID.\n"
                     message += "Are you sure to start experiment?\n"
                     retval = self.doc.messageBox("Warning", message, 2)
                     if retval == 1024:
-                        dictExperimentInformation["dict_user_information"] = dictProposal
-                        dictExperimentInformation["str_share_directory_in_storage"] = self.doc.getDictExperimentInformation("str_share_directory_in_storage")
-                        self.doc.setAllDictExperimentInformation(dictExperimentInformation)
+                        dictExperimentInformation["dict_user_information"] = (
+                            dictProposal
+                        )
+                        dictExperimentInformation["str_share_directory_in_storage"] = (
+                            self.doc.getDictExperimentInformation(
+                                "str_share_directory_in_storage"
+                            )
+                        )
+                        self.doc.setAllDictExperimentInformation(
+                            dictExperimentInformation
+                        )
                     else:
                         return False
                 else:
                     dictExperimentInformation["dict_user_information"] = dictProposal
-                    dictExperimentInformation["str_share_directory_in_storage"] = self.doc.getDictExperimentInformation("str_share_directory_in_storage")
+                    dictExperimentInformation["str_share_directory_in_storage"] = (
+                        self.doc.getDictExperimentInformation(
+                            "str_share_directory_in_storage"
+                        )
+                    )
                     self.doc.setAllDictExperimentInformation(dictExperimentInformation)
             else:
                 self.doc.setDiCtExperimentInformation(
                     "dict_user_information", dictProposal
                 )
         self.doc.saveToTemporary()
-        self.doc.writeToLogger("Start experiment")
-        self.doc.changeView("set_initial")
+        # self.doc.writeToLogger("Start experiment")
+        self.logger.info("Start experiment")
+        self.doc.changeView("set_initial", isTest=self.isTest)
         # self.dialogSetInitial = Dialog_Set_Initial(data_Model=self.doc)
         # self.dialogSetInitial.show()
         # self.close()
 
-    # def CheckIdRequestToDiamond(self, experiment_ID: str) -> str:
-    #     msgBox = QtWidgets.QMessageBox()
-    #     flag_return_experiment_id = False
-    #     if experiment_ID != "":
-    #         self.doc.writeToLogger("Ask experiment ID to diamond")
-    #         reply = self.messageSender.sendRequestCheckID(experiment_ID)
-    #         if reply["status"] is True:
-    #             if (
-    #                 experiment_ID
-    # != self.doc.getDictExperimentInformation("str_experiment_id")
-    #                 and self.doc.getDictExperimentInformation("str_experiment_id") != ""
-    #             ):
-    #                 self.proposal = reply["args"]["database"]
-    #                 strSetText = ""
-    #                 strSetText += "Warning!\n"
-    #                 strSetText += (
-    #                     "Your Experiment ID : " + str(self.proposal["id"]) + "\n"
-    #                 )
-    #                 strSetText += "Different experiment ID is being used.\n"
-    #                 strSetText += "Are you sure to start experiment?\n"
-    #                 strSetText += "The previous experiment saved local is deleted.\n"
-    #                 strSetText += "Please check the sheared folder empty!\n"
-    #                 msgBox.setWindowTitle("Warning!")
-    #                 msgBox.setText(strSetText)
-    #                 msgBox.setStandardButtons(
-    #                     QtWidgets.QMessageBox.Ok | QtWidgets.QMessageBox.Cancel
-    #                 )
-    #                 retval = msgBox.exec_()
-    #                 if retval == 1024:
-    #                     flag_return_experiment_id = True
-    #             else:
-    #                 self.proposal = reply["args"]["database"]
-    #                 strSetText = ""
-    #                 strSetText += reply["message"] + "\n"
-    #                 strSetText += "Experiment ID : " + str(self.proposal["id"]) + "\n"
-    #                 strSetText += (
-    #                     "User Name : "
-    #                     + str(self.proposal["creators"][0]["name"])
-    #                     + "\n"
-    #                 )
-    #                 strSetText += (
-    #                     "Instrument : "
-    #                     + str(self.proposal["instrument"]["name"])
-    #                     + "\n"
-    #                 )
-    #                 strSetText += (
-    #                     "Start Date : "
-    #                     + str(self.proposal["experiment_date"]["start_date"])
-    #                     + "\n"
-    #                 )
-    #                 strSetText += "Are you sure to start experiment?"
 
-    #                 msgBox.setWindowTitle("Your Experiment ID")
-    #                 msgBox.setText(strSetText)
-    #                 msgBox.setStandardButtons(
-    #                     QtWidgets.QMessageBox.Ok | QtWidgets.QMessageBox.Cancel
-    #                 )
-    #                 retval = msgBox.exec_()
-    #                 if retval == 1024:
-    #                     flag_return_experiment_id = True
-    #         elif "This Experiment ID is used" in reply["message"]:
-    #             self.proposal = reply["args"]["database"]
-    #             strSetText = ""
-    #             strSetText += reply["message"] + "\n"
-    #             strSetText += "Experiment ID : " + str(self.proposal["id"]) + "\n"
-    #             strSetText += (
-    #                 "User Name : " + str(self.proposal["creators"][0]["name"]) + "\n"
-    #             )
-    #             strSetText += "Are you continue to experiment?\n"
-    #             strSetText += "Be careful of duplicated changes other requests!"
+if __name__ == "__main__":
+    import sys
+    import os
 
-    #             msgBox.setWindowTitle("Warning")
-    #             msgBox.setText(strSetText)
-    #             msgBox.setStandardButtons(
-    #                 QtWidgets.QMessageBox.Ok | QtWidgets.QMessageBox.Cancel
-    #             )
-    #             retval = msgBox.exec_()
-    #             if retval == 1024:
-    #                 flag_return_experiment_id = True
-    #         else:
-    #             msgBox.setWindowTitle("Error")
-    #             strSetText = reply["message"]
-    #             msgBox.setText(strSetText)
-    #             msgBox.setStandardButtons(QtWidgets.QMessageBox.Ok)
-    #             retval = msgBox.exec_()
-    #     if flag_return_experiment_id is True:
-    #         return experiment_ID
-    #     else:
-    #         return None
+    sys.path.append(os.path.abspath(os.path.dirname(__file__)))
+    sys.path.append(
+        os.path.abspath(os.path.join(os.path.dirname(__file__), os.path.pardir))
+    )
+    from TyDocDataMemoTransfer import TyDocDataMemoTransfer
+    import buildConfig.global_variable_Local as global_variable
+
+    URL_DIAMOND = global_variable.URL_DIAMOND
+    SAVE_DIRECTORY = global_variable.SAVE_DIRECTORY
+    SHARE_DIRECTORY_IN_STORAGE = global_variable.SHARE_DIRECTORY_IN_STORAGE
+
+    doc = TyDocDataMemoTransfer()
+    doc.isBuild = False
+    logger = logging.getLogger("data_memo_transfer_debug")
+    logger.setLevel(logging.DEBUG)
+
+    app = QtWidgets.QApplication(sys.argv)
+
+    doc.setUrlBase(URL_DIAMOND)
+    doc.setDiCtExperimentInformation("str_save_directory", SAVE_DIRECTORY)
+    doc.setDiCtExperimentInformation(
+        "str_share_directory_in_storage", SHARE_DIRECTORY_IN_STORAGE
+    )
+    # doc.setLogger(logger)
+    logger.info("Start Data Memo Transfer.")
+    dialogLogin = TyDialogLogin(doc=doc)
+    dialogLogin.isTest = True
+    dialogLogin.ui.LE_Experiment_ID.setText("0000-0000-0000")
+    dialogLogin.show()
+    app.exec_()

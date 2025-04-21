@@ -4,22 +4,22 @@ from typing import TYPE_CHECKING
 if TYPE_CHECKING:
     from TyDocDataMemoTransfer import TyDocDataMemoTransfer
 
-import forms.MainWindow_ui as MainWidow_ui
+# import forms.MainWindow_ui as MainWidow_ui
 
 # from controller.Window_Edit_Form_Controller import Window_Edit_Form
-from controller.Dialog_Edit_Form_Controller import Dialog_Edit_Form
-from controller.SubWidget_Each_Files_Information_Controller import (
-    Sub_Widget_Each_Files_Information,
+from controller.TyDialogEditForm import Dialog_Edit_Form
+from controller.TySubWidgetEachFiles import (
+    TySubWidgetEachFiles,
 )
 
-from controller.SubWidget_Experiment_Information_Controller import (
-    Sub_Widget_Experiment_Information,
+from controller.TySubWidgetExperimentInformation import (
+    TySubWidgetExperimentInformation,
 )
-from controller.SubWidget_Sample_Information_Controller import (
-    Sub_Widget_Sample_Information,
+from controller.TySubWidgetSampleInformation import (
+    TySubWidgetSampleInformation,
 )
-from controller.SubWidget_Equipment_Information_Controller import (
-    Sub_Widget_Equipment_Information,
+from controller.TySubWidgetEquipmentInformation import (
+    TySubWidgetEquipmentInformation,
 )
 
 from TyMessageSender import TyMessageSender
@@ -67,8 +67,13 @@ class TyMainWindow(QtWidgets.QMainWindow):
     # def __del__(self):
     #     self.finish_Experiment()
     def __loadUi(self):
-        uic.loadUi(r"forms\FromMainWindow.ui", self)
-        self.ui = self
+        if self.doc.isBuild:
+            from views.FormMainWindow import Ui_MainWindow
+            self.ui = Ui_MainWindow()
+            self.ui.setupUi(self)
+        else:
+            uic.loadUi(r"forms\FormMainWindow.ui", self)
+            self.ui = self
 
     def __setSignals(self):
         self.ui.PB_Refresh.clicked.connect(self.refreshFiles)
@@ -117,14 +122,14 @@ class TyMainWindow(QtWidgets.QMainWindow):
             25, 25, QtCore.Qt.KeepAspectRatio, QtCore.Qt.FastTransformation
         )
         self.ui.LAB_UnConfirmed.setPixmap(pixmap_red)
-        self.sub_Widget_Experiment = Sub_Widget_Experiment_Information(
-            data_Model=self.doc, isEditable=False
+        self.sub_Widget_Experiment = TySubWidgetExperimentInformation(
+            doc=self.doc, isEditable=False
         )
-        self.sub_Widget_Sample = Sub_Widget_Sample_Information(
-            data_Model=self.doc, isEditable=False
+        self.sub_Widget_Sample = TySubWidgetSampleInformation(
+            doc=self.doc, isEditable=False
         )
-        self.sub_Widget_Equipment = Sub_Widget_Equipment_Information(
-            data_Model=self.doc, isEditable=False
+        self.sub_Widget_Equipment = TySubWidgetEquipmentInformation(
+            doc=self.doc, isEditable=False
         )
         self.ui.VL_Experiment.addWidget(self.sub_Widget_Experiment)
         self.ui.VL_Sample.addWidget(self.sub_Widget_Sample)
@@ -273,7 +278,7 @@ class TyMainWindow(QtWidgets.QMainWindow):
         # self.data_Model.set_File_Names(copy.copy(new_List_File_Names))
         # self.data_Model.set_All_File_Data(copy.copy(new_List_File_Data))
         for i, file in enumerate(new_List_File_Names):
-            sub_Widget_Each_Files_Information = Sub_Widget_Each_Files_Information(
+            sub_Widget_Each_Files_Information = TySubWidgetEachFiles(
                 data_Model=self.doc
             )
             sub_Widget_Each_Files_Information.set_Signal_Update_To_Metadata_Clipboard(

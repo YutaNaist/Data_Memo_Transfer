@@ -1,13 +1,13 @@
 from forms.Window_Edit_Form_ui import Ui_MainWindow as Ui_Window_Edit_Form
 
-from controller.SubWidget_Experiment_Information_Controller import (
-    Sub_Widget_Experiment_Information,
+from controller.TySubWidgetExperimentInformation import (
+    TySubWidgetExperimentInformation,
 )
-from controller.SubWidget_Sample_Information_Controller import (
-    Sub_Widget_Sample_Information,
+from controller.TySubWidgetSampleInformation import (
+    TySubWidgetSampleInformation,
 )
-from controller.SubWidget_Equipment_Information_Controller import (
-    Sub_Widget_Equipment_Information,
+from controller.TySubWidgetEquipmentInformation import (
+    TySubWidgetEquipmentInformation,
 )
 
 from PyQt5 import QtCore
@@ -16,7 +16,7 @@ from PyQt5 import QtWidgets
 from TyDocDataMemoTransfer import TyDocDataMemoTransfer
 
 
-class Window_Edit_Form(QtWidgets.QMainWindow):
+class TyWindowEditForm(QtWidgets.QMainWindow):
     signal_Update_Form = QtCore.pyqtSignal()
 
     def __init__(self, parent=None, data_Model=None, type_Form=None):
@@ -58,21 +58,17 @@ class Window_Edit_Form(QtWidgets.QMainWindow):
         if self.index_Form_Type == 0:
             self.setWindowTitle("Edit Experiment")
             self.ui.LAB_Title.setText("Your Experiment")
-            self.sub_Widget = Sub_Widget_Experiment_Information(
-                data_Model=self.data_Model
-            )
+            self.sub_Widget = TySubWidgetExperimentInformation(doc=self.data_Model)
             self.sub_Widget.set_All_From_Data_Model()
         elif self.index_Form_Type == 1:
             self.setWindowTitle("Edit Current Sample")
             self.ui.LAB_Title.setText("Current Sample")
-            self.sub_Widget = Sub_Widget_Sample_Information(data_Model=self.data_Model)
+            self.sub_Widget = TySubWidgetSampleInformation(doc=self.data_Model)
             self.sub_Widget.set_All_From_Data_Model()
         elif self.index_Form_Type == 2:
             self.setWindowTitle("Edit Current Equipment")
             self.ui.LAB_Title.setText("Current Equipment")
-            self.sub_Widget = Sub_Widget_Equipment_Information(
-                data_Model=self.data_Model
-            )
+            self.sub_Widget = TySubWidgetEquipmentInformation(doc=self.data_Model)
             self.sub_Widget.set_All_From_Data_Model()
         self.ui.HL_Add_Widget.addWidget(self.sub_Widget)
 

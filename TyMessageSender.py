@@ -1,21 +1,36 @@
 from __future__ import annotations
 from typing import TYPE_CHECKING
+from typing import TypedDict, Dict, Any
 
 import requests
 import urllib3
 import json
 import random
+import logging
 
 if TYPE_CHECKING:
     from TyDocDataMemoTransfer import TyDocDataMemoTransfer
+
+
 # except BaseException:
 #     pass
+class TyMessageSenderResponce(TypedDict):
+    status: bool
+    message: str
+    status_code: int
+    # args: Dict[str, Any]
 
 
 class TyMessageSender:
 
     def __init__(self, strUrlBase: str, doc: TyDocDataMemoTransfer):
         self.doc = doc
+        if self.doc.isBuild:
+            self.logger = logging.getLogger("data_memo_transfer")
+        else:
+            self.logger = logging.getLogger("data_memo_transfer_debug")
+            self.logger.setLevel(logging.DEBUG)
+
         self._urlBase = strUrlBase
         self.commandList = [
             "Check_UsageID",
@@ -37,68 +52,114 @@ class TyMessageSender:
         self._urlBase = strUrlBase
         # self.session
 
-    def sendMessage(self, url: str, args: dict) -> dict:
+    def sendMessage(
+        self,
+        url: str,
+        json_data: dict[str, Any] = {},
+        methods: str = "POST",
+        sendCount: int = 0,
+    ) -> dict[str, Any]:
         try:
-            identifier = int(random.random() * 1000000000)
-            json_data = json.dumps({"args": args, "identifier": identifier})
-            headers = {"Content-type": "application/json"}
-            message = f"Send Message to Server: {url} {json_data}"
-            self.doc.writeToLogger(message, "info")
-            response = self.session.post(
-                url, data=json_data, headers=headers, proxies={}
-            )
+            if sendCount > 10:
+                return {
+                    "status": False,
+                    "message": "ConnectionError: Failed to connect Server. Please contact to the administrator",
+                    "status_code": 408,
+                }
+            identifier = str(int(random.random() * 9999999999 + 1))
+            # json_data = json.dumps(json_data)
+            headers = {
+                "Content-type": "application/json",
+                "Diamond-Connection-Identifier": identifier,
+            }
+            message = f"Send Message to Server: {url}"
+            # self.doc.writeToLogger(message, "info")
+            self.logger.info(message)
+            self.logger.debug(f"json data: {json_data}")
+            if methods == "GET":
+                response = self.session.get(
+                    url, data=json_data, headers=headers, proxies={}
+                )
+            elif methods == "POST":
+                response = self.session.post(
+                    url, data=json_data, headers=headers, proxies={}
+                )
+            elif methods == "PUT":
+                response = self.session.put(
+                    url, data=json_data, headers=headers, proxies={}
+                )
+            elif methods == "DELETE":
+                response = self.session.delete(
+                    url, data=json_data, headers=headers, proxies={}
+                )
+            else:
+                raise ValueError("Invalid method.")
             message = (
                 f"Receive Message from Server: {response.status_code} {response.text}"
             )
-            self.doc.writeToLogger(message, "info")
+            # self.doc.writeToLogger(message, "info")
             # self.data_Model.write_to_logger(response)
             statusCode = response.status_code
+            self.logger.info(f"Get response, Status Code: {statusCode}")
+            self.logger.debug(f"Header: {response.headers}")
+            # self.logger.debug(f"Response: {response.text}")
             if statusCode == 500:
                 return {
                     "status": False,
                     "message": "Internal Server Error. Please contact the administrator.",
-                    "args": {},
+                    "status_code": statusCode,
                 }
             if statusCode == 404:
                 return {
                     "status": False,
                     "message": "Not Found. Please contact the administrator.",
-                    "args": {},
+                    "status_code": statusCode,
                 }
             if statusCode == 400:
                 return {
                     "status": False,
                     "message": "Bad Request. Please contact the administrator.",
-                    "args": {},
+                    "status_code": statusCode,
                 }
             if statusCode == 450:
                 message = response.json()["message"]
                 return {
                     "status": False,
                     "message": message,
-                    "args": {},
+                    "status_code": statusCode,
                 }
             # dictReturnResponse = json.loads(response.text)
             dictReturnResponse = response.json()
-            print(dictReturnResponse)
-            returnIdentifier = dictReturnResponse["identifier"]
+            # print(dictReturnResponse)
+            dictReturnResponse["status_code"] = statusCode
+            returnIdentifier = response.headers.get(
+                "Diamond-Connection-Identifier", None
+            )
+            self.logger.debug(
+                f"Identifier Originale: {identifier}, Return: {returnIdentifier}"
+            )
             if identifier != returnIdentifier:
-                print("Resend Message")
-                dictReturnResponse = self.sendMessage(url, args)
-
+                self.logger.error(
+                    f"Identifier mismatch: {identifier} != {returnIdentifier}\nResend Message"
+                )
+                dictReturnResponse = self.sendMessage(
+                    url, json_data, methods, sendCount + 1
+                )
         except requests.exceptions.ConnectTimeout as e:
-            print(e)
+            self.logger.warning(e)
             return {
                 "status": False,
                 "message": "TimeoutError: Failed to connect Server. Please contact to the administrator",
-                "args": {"error", e},
+                "status_code": 408,
+                "error": e,
             }
         except requests.exceptions.ConnectionError as e:
-            print(e)
+            self.logger.warning(e)
             return {
                 "status": False,
                 "message": "ConnectionError Failed to connect Server. Please contact to the administrator.",
-                "args": {"error", e},
+                "status_code": 408,
+                "error": e,
             }
         return dictReturnResponse
 

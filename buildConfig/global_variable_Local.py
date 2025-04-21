@@ -1,6 +1,8 @@
-SHARE_DIRECTORY_IN_STORAGE = r"D:\Share\NR-000"
-URL_DIAMOND = "https://192.168.150.10:6426"
-SAVE_DIRECTORY = r"D:\Share\NR-000"
+SHARE_DIRECTORY_IN_STORAGE = r"C:\Project\DataDiamondTest\Share\NR-000"
+URL_DIAMOND = "https://localhost:6426"
+SAVE_DIRECTORY = r"C:\Project\DataDiamondTest\Share\NR-000"
 # SHARE_DIRECTORY_IN_STORAGE = r"C:\Project\DataDiamondTest\Share\NR-000"
-# URL_DIAMOND = "https://127.0.0.1:5426"
+# SHARE_DIRECTORY_IN_STORAGE = r"C:\Project\DataDiamondTest\Share\NR-000"
 # SAVE_DIRECTORY = r"C:\Project\DataDiamondTest\Share\NR-000"
+
+# SAVE_DIRECTORY = r"D:\Share\NR-000"

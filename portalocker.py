@@ -12,6 +12,7 @@ import os
 import platform
 import subprocess
 import json
+import logging
 from datetime import datetime
 
 
@@ -25,88 +26,98 @@ class ProcessLock:
         self.lock_file_path = lock_file_path
         self.pid = os.getpid()
         self.timestamp = datetime.now().isoformat()
+        self.logger = logging.getLogger(__name__)
+        # print(f"Process ID: {self.pid}")
+        # print(f"Timestamp: {self.timestamp}")
 
-    def is_process_running(self, pid):
+    def isProcessRunning(self, pid):
         system = platform.system().lower()
         try:
-            if system == 'windows':
-                output = subprocess.check_output(['tasklist', '/FI', f'PID eq {pid}'], text=True)
-                return str(pid) in output
-            elif system in ['linux', 'darwin']:
-                output = subprocess.check_output(['ps', '-p', str(pid)], text=True)
-                return str(pid) in output
+            if system == "windows":
+                output = subprocess.check_output(
+                    ["tasklist", "/FI", f"PID eq {pid}"], text=True
+                )
+            elif system in ["linux", "darwin"]:
+                output = subprocess.check_output(["ps", "-p", str(pid)], text=True)
             else:
-                return False
+                output = ""
+            self.logger.debug(f"System: {system}")
+            self.logger.debug(f"Tasklist output: {output}")
+            self.logger.debug(f"PID: {pid}")
+            return str(pid) in output
         except (subprocess.CalledProcessError, Exception):
             return False
 
-    def check_and_remove_stale_lock(self):
-        try:
-            with open(self.lock_file_path, 'r') as f:
-                lock_data = json.load(f)
-                pid = lock_data.get('pid')
-                if pid and not self.is_process_running(pid):
-                    os.remove(self.lock_file_path)
-                    return True
+    def checkAndRemoveStateLock(self):
+        if not os.path.exists(self.lock_file_path):
             return False
-        except (json.JSONDecodeError, FileNotFoundError):
+        with open(self.lock_file_path, "r") as f:
+            lock_data = json.load(f)
+            pid = lock_data.get("pid")
+        if pid and not self.isProcessRunning(pid):
+            os.remove(self.lock_file_path)
+            return False
+        else:
             return True
 
-    def write_lock_info(self):
+    def writeLockInfo(self):
         lock_data = {
-            'pid': self.pid,
-            'timestamp': self.timestamp,
-            'system': platform.system()
+            "pid": self.pid,
+            "timestamp": self.timestamp,
+            "system": platform.system(),
         }
-        with open(self.lock_file_path, 'w') as f:
+        with open(self.lock_file_path, "w") as f:
             json.dump(lock_data, f)
 
 
-if os.name == 'nt':
-    import win32con
-    import win32file
-    import pywintypes
-    LOCK_EX = win32con.LOCKFILE_EXCLUSIVE_LOCK
-    LOCK_SH = 0  # the default
-    LOCK_NB = win32con.LOCKFILE_FAIL_IMMEDIATELY
-    __overlapped = pywintypes.OVERLAPPED()
-elif os.name == 'posix':
-    import fcntl
-    LOCK_EX = fcntl.LOCK_EX
-    LOCK_SH = fcntl.LOCK_SH
-    LOCK_NB = fcntl.LOCK_NB
-else:
-    raise RuntimeError  #, "PortaLocker only defined for nt and posix platforms"
+# if os.name == "nt":
+#     import win32con
+#     import win32file
+#     import pywintypes
 
-if os.name == 'nt':
+#     LOCK_EX = win32con.LOCKFILE_EXCLUSIVE_LOCK
+#     LOCK_SH = 0  # the default
+#     LOCK_NB = win32con.LOCKFILE_FAIL_IMMEDIATELY
+#     __overlapped = pywintypes.OVERLAPPED()
+# elif os.name == "posix":
+#     import fcntl
 
-    def lock(file, flags):
-        hfile = win32file._get_osfhandle(file.fileno())
-        try:
-            win32file.LockFileEx(hfile, flags, 0, -0x10000, __overlapped)
-        except pywintypes.error as exc_value:
-            raise IOError
+#     LOCK_EX = fcntl.LOCK_EX
+#     LOCK_SH = fcntl.LOCK_SH
+#     LOCK_NB = fcntl.LOCK_NB
+# else:
+#     raise RuntimeError  # , "PortaLocker only defined for nt and posix platforms"
 
-    def unlock(file):
-        hfile = win32file._get_osfhandle(file.fileno())
-        try:
-            win32file.UnlockFileEx(hfile, 0, -0x10000, __overlapped)
-        except pywintypes.error as exc_value:
-            if exc_value[0] == 158:
-                pass
-            else:
-                raise
+# if os.name == "nt":
 
-elif os.name == 'posix':
+#     def lock(file, flags):
+#         hfile = win32file._get_osfhandle(file.fileno())
+#         try:
+#             win32file.LockFileEx(hfile, flags, 0, -0x10000, __overlapped)
+#         except pywintypes.error as exc_value:
+#             raise IOError
 
-    def lock(file, flags):
-        try:
-            fcntl.flock(file.fileno(), flags)
-        except IOError as exc_value:
-            raise IOError
+#     def unlock(file):
+#         hfile = win32file._get_osfhandle(file.fileno())
+#         try:
+#             win32file.UnlockFileEx(hfile, 0, -0x10000, __overlapped)
+#         except pywintypes.error as exc_value:
+#             if exc_value[0] == 158:
+#                 pass
+#             else:
+#                 raise
 
-    def unlock(file):
-        fcntl.flock(file.fileno(), fcntl.LOCK_UN)
+# elif os.name == "posix":
+
+#     def lock(file, flags):
+#         try:
+#             fcntl.flock(file.fileno(), flags)
+#         except IOError as exc_value:
+#             raise IOError
+
+#     def unlock(file):
+#         fcntl.flock(file.fileno(), fcntl.LOCK_UN)
+
 
 if __name__ == "__main__":
     print(os.name)
