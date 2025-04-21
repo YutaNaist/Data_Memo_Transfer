@@ -16,12 +16,12 @@ if exist "%USERPROFILE%\miniconda3" (
 
 "%USERPROFILE%\miniconda3\Scripts\conda.exe" init
 
-if exist "%USERPROFILE%\miniconda3\envs\diamond" (
-    echo "Skip create conda environment diamond: already exist"
+if exist "%USERPROFILE%\miniconda3\envs\data-memo-transfer-PyQt5" (
+    echo "Skip create conda environment data-memo-transfer-PyQt5: already exist"
 ) else (
-    echo "Create environment for diamond from yaml file."
+    echo "Create environment for data-memo-transfer-PyQt5 from yaml file."
     @REM "%USERPROFILE%\miniconda3\condabin\conda.bat" create -n diamond python=3.11 -y
-    "%USERPROFILE%\miniconda3\condabin\conda.bat" env create -f "%CD%\environment_diamond.yml"
+    "%USERPROFILE%\miniconda3\condabin\conda.bat" env create -f "%CD%\environment_data-memo-transfer.yaml"
 )
 
 
