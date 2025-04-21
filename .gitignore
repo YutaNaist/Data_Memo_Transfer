@@ -16,4 +16,5 @@ pyinstaller/
 *.dist/
 *.onefile-build/
 test/
-Data_Memo_transfer.spec
+./Data_Memo_transfer.spec
+./global_variable.py
