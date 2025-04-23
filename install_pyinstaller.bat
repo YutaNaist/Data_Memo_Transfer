@@ -1,6 +1,8 @@
 @echo off
 echo "Start initialize for diamond system %0"
 pause
+echo "-----Create Conda environment for diamond-----"
+
 if exist "%USERPROFILE%\miniconda3" (
     "Skip install the miniconda latest version: already exist"
 ) else (
@@ -14,31 +16,31 @@ if exist "%USERPROFILE%\miniconda3" (
     exit
 )
 
-"%USERPROFILE%\miniconda3\Scripts\conda.exe" init
+call "%USERPROFILE%\miniconda3\Scripts\conda.exe" init
 
 if exist "%USERPROFILE%\miniconda3\envs\data-memo-transfer-PyQt5" (
     echo "Delete environment data-memo-transfer-PyQt5: already exist"
     @REM "Skip create conda environment diamond: already exist"
-    "%USERPROFILE%\miniconda3\condabin\conda.bat" env remove -n data-memo-transfer-PyQt5 -y
+    call "%USERPROFILE%\miniconda3\condabin\conda.bat" env remove -n data-memo-transfer-PyQt5 -y
     echo "Create environment again for diamond from yaml file."
-    "%USERPROFILE%\miniconda3\condabin\conda.bat" env create -f "%CD%\environment_diamond.yml"
+    call "%USERPROFILE%\miniconda3\condabin\conda.bat" env create -f "%CD%\environment_data-memo-transfer.yaml"
 ) else (
     echo "Create environment for data-memo-transfer-PyQt5 from yaml file."
     @REM "%USERPROFILE%\miniconda3\condabin\conda.bat" create -n diamond python=3.11 -y
-    "%USERPROFILE%\miniconda3\condabin\conda.bat" env create -f "%CD%\environment_data-memo-transfer.yaml"
+    call "%USERPROFILE%\miniconda3\condabin\conda.bat" env create -f "%CD%\environment_data-memo-transfer.yaml"
 )
 
-echo "Finish installing environment for data-memo-transfer-PyQt5."
-echo "Next step: run build_client.bat to build the client."
-
-
 @REM REM To install with this script, MinGW and python with pip is required before running bat file.
-@REM git clone https://github.com/pyinstaller/pyinstaller.git
-@REM REM winget install MartinStorsjo.LLVM-MinGW.MSVCRT
-@REM cd .\pyinstaller\bootloader\
-@REM python .\waf distclean all
+git clone https://github.com/pyinstaller/pyinstaller.git
+winget install MartinStorsjo.LLVM-MinGW.MSVCRT
+cd .\pyinstaller\bootloader\
+python .\waf distclean all
 @REM cd ..
 @REM @REM pip install wheel
 @REM pip install .
 @REM cd ..
 @REM rm -rf .\pyinstaller
+
+echo "Finish installing environment for data-memo-transfer-PyQt5."
+echo "Next step: run build_client.bat to build the client."
+
