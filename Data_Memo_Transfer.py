@@ -17,6 +17,7 @@ SHARE_DIRECTORY_IN_STORAGE = global_variable.SHARE_DIRECTORY_IN_STORAGE
 # SAVE_DIRECTORY = "C:/Test/Share/"
 # SHARE_DIRECTORY_IN_STORAGE = "C:/Test/Share/"
 
+
 def main():
     doc = TyDocDataMemoTransfer()
     doc.makeLogger("settings/logDataMemoTransfer.json", name=__name__)
