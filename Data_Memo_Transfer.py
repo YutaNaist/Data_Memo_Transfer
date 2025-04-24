@@ -8,6 +8,7 @@ import logging
 from PyQt5 import QtWidgets
 
 
+
 def main():
     # * build_client.ps1から実行されたかどうかを判別。
     # * global_variable.pyが存在する場合はbuild_client.ps1から実行されたと判断。

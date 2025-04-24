@@ -1,19 +1,29 @@
 $CurrentDir = Split-Path $MyInvocation.MyCommand.Path
 Set-Location $CurrentDir
 
+$condaPath = Join-Path $env:USERPROFILE "miniconda3\envs\data-memo-transfer-PyQt5"
+$condaLibPath = Join-Path $condaPath "Library\bin"
+$pyinstallerPath = Join-Path $condaPath "Scripts\pyinstaller.exe"
+$env:PATH = "$condaLibPath;$env:PATH"
+
+$conditionFile = "buildConfig\build_client_config.json"
+
 $isDebugMode = 0
 # PowerShell script to build multiple versions using JSON configuration
-$conditionFile = "buildConfig\build_client_config.json"
+
 if (-Not (Test-Path $conditionFile)) {
-    Write-Error "JSON file '$conditionFile' not found!" -ForegroundColor Red
+    Write-Host "Error: JSON file '$conditionFile' not found!" -ForegroundColor Red
     exit 1
 }
 $buildConditions = Get-Content -Path $conditionFile | ConvertFrom-Json
-if ( -Not ( 0 -eq $isDebugMode ) ){
+if ( -Not ( 0 -eq $isDebugMode ) ) {
     Write-Host "Debug mode is: Activated" -ForegroundColor Cyan
 }
 
 # Loop through each build condition
+
+Write-Host "PyInstaller Path: $pyinstallerPath" -ForegroundColor Cyan
+
 Write-Host "Start to build Data_Memo_Transfer.exe" -ForegroundColor Cyan
 foreach ($condition in $buildConditions) {
     $versionName = $condition.version_name
@@ -24,20 +34,36 @@ foreach ($condition in $buildConditions) {
         Copy-Item $globalVariableFile global_variable.py -Force
     }
     else {
-        Write-Error "Source file '$globalVariableFile' not found!" -ForegroundColor Red
+        Write-Host "Error: Source file '$globalVariableFile' not found!" -ForegroundColor Red
         continue
     }
-    if ( 0 -eq $isDebugMode ){
-        pyinstaller.exe .\Data_Memo_Transfer.py -F -w
+    if ( 0 -eq $isDebugMode ) {
+        & $pyinstallerPath @(
+            "--paths", "$condaLibPath",
+            "Data_Memo_Transfer.py",
+            "-F",
+            "-w"
+        )
+        # & $pyinstallerPath --paths $condaLibPath Data_Memo_Transfer.py -F -w
+        # & $pyinstallerPath Data_Memo_Transfer.py -F -w
     }
-    else{pyinstaller.exe .\Data_Memo_Transfer.py -F
+    else {
+        & $pyinstallerPath @(
+            "--paths", "$condaLibPath",
+            "Data_Memo_Transfer.py",
+            "-F"
+        )
+        #& $pyinstallerPath --paths $condaLibPath Data_Memo_Transfer.py -F
+        # & $pyinstallerPath Data_Memo_Transfer.py -F
+        # Start-Process -FilePath $pyinstallerPath -ArgumentList @("Data_Memo_Transfer.py", "-F")
     }
-
     Copy-Item .\settings\ .\dist\settings\ -Recurse -Force
     Copy-Item .\icons\ .\dist\icons\ -Recurse -Force
     Copy-Item .\forms\ .\dist\forms\ -Recurse -Force
     # Copy-Item C:\mingw64\bin\libmcfgthread-1.dll .\dist\libmcfgthread-1.dll -Force
     New-Item .\dist\Log -ItemType Directory -Force > $null
+    Remove-Item global_variable.py -Force
+    Remove-Item Data_Memo_Transfer.spec -Force
     Write-Host "Finish Build: $versionName" -ForegroundColor Cyan
 
     $outputFolder = "BuildExe\"
@@ -56,7 +82,7 @@ foreach ($condition in $buildConditions) {
         Move-Item -Path $outputDistFolder -Destination $outputFolder$outputDistFolder -Force
     }
     else {
-        Write-Error "No 'dist' folder found after build!" -ForegroundColor Red
+        Write-Host "Error: No 'dist' folder found after build!" -ForegroundColor Red
         continue
     }
     $outputBuildFolder = "Build_Data_Memo_Transfer_$versionName"
@@ -68,7 +94,7 @@ foreach ($condition in $buildConditions) {
         Move-Item -Path $outputBuildFolder -Destination $outputFolder$outputBuildFolder -Force
     }
     else {
-        Write-Error "No 'build' folder found after build!" -ForegroundColor Red
+        Write-Host "Error: No 'build' folder found after build!" -ForegroundColor Red
         continue
     }
     Write-Host "Build completed for: $versionName" -ForegroundColor Green
