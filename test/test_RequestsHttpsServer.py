@@ -141,4 +141,4 @@ def test_requestOneTimePassword():
 if __name__ == "__main__":
     # test_sendCheckExperimentId()
     test_sendLogin()
-    # test_requestOneTimePassword()
+    test_requestOneTimePassword()
