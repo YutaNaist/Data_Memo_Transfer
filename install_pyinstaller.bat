@@ -4,13 +4,13 @@ pause
 echo "-----Create Conda environment for diamond-----"
 
 if exist "%USERPROFILE%\miniconda3" (
-    "Skip install the miniconda latest version: already exist"
+    echo "Skip install the miniconda latest version: already exist"
 ) else (
     echo "Install the miniconda latest version on %USERPROFILE%"
     curl https://repo.anaconda.com/miniconda/Miniconda3-latest-Windows-x86_64.exe -o "%USERPROFILE%\miniconda.exe"
     start /wait "" "%USERPROFILE%\miniconda.exe" /S
     del "%USERPROFILE%\miniconda.exe"
-    "%USERPROFILE%\miniconda3\Scripts\conda.exe" init
+    call "%USERPROFILE%\miniconda3\Scripts\conda.exe" init
     echo "Finish install ing miniconda. restart this bat file again"
     call %0
     exit
@@ -43,4 +43,3 @@ python .\waf distclean all
 
 echo "Finish installing environment for data-memo-transfer-PyQt5."
 echo "Next step: run build_client.bat to build the client."
-
