@@ -1,9 +1,16 @@
 $CurrentDir = Split-Path $MyInvocation.MyCommand.Path
 Set-Location $CurrentDir
 
+$condaPath = Join-Path $env:USERPROFILE "miniconda3\envs\data-memo-transfer-PyQt5"
+$condaLibPath = Join-Path $condaPath "Library\bin"
+$pyinstallerPath = Join-Path $condaPath "Scripts\pyinstaller.exe"
+$env:PATH = "$condaLibPath;$env:PATH"
+
+$conditionFile = "buildConfig\build_client_config.json"
+
 $isDebugMode = 0
 # PowerShell script to build multiple versions using JSON configuration
-$conditionFile = "buildConfig\build_client_config.json"
+
 if (-Not (Test-Path $conditionFile)) {
     Write-Host "Error: JSON file '$conditionFile' not found!" -ForegroundColor Red
     exit 1
@@ -14,7 +21,7 @@ if ( -Not ( 0 -eq $isDebugMode ) ) {
 }
 
 # Loop through each build condition
-$pyinstallerPath = Join-Path $home "miniconda3\envs\data-memo-transfer-PyQt5\Scripts\pyinstaller.exe"
+
 Write-Host "PyInstaller Path: $pyinstallerPath" -ForegroundColor Cyan
 
 Write-Host "Start to build Data_Memo_Transfer.exe" -ForegroundColor Cyan
@@ -31,18 +38,33 @@ foreach ($condition in $buildConditions) {
         continue
     }
     if ( 0 -eq $isDebugMode ) {
-        & $pyinstallerPath Data_Memo_Transfer.py -F -w
+        & $pyinstallerPath @(
+            "--paths", "$condaLibPath",
+            "Data_Memo_Transfer.py",
+            "-F",
+            "-w"
+        )
+        # & $pyinstallerPath --paths $condaLibPath Data_Memo_Transfer.py -F -w
+        # & $pyinstallerPath Data_Memo_Transfer.py -F -w
     }
     else {
-        & $pyinstallerPath Data_Memo_Transfer.py -F
+        & $pyinstallerPath @(
+            "--paths", "$condaLibPath",
+            "Data_Memo_Transfer.py",
+            "-F"
+        )
+        #& $pyinstallerPath --paths $condaLibPath Data_Memo_Transfer.py -F
+        # & $pyinstallerPath Data_Memo_Transfer.py -F
         # Start-Process -FilePath $pyinstallerPath -ArgumentList @("Data_Memo_Transfer.py", "-F")
     }
-
+ 
     Copy-Item .\settings\ .\dist\settings\ -Recurse -Force
     Copy-Item .\icons\ .\dist\icons\ -Recurse -Force
     Copy-Item .\forms\ .\dist\forms\ -Recurse -Force
     # Copy-Item C:\mingw64\bin\libmcfgthread-1.dll .\dist\libmcfgthread-1.dll -Force
     New-Item .\dist\Log -ItemType Directory -Force > $null
+    Remove-Item global_variable.py -Force
+    Remove-Item Data_Memo_Transfer.spec -Force
     Write-Host "Finish Build: $versionName" -ForegroundColor Cyan
 
     $outputFolder = "BuildExe\"
