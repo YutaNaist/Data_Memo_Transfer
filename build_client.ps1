@@ -4,7 +4,25 @@ Set-Location $CurrentDir
 $condaPath = Join-Path $env:USERPROFILE "miniconda3\envs\data-memo-transfer-PyQt5"
 $condaLibPath = Join-Path $condaPath "Library\bin"
 $pyinstallerPath = Join-Path $condaPath "Scripts\pyinstaller.exe"
+$pythonPath = Join-Path $condaPath "python.exe"
 $env:PATH = "$condaLibPath;$env:PATH"
+$pyinstallerExcludedModules = @(
+    "tkinter",
+    "unittest",
+    "pydoc",
+    "doctest",
+    "test",
+    "distutils",
+    "setuptools",
+    "pkg_resources",
+    "turtle",
+    "venv",
+    "wsgiref",
+    "pip",
+    "wheel",
+    "pytest",
+    "colorama"
+)
 
 $conditionFile = "buildConfig\build_client_config.json"
 
@@ -25,6 +43,10 @@ if ( -Not ( 0 -eq $isDebugMode ) ) {
 Write-Host "PyInstaller Path: $pyinstallerPath" -ForegroundColor Cyan
 
 Write-Host "Start to build Data_Memo_Transfer.exe" -ForegroundColor Cyan
+if (Test-Path .\BuildExe) {
+    Write-Host "BuildExe folder already exists. Deleting it..." -ForegroundColor Yellow
+    Remove-Item .\BuildExe -Recurse -Force
+}
 foreach ($condition in $buildConditions) {
     $versionName = $condition.version_name
     $globalVariableFile = $condition.global_variable_file
@@ -37,31 +59,25 @@ foreach ($condition in $buildConditions) {
         Write-Host "Error: Source file '$globalVariableFile' not found!" -ForegroundColor Red
         continue
     }
+    $pyinstallerArgs = @(
+        "--paths", $condaLibPath,
+        "Data_Memo_Transfer.py",
+        "--onefile"
+    )
     if ( 0 -eq $isDebugMode ) {
-        & $pyinstallerPath @(
-            "--paths", "$condaLibPath",
-            "Data_Memo_Transfer.py",
-            "-F",
-            "-w"
-        )
-        # & $pyinstallerPath --paths $condaLibPath Data_Memo_Transfer.py -F -w
-        # & $pyinstallerPath Data_Memo_Transfer.py -F -w
+        $pyinstallerArgs += "--windowed"
     }
-    else {
-        & $pyinstallerPath @(
-            "--paths", "$condaLibPath",
-            "Data_Memo_Transfer.py",
-            "-F"
-        )
-        #& $pyinstallerPath --paths $condaLibPath Data_Memo_Transfer.py -F
-        # & $pyinstallerPath Data_Memo_Transfer.py -F
-        # Start-Process -FilePath $pyinstallerPath -ArgumentList @("Data_Memo_Transfer.py", "-F")
+    foreach ($module in $pyinstallerExcludedModules) {
+        $pyinstallerArgs += "--exclude-module"
+        $pyinstallerArgs += $module
     }
+    & $pythonPath "colorized_pyinstaller.py" $pyinstallerPath @pyinstallerArgs
+
     Copy-Item .\settings\ .\dist\settings\ -Recurse -Force
     Copy-Item .\icons\ .\dist\icons\ -Recurse -Force
     Copy-Item .\forms\ .\dist\forms\ -Recurse -Force
     # Copy-Item C:\mingw64\bin\libmcfgthread-1.dll .\dist\libmcfgthread-1.dll -Force
-    New-Item .\dist\Log -ItemType Directory -Force > $null
+    New-Item .\dist\Logs -ItemType Directory -Force > $null
     Remove-Item global_variable.py -Force
     Remove-Item Data_Memo_Transfer.spec -Force
     Write-Host "Finish Build: $versionName" -ForegroundColor Cyan
@@ -99,5 +115,5 @@ foreach ($condition in $buildConditions) {
     }
     Write-Host "Build completed for: $versionName" -ForegroundColor Green
 }
-Remove-Item -Force global_variable.py
+# Remove-Item -Force global_variable.py
 Write-Host "`nAll builds completed successfully!" -ForegroundColor Magenta

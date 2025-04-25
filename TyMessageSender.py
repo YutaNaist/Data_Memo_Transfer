@@ -237,21 +237,21 @@ class TyMessageSender:
     def sendRequestSendOneTimePassword(
         self, strExperimentId: str, isSuperVisor: bool = False
     ) -> dict:
-        args = {"experiment_id": strExperimentId, "is_send_to_supervisor": isSuperVisor}
-        url = self._urlBase + "/request_one_time_password"
-        dictResponse = self.sendMessage(url, args)
+        jsonData = {"experiment_id": strExperimentId, "is_send_to_supervisor": isSuperVisor}
+        url = self._urlBase + f"/request_one_time_password/{strExperimentId}"
+        dictResponse = self.sendMessage(url, jsonData=jsonData, methods="POST")
         return dictResponse
 
     def sendRequestRegisterPassword(
         self, strExperimentId: str, password: str, oneTimePassword: str
     ) -> dict:
-        args = {
+        jsonData = {
             "experiment_id": strExperimentId,
             "password": password,
             "one_time_password": oneTimePassword,
         }
-        url = self._urlBase + "/register_password"
-        dictResponse = self.sendMessage(url, args)
+        url = self._urlBase + f"/register_password/{strExperimentId}"
+        dictResponse = self.sendMessage(url, jsonData=jsonData, methods="POST")
         return dictResponse
 
     def sendRequestCheckProposal(self, str_Experiment_ID: str) -> dict:

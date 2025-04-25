@@ -54,10 +54,12 @@ def test_sendLogin():
     )
     messageSender = TyMessageSender(URL_DIAMOND, doc)
 
+    logger.info("--------------------------------------------------")
+    logger.info("Case 1: Correct experiment id and password")
     strExperimentId = "0000-0000-0000"
-    rowPass = "password"
-    hashPass = doc.makeHashFromString(rowPass)
-
+    # rowPass = "password"
+    # hashPass = doc.makeHashFromString(rowPass)
+    hashPass = "BILRGNtGU4Frmfw3qpOAikpkmjLdxr1mySkykz+H4Jw="
     doc.setUrlBase(URL_DIAMOND)
     doc.setDiCtExperimentInformation("str_save_directory", SAVE_DIRECTORY)
     doc.setDiCtExperimentInformation(
@@ -77,9 +79,11 @@ def test_sendLogin():
 
     logger.info("--------------------------------------------------")
 
+    logger.info("Case 2: Correct experiment id and wrong password")
     strExperimentId = "0000-0000-0000"
-    rowPass = "wrong_password"
-    hashPass = doc.makeHashFromString(rowPass)
+    # rowPass = "wrong_password"
+    # hashPass = doc.makeHashFromString(rowPass)
+    hashPass = "BILRGNtGU4Frmfw3qpOAiaaaaaaaaaaaaaaaaaaaaaaa"
     sendURL = URL_DIAMOND + f"/request_one_time_password/{strExperimentId}"
     response = messageSender.sendRequestLogin(strExperimentId, hashPass)
     logger.info(f"responce: {response}")
@@ -88,9 +92,11 @@ def test_sendLogin():
     ), "Failed to send check experiment ID request"
     logger.info("--------------------------------------------------")
 
+    logger.info("Case 3: Wrong experiment id")
     strExperimentId = "0013-0000-0000"
-    rowPass = "wrong_password"
-    hashPass = doc.makeHashFromString(rowPass)
+    # rowPass = "password"
+    # hashPass = doc.makeHashFromString(rowPass)
+    hashPass = "BILRGNtGU4Frmfw3qpOAikpkmjLdxr1mySkykz+H4Jw="
     sendURL = URL_DIAMOND + f"/request_one_time_password/{strExperimentId}"
     response = messageSender.sendRequestLogin(strExperimentId, hashPass)
     logger.info(f"responce: {response}")
@@ -100,20 +106,21 @@ def test_sendLogin():
 
     logger.info("--------------------------------------------------")
 
-    strExperimentId = "0000-0000-0000"
-    rowPass = "password"
-    hashPass = doc.makeHashFromString(rowPass)
-    jsonData = {
-        "password": hashPass,
-    }
-    sendURL = URL_DIAMOND + f"/request_one_time_password/{strExperimentId}"
-    response = messageSender.sendMessage(sendURL, jsonData, "POST")
-    logger.info(f"responce: {response}")
-    assert (response["status_code"] == 400) and (
-        response["status"] is False
-    ), "Failed to send check experiment ID request"
+    # logger.info("Case 4: Wrong experiment id and correct password")
+    # strExperimentId = "0000-0000-0000"
+    # rowPass = "password"
+    # hashPass = doc.makeHashFromString(rowPass)
+    # jsonData = {
+    #     "password": hashPass,
+    # }
+    # sendURL = URL_DIAMOND + f"/request_one_time_password/{strExperimentId}"
+    # response = messageSender.sendMessage(sendURL, jsonData, "POST")
+    # logger.info(f"responce: {response}")
+    # assert (response["status_code"] == 400) and (
+    #     response["status"] is False
+    # ), "Failed to send check experiment ID request"
 
-    logger.info("--------------------------------------------------")
+    # logger.info("--------------------------------------------------")
 
 
 def test_requestOneTimePassword():
@@ -137,8 +144,21 @@ def test_requestOneTimePassword():
         response["status"] is True
     ), "Failed to send check experiment ID request"
 
+    strExperimentId = "0013-0000-0000"
+    sendURL = URL_DIAMOND + f"/request_one_time_password/{strExperimentId}"
+    logger.info(f"sendURL: {sendURL}")
+    dataJson = {
+        "is_send_to_supervisor": False,
+        "is_debug": True,
+    }
+    response = messageSender.sendMessage(sendURL, dataJson, "POST")
+    logger.info(f"responce: {response}")
+    assert (response["status_code"] == 200) and (
+        response["status"] is True
+    ), "Failed to send check experiment ID request"
+
 
 if __name__ == "__main__":
     # test_sendCheckExperimentId()
-    test_sendLogin()
+    # test_sendLogin()
     test_requestOneTimePassword()

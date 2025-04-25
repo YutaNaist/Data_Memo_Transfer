@@ -50,7 +50,7 @@ class TyDialogSendOneTimePassword(QtWidgets.QDialog):
             experimentId, isSendSupervisor
         )
         if response["status"] is True:
-            mailAddress = response["args"]["mail_address"]
+            mailAddress = response["mail_address"]
             self.doc.setMailAddress(mailAddress)
             self.doc.changeView("register_password")
         else:
