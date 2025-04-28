@@ -1,6 +1,7 @@
 from __future__ import annotations
 from typing import TYPE_CHECKING
 from typing import TypedDict, Any, Optional, Union, cast
+
 # from typing import Dict
 
 import requests
@@ -15,6 +16,18 @@ if TYPE_CHECKING:
 
 # except BaseException:
 #     pass
+
+
+class MessageSenderError(Exception):
+    """Custom exception for message sender errors."""
+
+    def __init__(self, message: str, status_code: int, logger: logging.Logger):
+        super().__init__(message)
+        self.message = message
+        self.status_code = 500
+        logger.error(f"MessageSenderError: {message}, Status Code: {status_code}")
+
+
 class TyMessageSenderResponce(TypedDict):
     status: bool
     message: str
@@ -37,6 +50,28 @@ class TyLoginResponse(TypedDict):
     proposal: Union[TyProposalInfo, dict]
     status: bool
     status_code: int
+
+
+class TyRequestOneTimePasswordResponse(TypedDict):
+    status: bool
+    message: str
+    status_code: int
+    mail_address: str
+    one_time_password: str
+
+
+class TyRegisterPasswordResponse(TypedDict):
+    status: bool
+    message: str
+    status_code: int
+
+
+class TyStartExperimentResponse(TypedDict):
+    status: bool
+    message: str
+    status_code: int
+    experiment_information: dict[str, Any]
+    # experiment_information: TyExperimentInformation
 
 
 class TyMessageSender:
@@ -90,11 +125,12 @@ class TyMessageSender:
                 "Content-type": "application/json",
                 "Diamond-Connection-Identifier": identifier,
             }
-            message = f"Send Message to Server: {url}"
+            # message = f"Send Message to Server: {url}"
             # self.doc.writeToLogger(message, "info")
-            self.logger.info(message)
-            self.logger.debug(f"json data: {jsonData}")
+            # self.logger.info(message)
             jsonDataSend = json.dumps(jsonData, ensure_ascii=False).encode("utf-8")
+            self.logger.info(f"Send, URL: {url}, Method: {methods}")
+            self.logger.debug(f"Json Data: {jsonData}")
             if methods == "GET":
                 response = self.session.get(
                     url, data=jsonDataSend, headers=headers, proxies={}
@@ -113,44 +149,45 @@ class TyMessageSender:
                 )
             else:
                 raise ValueError("Invalid method.")
-            message = (
-                f"Receive Message from Server: {response.status_code} {response.text}"
-            )
+            # message = (
+            #     f"Receive Message from Server: {response.status_code} {response.text}"
+            # )
             # self.doc.writeToLogger(message, "info")
             # self.data_Model.write_to_logger(response)
             statusCode = response.status_code
             self.logger.info(f"Get response, Status Code: {statusCode}")
-            self.logger.debug(f"Header: {response.headers}")
+            self.logger.debug(f"Header Keys: {list(response.headers.keys())}")
             # self.logger.debug(f"Response: {response.text}")
-            if statusCode == 500:
-                return {
-                    "status": False,
-                    "message": "Internal Server Error. Please contact the administrator.",
-                    "status_code": statusCode,
-                }
-            if statusCode == 404:
-                return {
-                    "status": False,
-                    "message": "Not Found. Please contact the administrator.",
-                    "status_code": statusCode,
-                }
-            if statusCode == 400:
-                return {
-                    "status": False,
-                    "message": "Bad Request. Please contact the administrator.",
-                    "status_code": statusCode,
-                }
-            if statusCode == 450:
-                message = response.json()["message"]
-                return {
-                    "status": False,
-                    "message": message,
-                    "status_code": statusCode,
-                }
+            # if statusCode == 500:
+            #     return {
+            #         "status": False,
+            #         "message": "Internal Server Error. Please contact the administrator.",
+            #         "status_code": statusCode,
+            #     }
+            # if statusCode == 404:
+            #     return {
+            #         "status": False,
+            #         "message": "Not Found. Please contact the administrator.",
+            #         "status_code": statusCode,
+            #     }
+            # if statusCode == 400:
+            #     return {
+            #         "status": False,
+            #         "message": "Bad Request. Please contact the administrator.",
+            #         "status_code": statusCode,
+            #     }
+            # if statusCode == 450:
+            #     message = response.json()["message"]
+            #     return {
+            #         "status": False,
+            #         "message": message,
+            #         "status_code": statusCode,
+            #     }
             # dictReturnResponse = json.loads(response.text)
             dictReturnResponse = response.json()
-            # print(dictReturnResponse)
             dictReturnResponse["status_code"] = statusCode
+            # self.logger.debug(f"Response Key: {list(dictReturnResponse.keys())}")
+
             returnIdentifier = response.headers.get(
                 "Diamond-Connection-Identifier", None
             )
@@ -164,22 +201,33 @@ class TyMessageSender:
                 dictReturnResponse = self.sendMessage(
                     url, jsonData, methods, sendCount + 1
                 )
-        except requests.exceptions.ConnectTimeout as e:
-            self.logger.warning(e)
-            return {
-                "status": False,
-                "message": "TimeoutError: Failed to connect Server. Please contact to the administrator",
-                "status_code": 408,
-                "error": e,
-            }
-        except requests.exceptions.ConnectionError as e:
-            self.logger.warning(e)
-            return {
-                "status": False,
-                "message": "ConnectionError Failed to connect Server. Please contact to the administrator.",
-                "status_code": 408,
-                "error": e,
-            }
+        except requests.exceptions.ConnectTimeout:
+            raise MessageSenderError(
+                "Connection timed out while trying to connect to the server. Please contact to the administrator.",
+                408,
+                self.logger,
+            )
+            # self.logger.warning(e)
+            # return {
+            #     "status": False,
+            #     "message": "TimeoutError: Failed to connect Server. Please contact to the administrator",
+            #     "status_code": 408,
+            #     "error": e,
+            # }
+        except requests.exceptions.ConnectionError:
+            raise MessageSenderError(
+                "Connection error occurred while trying to connect to the server. Please contact to the administrator.",
+                408,
+                self.logger,
+            )
+            # self.logger.warning(e)
+            # return {
+            #     "status": False,
+            #     "message": "ConnectionError Failed to connect Server. Please contact to the administrator.",
+            #     "status_code": 408,
+            #     "error": e,
+            # }
+        self.logger.debug(f"Response Key: {list(dictReturnResponse.keys())}")
         return dictReturnResponse
 
     def sendRequestCheckID(self, strExperimentId: str) -> dict[str, Any]:
@@ -223,28 +271,53 @@ class TyMessageSender:
         return dictResponse
 
     def sendRequestStartExperiment(
-        self, str_Experiment_ID: str, doc: TyDocDataMemoTransfer
-    ) -> dict:
-        url = self._urlBase + "/start_experiment"
-        args = {}
-        args["experiment_id"] = str_Experiment_ID
-        args["share_directory"] = doc.getDictExperimentInformation(
+        self, strExperimentId: str, doc: TyDocDataMemoTransfer
+    ) -> TyStartExperimentResponse:
+        url = self._urlBase + f"/start_experiment/{strExperimentId}"
+        jsonData = {}
+        jsonData["share_directory"] = doc.getDictExperimentInformation(
             "str_share_directory_in_storage"
         )
-        dictResponse = self.sendMessage(url, args)
-        return dictResponse
+        dictResponse = self.sendMessage(url, jsonData, "POST")
+        if not all(
+            key in dictResponse
+            for key in [
+                "status",
+                "message",
+                "status_code",
+                "experiment_information",
+            ]
+        ):
+            raise ValueError("Invalid response format for sendRequestStartExperiment")
+        # dictResponse = self.sendMessage(url, args)
+        return cast(TyStartExperimentResponse, dictResponse)
 
     def sendRequestSendOneTimePassword(
-        self, strExperimentId: str, isSuperVisor: bool = False
-    ) -> dict:
-        jsonData = {"experiment_id": strExperimentId, "is_send_to_supervisor": isSuperVisor}
+        self, strExperimentId: str, isSuperVisor: bool = False, isDebug: bool = False
+    ) -> TyRequestOneTimePasswordResponse:
+        jsonData = {
+            "is_send_to_supervisor": isSuperVisor,
+            "is_debug": isDebug,
+        }
         url = self._urlBase + f"/request_one_time_password/{strExperimentId}"
         dictResponse = self.sendMessage(url, jsonData=jsonData, methods="POST")
-        return dictResponse
+
+        if not all(
+            key in dictResponse
+            for key in [
+                "status",
+                "message",
+                "status_code",
+                "mail_address",
+                "one_time_password",
+            ]
+        ):
+            raise ValueError("Invalid response format for sendRequestLogin")
+        return cast(TyRequestOneTimePasswordResponse, dictResponse)
 
     def sendRequestRegisterPassword(
         self, strExperimentId: str, password: str, oneTimePassword: str
-    ) -> dict:
+    ) -> TyRegisterPasswordResponse:
         jsonData = {
             "experiment_id": strExperimentId,
             "password": password,
@@ -252,28 +325,25 @@ class TyMessageSender:
         }
         url = self._urlBase + f"/register_password/{strExperimentId}"
         dictResponse = self.sendMessage(url, jsonData=jsonData, methods="POST")
-        return dictResponse
+        if not all(key in dictResponse for key in ["status", "message", "status_code"]):
+            raise ValueError("Invalid response format for sendRequestRegisterPassword")
+        return cast(TyRegisterPasswordResponse, dictResponse)
 
-    def sendRequestCheckProposal(self, str_Experiment_ID: str) -> dict:
-        args = {"experiment_id": str_Experiment_ID}
-        dictResponse = self.sendMessage(self.commandList[3], args)
-        return dictResponse
+    def sendRequestLogout(self, strExperimentId: str) -> TyMessageSenderResponce:
+        url = self._urlBase + f"/logout/{strExperimentId}"
+        dictResponse = self.sendMessage(url, {}, "POST")
+        if not all(key in dictResponse for key in ["status", "message", "status_code"]):
+            raise ValueError("Invalid response format for sendRequestLogOut")
+        return cast(TyMessageSenderResponce, dictResponse)
 
-    def sendRequestGetMetaData(self, str_Experiment_ID: str) -> dict:
-        args = {}
-        args["experiment_id"] = str_Experiment_ID
-        # print(self.commandList[4])
-        dictResponse = self.sendMessage(self.commandList[4], args)
-        return dictResponse
+    # def sendRequestCheckProposal(self, str_Experiment_ID: str) -> dict:
+    #     args = {"experiment_id": str_Experiment_ID}
+    #     dictResponse = self.sendMessage(self.commandList[3], args)
+    #     return dictResponse
 
-    def sendRequestCopyOriginal(
-        self, str_Experiment_ID: str, data_Model: TyDocDataMemoTransfer
-    ) -> dict:
-        self.doc = data_Model
-        args = {}
-        args["experiment_id"] = str_Experiment_ID
-        args["storagePC_share_directory"] = self.doc.getDictExperimentInformation(
-            "str_share_directory_in_storage"
-        )
-        dictResponse = self.sendMessage(self.commandList[5], args)
-        return dictResponse
+    # def sendRequestGetMetaData(self, str_Experiment_ID: str) -> dict:
+    #     args = {}
+    #     args["experiment_id"] = str_Experiment_ID
+    #     # print(self.commandList[4])
+    #     dictResponse = self.sendMessage(self.commandList[4], args)
+    #     return dictResponse

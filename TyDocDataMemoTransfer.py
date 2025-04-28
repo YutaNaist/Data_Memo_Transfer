@@ -8,6 +8,7 @@ import logging
 # import urllib3
 import hashlib
 import base64
+from typing import TypedDict, Any, List, Dict, cast
 
 from TyMessageSender import TyMessageSender
 from PyQt5 import QtWidgets
@@ -19,14 +20,63 @@ from controller.TyDialogSetInitial import TyDialogSetInitial
 from controller.TyMainWindow import TyMainWindow
 
 
-class DataModel_DataMemoTransfer_Exception(Exception):
+class DataMemoTransferException(Exception):
     def __init__(self):
         pass
 
 
-class DataModel_DataMemoTransfer_TypeException(DataModel_DataMemoTransfer_Exception):
+class DataMemoTransferDocTypeException(DataMemoTransferException):
     def __str__(self):
         return "DataModelException DataMemoTransfer: Different Type is used."
+
+
+class TyClipboardInfo(TypedDict):
+    filename: str
+    index: int
+    classified: str
+    valid: bool
+    arim_upload: bool
+    comment: str
+    experiment: Dict[str, Any]
+    sample: Dict[str, Any]
+    equipment: Dict[str, Any]
+
+
+class TyFileDataInfo(TypedDict):
+    filename: str
+    index: int
+    classified: str
+    valid: bool
+    arim_upload: bool
+    comment: str
+    experiment: Dict[str, Any]
+    sample: Dict[str, Any]
+    equipment: Dict[str, Any]
+
+
+class TyUserInformation(TypedDict):
+    arim: Dict[str, Any]
+    date: Dict[str, Any]
+    edit_url: str
+    experiment_id: str
+    instrument: Dict[str, Any]
+    share: Dict[str, Any]
+    user: Dict[str, Any]
+
+
+class TyExperimentInformation(TypedDict):
+    str_url_diamond: str
+    str_save_directory: str
+    str_share_directory_in_storage: str
+    str_experiment_id: str
+    dict_user_information: TyUserInformation
+    is_exist_temp_file: bool
+    is_upload_arim: bool
+    is_share_with_google: bool
+    str_parent_id_in_google_drive: str
+    str_mail_address: str
+    dict_clipboard: TyClipboardInfo
+    list_file_data: List[TyFileDataInfo]
 
 
 class TyDocDataMemoTransfer:
@@ -125,7 +175,7 @@ class TyDocDataMemoTransfer:
     def setAllDictExperimentInformation(self, dictExperimentInformation):
         for key, value in dictExperimentInformation.items():
             if key not in self.list_keys:
-                raise DataModel_DataMemoTransfer_Exception
+                raise DataMemoTransferException
             else:
                 self.dictExperimentInformation[key] = value
 
@@ -137,8 +187,8 @@ class TyDocDataMemoTransfer:
 
     def setDiCtExperimentInformation(self, key, value):
         # if isinstance(value, type(self.dict_Data_Model[key])):
-        if type(value) != type(self.dictExperimentInformation[key]):
-            raise DataModel_DataMemoTransfer_TypeException
+        if type(value) is not type(self.dictExperimentInformation[key]):
+            raise DataMemoTransferDocTypeException
         self.dictExperimentInformation[key] = value
 
     def setNumberOfFiles(self) -> int:
@@ -393,17 +443,17 @@ class TyDocDataMemoTransfer:
         logging.config.dictConfig(log_config)
         return None
 
-    def writeToLogger(self, msg: str, mode: str = "debug") -> None:
-        if mode == "error":
-            self.logger.error(msg)
-        elif mode == "warning":
-            self.logger.warning(msg)
-        elif mode == "critical":
-            self.logger.critical(msg)
-        elif mode == "info":
-            self.logger.info(msg)
-        else:
-            self.logger.debug(msg)
+    # def writeToLogger(self, msg: str, mode: str = "debug") -> None:
+    #     if mode == "error":
+    #         self.logger.error(msg)
+    #     elif mode == "warning":
+    #         self.logger.warning(msg)
+    #     elif mode == "critical":
+    #         self.logger.critical(msg)
+    #     elif mode == "info":
+    #         self.logger.info(msg)
+    #     else:
+    #         self.logger.debug(msg)
 
     def makeHashFromString(self, string: str) -> str:
         # salt = "abcd".encode("utf-8")

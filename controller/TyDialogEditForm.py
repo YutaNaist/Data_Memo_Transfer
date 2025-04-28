@@ -26,14 +26,18 @@ class Dialog_Edit_Form(QtWidgets.QDialog):
     signal_update_to_metadata_clipboard = QtCore.pyqtSignal()
 
     def __init__(
-        self, parent=None, data_Model=None, type_Form=None, isTemplate=True, index=-1
+        self, parent=None, doc=None, type_Form=None, isTemplate=True, index=-1
     ):
         super().__init__(parent)
-        # self.ui = Ui_Dialog_Edit_Form()
-        self.__loadUi()
-        # self.ui.setupUi(self)
-        # if isTemplate is True:
-        # self.ui.PB_OK.setVisible(False)
+        if doc is not None:
+            self.doc = doc
+        else:
+            self.doc = TyDocDataMemoTransfer()
+
+        if type_Form is not None:
+            self.type_Form = type_Form
+        else:
+            self.type_Form = None
 
         self.list_Type_Form = [
             "experiment_information",
@@ -41,16 +45,8 @@ class Dialog_Edit_Form(QtWidgets.QDialog):
             "equipment_information",
         ]
 
-        if data_Model is not None:
-            self.data_Model = data_Model
-        else:
-            self.data_Model = TyDocDataMemoTransfer()
-
-        if type_Form is not None:
-            self.type_Form = type_Form
-        else:
-            self.type_Form = None
-
+        # self.ui = Ui_Dialog_Edit_Form()
+        self.__loadUi()
         self.isTemplate = isTemplate
         if isTemplate is True:
             self.ui.PB_Copy_From_Clipboard.setVisible(False)
@@ -59,11 +55,21 @@ class Dialog_Edit_Form(QtWidgets.QDialog):
         else:
             self.index = index
 
+        # self.ui.setupUi(self)
+        # if isTemplate is True:
+        # self.ui.PB_OK.setVisible(False)
+
         self.set_Signals()
 
     def __loadUi(self):
-        uic.loadUi(r"forms\Dialog_Edit_Form.ui", self)
-        self.ui = self
+        if self.doc.isBuild:
+            from views.FormDialogEditInformation import Ui_Dialog
+
+            self.ui = Ui_Dialog()
+            self.ui.setupUi(self)
+        else:
+            uic.loadUi(r"forms/FormDialogEditInformation.ui", self)
+            self.ui = self
 
     def set_Signals(self):
         self.ui.PB_OK.clicked.connect(self.save_Update)
@@ -76,7 +82,7 @@ class Dialog_Edit_Form(QtWidgets.QDialog):
         self.signal_update_to_metadata_clipboard = signal
 
     def set_Data_Model(self, data_model):
-        self.data_Model = data_model
+        self.doc = data_model
 
     def set_Type_Form(self, type_Form):
         self.type_Form = type_Form
@@ -86,21 +92,21 @@ class Dialog_Edit_Form(QtWidgets.QDialog):
         if self.index_Form_Type == 0:
             self.setWindowTitle("Edit Experiment")
             self.ui.LAB_Title.setText("Your Experiment")
-            self.sub_Widget = TySubWidgetExperimentInformation(doc=self.data_Model)
+            self.sub_Widget = TySubWidgetExperimentInformation(doc=self.doc)
             self.sub_Widget.get_From_Data_Model(
                 index=self.index, is_Template=self.isTemplate
             )
         elif self.index_Form_Type == 1:
             self.setWindowTitle("Edit Current Sample")
             self.ui.LAB_Title.setText("Current Sample")
-            self.sub_Widget = TySubWidgetSampleInformation(doc=self.data_Model)
+            self.sub_Widget = TySubWidgetSampleInformation(doc=self.doc)
             self.sub_Widget.get_From_Data_Model(
                 index=self.index, is_Template=self.isTemplate
             )
         elif self.index_Form_Type == 2:
             self.setWindowTitle("Edit Current Equipment")
             self.ui.LAB_Title.setText("Current Equipment")
-            self.sub_Widget = TySubWidgetEquipmentInformation(doc=self.data_Model)
+            self.sub_Widget = TySubWidgetEquipmentInformation(doc=self.doc)
             self.sub_Widget.get_From_Data_Model(
                 index=self.index, is_Template=self.isTemplate
             )
@@ -127,7 +133,7 @@ class Dialog_Edit_Form(QtWidgets.QDialog):
                 self.sub_Widget.set_All_To_Data_Model_File_Information(
                     self.index)
         """
-        self.data_Model.saveToTemporary()
+        self.doc.saveToTemporary()
         self.signal_update_to_metadata_clipboard.emit()
         self.close()
 
@@ -152,7 +158,7 @@ class Dialog_Edit_Form(QtWidgets.QDialog):
         #     self.sub_Widget.set_All_To_Data_Model()
         # elif self.index_Form_Type == 2:
         #     self.sub_Widget.set_All_To_Data_Model()
-        self.data_Model.saveToTemporary()
+        self.doc.saveToTemporary()
         self.signal_update_to_metadata_clipboard.emit()
 
     def Undo(self):

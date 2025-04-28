@@ -20,7 +20,11 @@ class TySubWidgetEachFiles(QtWidgets.QWidget):
 
     # signal_update_text_box
 
-    def __init__(self, parent=None, data_Model: TyDocDataMemoTransfer = None):
+    def __init__(self, parent=None, doc: TyDocDataMemoTransfer = None):
+        if doc is not None:
+            self.doc = doc
+        else:
+            self.doc = TyDocDataMemoTransfer()
         self.timer = QtCore.QTimer()
         self.timer.setSingleShot(True)
         super().__init__(parent)
@@ -31,15 +35,11 @@ class TySubWidgetEachFiles(QtWidgets.QWidget):
         self.file_Name = ""
         self.index = 0
 
-        if data_Model is not None:
-            self.data_Model = data_Model
-        else:
-            self.data_Model = TyDocDataMemoTransfer()
         # print()
         # print(self.data_Model.get_All_Dict_Data_Model())
         # print()
 
-        if self.data_Model.getDictExperimentInformation("is_upload_arim") is False:
+        if self.doc.getDictExperimentInformation("is_upload_arim") is False:
             # self.ui.GB_ARIM_Upload.setVisible(False)
             self.ui.RB_ARIM_Upload.setVisible(False)
             self.ui.RB_ARIM_Not_Upload.setVisible(False)
@@ -49,8 +49,15 @@ class TySubWidgetEachFiles(QtWidgets.QWidget):
         self.ui.PB_Edit_Sample_Information.setIcon(QtGui.QIcon("./icons/edit.png"))
 
     def __loadUi(self):
-        uic.loadUi(r"forms\Widget_Each_Files_Information.ui", self)
-        self.ui = self
+        if self.doc.isBuild:
+            from views.FormSubWidgetEachFile import Ui_Form
+
+            self.ui = Ui_Form()
+            self.ui.setupUi(self)
+            self.setWindowTitle("File Information")
+        else:
+            uic.loadUi(r"forms/FormSubWidgetEachFile.ui", self)
+            self.ui = self
 
     def set_Signal(self):
         self.ui.RB_Valid.clicked.connect(self.set_Status_Classified)
@@ -82,13 +89,13 @@ class TySubWidgetEachFiles(QtWidgets.QWidget):
         self.parent_Index = parent_Index
 
     def set_Data_Model(self, data_model):
-        self.data_Model = data_model
+        self.doc = data_model
 
     def set_File_Name(self, str_File_Name):
         self.file_Name = str_File_Name
 
     def set_Status_Classified(self):
-        dict_file_data = self.data_Model.getFileInformation(self.index)
+        dict_file_data = self.doc.getFileInformation(self.index)
         status = self.get_Status_Classified()
         if status == "effective_data":
             dict_file_data["classified"] = "effective_data"
@@ -100,8 +107,8 @@ class TySubWidgetEachFiles(QtWidgets.QWidget):
             dict_file_data["classified"] = "not_classified"
             dict_file_data["valid"] = False
         self.update_Title()
-        self.data_Model.setFileInformation(self.index, dict_file_data)
-        self.data_Model.saveToTemporary()
+        self.doc.setFileInformation(self.index, dict_file_data)
+        self.doc.saveToTemporary()
 
     def get_Status_Classified(self):
         if self.ui.RB_Valid.isChecked():
@@ -112,13 +119,13 @@ class TySubWidgetEachFiles(QtWidgets.QWidget):
             return "not_classified"
 
     def set_Status_ARIM_Upload(self):
-        dict_file_data = self.data_Model.getFileInformation(self.index)
+        dict_file_data = self.doc.getFileInformation(self.index)
         if self.ui.RB_ARIM_Upload.isChecked():
             dict_file_data["arim_upload"] = True
         else:
             dict_file_data["arim_upload"] = False
-        self.data_Model.setFileInformation(self.index, dict_file_data)
-        self.data_Model.saveToTemporary()
+        self.doc.setFileInformation(self.index, dict_file_data)
+        self.doc.saveToTemporary()
 
     def get_Status_ARIM_Upload(self):
         if self.ui.RB_ARIM_Upload.isChecked():
@@ -153,7 +160,7 @@ class TySubWidgetEachFiles(QtWidgets.QWidget):
 
     def set_Text_From_Data_Model(self):
         # self.index = self.data_Model.check_Index_File_Name(self.file_Name)
-        dict_File_Data = self.data_Model.getFileInformation(self.index)
+        dict_File_Data = self.doc.getFileInformation(self.index)
         self.ui.TE_Free_Comment.setPlainText(dict_File_Data["comment"])
         self.set_classified(dict_File_Data["classified"])
         self.set_arim_upload(dict_File_Data["arim_upload"])
@@ -177,10 +184,10 @@ class TySubWidgetEachFiles(QtWidgets.QWidget):
             )
 
     def set_File_Comment_To_Data_Model(self):
-        dict_file_data = self.data_Model.getFileInformation(self.index)
+        dict_file_data = self.doc.getFileInformation(self.index)
         dict_file_data["comment"] = self.ui.TE_Free_Comment.toPlainText()
-        self.data_Model.setFileInformation(self.index, dict_file_data)
-        self.data_Model.saveToTemporary()
+        self.doc.setFileInformation(self.index, dict_file_data)
+        self.doc.saveToTemporary()
 
     def start_edit_Timer(self):
         self.timer.start(5000)
@@ -192,7 +199,7 @@ class TySubWidgetEachFiles(QtWidgets.QWidget):
         #     self.signal_Edit_Sample_Information)
         # self.sub_Window_Edit_Sample_Information.show()
         self.dialog_Edit_Sample_Information = Dialog_Edit_Form(
-            data_Model=self.data_Model,
+            doc=self.doc,
             type_Form="sample_information",
             isTemplate=False,
             index=self.index,
@@ -216,7 +223,7 @@ class TySubWidgetEachFiles(QtWidgets.QWidget):
         #     self.signal_Edit_Sample_Information)
         # self.sub_Window_Edit_Sample_Information.show()
         self.dialog_Edit_Equipment_Information = Dialog_Edit_Form(
-            data_Model=self.data_Model,
+            doc=self.doc,
             type_Form="equipment_information",
             isTemplate=False,
             index=self.index,
@@ -233,7 +240,7 @@ class TySubWidgetEachFiles(QtWidgets.QWidget):
         # self.update_Title()
 
     def set_Sample_And_Equipment_Information(self, index):
-        dict_File_Data = self.data_Model.getFileInformation(index)
+        dict_File_Data = self.doc.getFileInformation(index)
         str_File_Information = ""
         str_File_Information += "Sample Name: {}\n".format(
             dict_File_Data["sample"]["name"]

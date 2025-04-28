@@ -21,6 +21,7 @@ from controller.TyMainWindow import TyMainWindow
 from PyQt5 import QtWidgets
 from PyQt5 import QtGui
 from PyQt5 import uic
+import logging
 
 
 class TyDialogSetInitial(QtWidgets.QDialog):
@@ -32,6 +33,7 @@ class TyDialogSetInitial(QtWidgets.QDialog):
             self.doc = TyDocDataMemoTransfer()
         # self.data_Model = DataModel()
         # self.window_Main = Window_Main()
+        self.logger = logging.getLogger("data_memo_transfer")
 
         super().__init__(parent)
         # self.ui = Dialog_Set_Initial_ui.Ui_Dialog()
@@ -121,7 +123,7 @@ class TyDialogSetInitial(QtWidgets.QDialog):
             self.ui.stackedWidget.setCurrentIndex(2)
             self.setWindowTitle("Set Initial Informationl 3/3")
         elif newState == "finish":
-            self.doc.writeToLogger("finish initialization.")
+            self.logger.info("Finish Initialize. Next, Change View To MainWindow")
             self.doc.saveToTemporary()
             self.doc.changeView("main_window")
             # self.window_Main = Window_Main(data_Model=self.doc)
@@ -152,7 +154,8 @@ class TyDialogSetInitial(QtWidgets.QDialog):
             self.subWidgetEquipmentInformation.set_To_Data_Model()
             return True
         elif currentState == "finish":
-            self.doc.writeToLogger("Initialization finished.", "info")
+            # self.doc.writeToLogger("Initialization finished.", "info")
+            self.logger.info("Initialization finished")
 
     # def go_Next_To_1(self):
     #     if self.sub_Widget_Experiment_Information.ui.LE_Title.text() == "":

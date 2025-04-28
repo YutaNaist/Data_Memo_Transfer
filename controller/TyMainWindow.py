@@ -32,6 +32,7 @@ from PyQt5 import uic
 import copy
 import glob
 import os
+import logging
 
 
 class TyMainWindow(QtWidgets.QMainWindow):
@@ -44,6 +45,7 @@ class TyMainWindow(QtWidgets.QMainWindow):
             self.doc = doc
         else:
             self.doc = TyDocDataMemoTransfer()
+        self.logger = logging.getLogger("data_memo_transfer")
 
         self.current_Index_ToolBox = 0
 
@@ -69,6 +71,7 @@ class TyMainWindow(QtWidgets.QMainWindow):
     def __loadUi(self):
         if self.doc.isBuild:
             from views.FormMainWindow import Ui_MainWindow
+
             self.ui = Ui_MainWindow()
             self.ui.setupUi(self)
         else:
@@ -105,7 +108,7 @@ class TyMainWindow(QtWidgets.QMainWindow):
         pass
 
     def initializeForms(self):
-        self.doc.writeToLogger("Start to initialize forms.")
+        self.logger.info("Start to initialize forms.")
         self.ui.PB_Experiment_Title_Edit.setIcon(QtGui.QIcon("./icons/edit.png"))
         self.ui.PB_Sample_ID_Edit.setIcon(QtGui.QIcon("./icons/edit.png"))
         self.ui.PB_Experiment_Method_Edit.setIcon(QtGui.QIcon("./icons/edit.png"))
@@ -136,7 +139,7 @@ class TyMainWindow(QtWidgets.QMainWindow):
         self.ui.VL_Equipment.addWidget(self.sub_Widget_Equipment)
 
         self.set_Template_Form_By_Data_Model()
-        self.doc.writeToLogger("finish initializing main window forms")
+        self.logger.info("finish initializing main window forms")
         # if self.data_Model.get_File_Names() != []:
         #     self.refresh_Files()
 
@@ -151,7 +154,7 @@ class TyMainWindow(QtWidgets.QMainWindow):
 
     def edit_Experiment_Information(self):
         self.window_Edit_Form = Dialog_Edit_Form(
-            data_Model=self.doc,
+            doc=self.doc,
             type_Form="experiment_information",
             isTemplate=True,
         )
@@ -163,7 +166,7 @@ class TyMainWindow(QtWidgets.QMainWindow):
 
     def edit_Sample_Information(self):
         self.window_Edit_Form = Dialog_Edit_Form(
-            data_Model=self.doc, type_Form="sample_information", isTemplate=True
+            doc=self.doc, type_Form="sample_information", isTemplate=True
         )
         self.window_Edit_Form.set_Input_Form()
         self.window_Edit_Form.set_Signal_Update_To_Metadata_Clipboard(
@@ -173,7 +176,7 @@ class TyMainWindow(QtWidgets.QMainWindow):
 
     def edit_Equipment_Information(self):
         self.window_Edit_Form = Dialog_Edit_Form(
-            data_Model=self.doc,
+            doc=self.doc,
             type_Form="equipment_information",
             isTemplate=True,
         )
@@ -184,7 +187,7 @@ class TyMainWindow(QtWidgets.QMainWindow):
         self.window_Edit_Form.show()
 
     def refreshFiles(self):
-        self.doc.writeToLogger("start refresh files")
+        self.logger.info("start refresh files")
         self.ui.LAB_File_List.setText("File List")
         # save_Directory = self.data_Model.get_Dict_Data_Model(
         #    "str_share_directory_in_storage")
@@ -192,10 +195,14 @@ class TyMainWindow(QtWidgets.QMainWindow):
         listFilesInSaveDirectoryOriginal = glob.glob(
             saveDirectory + "/**", recursive=True
         )
-        self.doc.writeToLogger(f"Save directory: {saveDirectory}")
-        self.doc.writeToLogger(
+        # self.doc.writeToLogger(f"Save directory: {saveDirectory}")
+        self.logger.info(f"Save directory: {saveDirectory}")
+        self.logger.info(
             f"List of files in save directory: {listFilesInSaveDirectoryOriginal}"
         )
+        # self.doc.writeToLogger(
+        #     f"List of files in save directory: {listFilesInSaveDirectoryOriginal}"
+        # )
         lenBaseDir = len(saveDirectory)
         listFilesInSaveDirectory = []
         xs = []
@@ -208,7 +215,8 @@ class TyMainWindow(QtWidgets.QMainWindow):
                 continue
             path = os.path.join(saveDirectory, file)
             xs.append((os.path.getmtime(path), file))
-        self.doc.writeToLogger(f"xs: {xs}")
+        self.logger.debug(f"xs: {xs}")
+
         for _, file in sorted(xs):
             listFilesInSaveDirectory.append(file)
         new_List_File_Names = []
@@ -278,9 +286,7 @@ class TyMainWindow(QtWidgets.QMainWindow):
         # self.data_Model.set_File_Names(copy.copy(new_List_File_Names))
         # self.data_Model.set_All_File_Data(copy.copy(new_List_File_Data))
         for i, file in enumerate(new_List_File_Names):
-            sub_Widget_Each_Files_Information = TySubWidgetEachFiles(
-                data_Model=self.doc
-            )
+            sub_Widget_Each_Files_Information = TySubWidgetEachFiles(doc=self.doc)
             sub_Widget_Each_Files_Information.set_Signal_Update_To_Metadata_Clipboard(
                 self.signal_update_to_metadata_clipboard
             )
@@ -296,10 +302,10 @@ class TyMainWindow(QtWidgets.QMainWindow):
         # self.ui.toolBox.currentWidget().setMinimumHeight(300)
         # self.ui.toolBox.widget(i).setMinimumHeight(500)
         self.doc.saveToTemporary()
-        self.doc.writeToLogger("end refresh files")
+        self.logger.info("end refresh files")
 
     def finishExperiment(self):
-        self.doc.writeToLogger("Finish experiment procedure starting.")
+        self.logger.info("Finish experiment procedure starting.")
         # experiment_ID = self.data_Model.get_Dict_Data_Model(
         #     "str_experiment_id")
         self.messageSender = TyMessageSender(
@@ -348,7 +354,7 @@ class TyMainWindow(QtWidgets.QMainWindow):
                 msgBox.setStandardButtons(QtWidgets.QMessageBox.Ok)
                 retval = msgBox.exec_()
                 os.remove("./temporary.json")
-                self.doc.writeToLogger("Finish all procedure.")
+                self.logger.info("Finish all procedure.")
                 return True
             else:
                 msgBox.setText(response["message"])
@@ -357,6 +363,8 @@ class TyMainWindow(QtWidgets.QMainWindow):
                 self.doc.writeToLogger(
                     "any error occurs: {}.".format(response["message"])
                 )
+                self.logger.error("Finish experiment procedure canceled.")
+                self.logger.error(f"Message: {response['message']}")
                 return False
         else:
-            self.doc.writeToLogger("canceled.")
+            self.logger.info("Finish experiment procedure canceled.")

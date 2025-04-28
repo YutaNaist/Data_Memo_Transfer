@@ -63,6 +63,7 @@ class TyDialogLogin(QtWidgets.QDialog):
         try:
             self.logger.info("Log in to diamond")
             strExperimentId = self.ui.LE_Experiment_ID.text()
+            self.doc.setExperimentId(strExperimentId)
             if strExperimentId == "":
                 message = "Please input Experiment ID."
                 self.doc.messageBox("Error", message)
@@ -77,27 +78,14 @@ class TyDialogLogin(QtWidgets.QDialog):
                 strExperimentId, hashPassword
             )
             if response["status"] is True:
-                self.proposal = response["args"]["dict_proposal"]
+                self.proposal = response["proposal"]
                 if self.isTest:
                     return (True, "Success")
-                strSetText = ""
-                strSetText += response["message"] + "\n"
-                strSetText += (
-                    "Experiment ID : " + str(self.proposal["experiment_id"]) + "\n"
-                )
-                strSetText += "User Name : " + str(self.proposal["user"]["name"]) + "\n"
-                strSetText += (
-                    "Instrument : " + str(self.proposal["instrument"]["name"]) + "\n"
-                )
-                strSetText += (
-                    "Start Date : " + str(self.proposal["date"]["start"]) + "\n"
-                )
-                strSetText += "Are you sure to start experiment?"
-
+                strSetText = self.createLoginMessage(response["message"])
                 retval = self.doc.messageBox("Your Experiment ID", strSetText, 2)
                 if retval == 1024:
                     self.doc.setHashPassword(hashPassword)
-                    self.startExperiment(strExperimentId, self.proposal)
+                    self.startExperiment(strExperimentId)
                     return (True, "Success")
                 else:
                     return (True, "Cancel")
@@ -119,23 +107,29 @@ class TyDialogLogin(QtWidgets.QDialog):
         self.doc.changeView("send_one_time_password", isTest=self.isTest)
         return (True, "Success")
 
-    def startExperiment(
-        self, strExperimentId: str, dictProposal: dict
-    ) -> tuple[bool, str]:
+    def startExperiment(self, strExperimentId: str) -> tuple[bool, str]:
         self.doc.setExperimentId(strExperimentId)
         response = self.doc.messageSender.sendRequestStartExperiment(
             strExperimentId, self.doc
         )
         if response["status"] is False:
-            pass
-        if dictProposal["arim"]["is_arim"][0] != "0":
+            message = "Failed to start experiment.\n"
+            message += "Please contact to administrator.\n"
+            message += "--------------------\n"
+            message += response["message"]
+            message += "--------------------\n"
+            self.doc.messageBox("Error", message)
+            return (False, "Status is False")
+        if self.proposal["arim"]["is_arim"][0] != "0":
             self.doc.setDiCtExperimentInformation("is_upload_arim", True)
-        if dictProposal["share"]["is_share"][0] == "1":
+        if self.proposal["share"]["is_share"][0] == "1":
             self.doc.setDiCtExperimentInformation("is_share_with_google", True)
-        dictExperimentInformation = response["args"]["dict_experiment_information"]
+        dictExperimentInformation = response["experiment_information"]
         if self.doc.loadFromTemporary():
             self.doc.setExperimentId(strExperimentId)
-            self.doc.setDiCtExperimentInformation("dict_user_information", dictProposal)
+            self.doc.setDiCtExperimentInformation(
+                "dict_user_information", self.proposal
+            )
         else:
             if dictExperimentInformation != {}:
                 oldExperimentId = self.doc.getDictExperimentInformation(
@@ -143,12 +137,16 @@ class TyDialogLogin(QtWidgets.QDialog):
                 )
                 if oldExperimentId != strExperimentId:
                     message = "Warning!\n"
-                    message += f"Previous experiment ID : {oldExperimentId} is different from current experiment ID.\n"
+                    message += (
+                        "There is confliction compared with temporally saved file."
+                    )
+                    message += f"Previous experiment ID : {oldExperimentId}.\n"
+                    message += f"Current experiment ID : {strExperimentId}.\n"
                     message += "Are you sure to start experiment?\n"
                     retval = self.doc.messageBox("Warning", message, 2)
                     if retval == 1024:
                         dictExperimentInformation["dict_user_information"] = (
-                            dictProposal
+                            self.proposal
                         )
                         dictExperimentInformation["str_share_directory_in_storage"] = (
                             self.doc.getDictExperimentInformation(
@@ -159,9 +157,9 @@ class TyDialogLogin(QtWidgets.QDialog):
                             dictExperimentInformation
                         )
                     else:
-                        return False
+                        return (False, "Status is False")
                 else:
-                    dictExperimentInformation["dict_user_information"] = dictProposal
+                    dictExperimentInformation["dict_user_information"] = self.proposal
                     dictExperimentInformation["str_share_directory_in_storage"] = (
                         self.doc.getDictExperimentInformation(
                             "str_share_directory_in_storage"
@@ -170,15 +168,26 @@ class TyDialogLogin(QtWidgets.QDialog):
                     self.doc.setAllDictExperimentInformation(dictExperimentInformation)
             else:
                 self.doc.setDiCtExperimentInformation(
-                    "dict_user_information", dictProposal
+                    "dict_user_information", self.proposal
                 )
         self.doc.saveToTemporary()
         # self.doc.writeToLogger("Start experiment")
         self.logger.info("Start experiment")
         self.doc.changeView("set_initial", isTest=self.isTest)
+        return (True, "Success")
         # self.dialogSetInitial = Dialog_Set_Initial(data_Model=self.doc)
         # self.dialogSetInitial.show()
         # self.close()
+
+    def createLoginMessage(self, message: str) -> str:
+        strSetText = ""
+        strSetText += message + "\n"
+        strSetText += "Experiment ID : " + str(self.proposal["experiment_id"]) + "\n"
+        strSetText += "User Name : " + str(self.proposal["user"]["name"]) + "\n"
+        strSetText += "Instrument : " + str(self.proposal["instrument"]["name"]) + "\n"
+        strSetText += "Start Date : " + str(self.proposal["date"]["start"]) + "\n"
+        strSetText += "Are you sure to start experiment?"
+        return strSetText
 
 
 if __name__ == "__main__":

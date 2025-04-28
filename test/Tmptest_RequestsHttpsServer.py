@@ -17,6 +17,7 @@ logger.setLevel(logging.DEBUG)
 
 
 def test_sendCheckExperimentId():
+    print("--------------------Check Experiment ID--------------------")
     # Test case for sending a check experiment ID request
     doc.setUrlBase(URL_DIAMOND)
     doc.setDiCtExperimentInformation("str_save_directory", SAVE_DIRECTORY)
@@ -25,6 +26,8 @@ def test_sendCheckExperimentId():
     )
     messageSender = TyMessageSender(URL_DIAMOND, doc)
 
+    # logger.info("----------Case 1: Correct experiment ID----------")
+    print("--------------------Case 1: Correct experiment ID--------------------")
     strExperimentId = "0000-0000-0000"
     sendURL = URL_DIAMOND + f"/experiment_id/{strExperimentId}"
     logger.info(f"sendURL: {sendURL}")
@@ -32,10 +35,15 @@ def test_sendCheckExperimentId():
     logger.info(f"responce: {response}")
     assert (response["status_code"] == 200) and (
         response["status"] is True
-    ), "Failed to send check experiment ID request"
+    ), "Failed to send check experiment ID request Case 1"
+    print(
+        "--------------------------------------------------------------------------------"
+    )
 
     messageSender = TyMessageSender(URL_DIAMOND, doc)
 
+    # logger.info("----------Case 2: Inorrect experiment ID----------")
+    print("--------------------Case 2: Inorrect experiment ID--------------------")
     strExperimentId = "0013-0000-0000"
     sendURL = URL_DIAMOND + f"/experiment_id/{strExperimentId}"
     logger.info(f"sendURL: {sendURL}")
@@ -43,10 +51,14 @@ def test_sendCheckExperimentId():
     logger.info(f"responce: {response}")
     assert (response["status_code"] == 404) and (
         response["status"] is False
-    ), "Failed to send check experiment ID request"
+    ), "Failed to send check experiment ID request Case 2"
+    print(
+        "--------------------------------------------------------------------------------"
+    )
 
 
 def test_sendLogin():
+    print("--------------------LOG IN--------------------")
     doc.setUrlBase(URL_DIAMOND)
     doc.setDiCtExperimentInformation("str_save_directory", SAVE_DIRECTORY)
     doc.setDiCtExperimentInformation(
@@ -54,8 +66,10 @@ def test_sendLogin():
     )
     messageSender = TyMessageSender(URL_DIAMOND, doc)
 
-    logger.info("--------------------------------------------------")
-    logger.info("Case 1: Correct experiment id and password")
+    # logger.info("----------Case 1: Correct experiment id and password----------")
+    print(
+        "--------------------Case 1: Correct experiment id and password--------------------"
+    )
     strExperimentId = "0000-0000-0000"
     # rowPass = "password"
     # hashPass = doc.makeHashFromString(rowPass)
@@ -75,11 +89,15 @@ def test_sendLogin():
     logger.info(f"responce: {response}")
     assert (response["status_code"] == 200) and (
         response["status"] is True
-    ), "Failed to send check experiment ID request"
+    ), "Failed to send check experiment ID request Case 1"
+    print(
+        "--------------------------------------------------------------------------------"
+    )
 
-    logger.info("--------------------------------------------------")
-
-    logger.info("Case 2: Correct experiment id and wrong password")
+    # logger.info("----------Case 2: Correct experiment id and wrong password----------")
+    print(
+        "--------------------Case 2: Correct experiment id and wrong password--------------------"
+    )
     strExperimentId = "0000-0000-0000"
     # rowPass = "wrong_password"
     # hashPass = doc.makeHashFromString(rowPass)
@@ -87,13 +105,16 @@ def test_sendLogin():
     sendURL = URL_DIAMOND + f"/request_one_time_password/{strExperimentId}"
     response = messageSender.sendRequestLogin(strExperimentId, hashPass)
     logger.info(f"responce: {response}")
-    assert (response["status_code"] == 404) and (
+    assert (response["status_code"] == 401) and (
         response["status"] is False
-    ), "Failed to send check experiment ID request"
-    logger.info("--------------------------------------------------")
+    ), "Failed to send check experiment ID request Case 2"
+    print(
+        "--------------------------------------------------------------------------------"
+    )
 
-    logger.info("Case 3: Wrong experiment id")
-    strExperimentId = "0013-0000-0000"
+    # logger.info("----------Case 3: Wrong experiment id----------")
+    print("--------------------Case 3: Wrong experiment id--------------------")
+    strExperimentId = "0014-0000-0000"
     # rowPass = "password"
     # hashPass = doc.makeHashFromString(rowPass)
     hashPass = "BILRGNtGU4Frmfw3qpOAikpkmjLdxr1mySkykz+H4Jw="
@@ -102,9 +123,10 @@ def test_sendLogin():
     logger.info(f"responce: {response}")
     assert (response["status_code"] == 404) and (
         response["status"] is False
-    ), "Failed to send check experiment ID request"
-
-    logger.info("--------------------------------------------------")
+    ), "Failed to send check experiment ID request Case 3"
+    print(
+        "--------------------------------------------------------------------------------"
+    )
 
     # logger.info("Case 4: Wrong experiment id and correct password")
     # strExperimentId = "0000-0000-0000"
@@ -124,6 +146,7 @@ def test_sendLogin():
 
 
 def test_requestOneTimePassword():
+    print("--------------------Request One Time Password--------------------")
     doc.setUrlBase(URL_DIAMOND)
     doc.setDiCtExperimentInformation("str_save_directory", SAVE_DIRECTORY)
     doc.setDiCtExperimentInformation(
@@ -131,6 +154,8 @@ def test_requestOneTimePassword():
     )
     messageSender = TyMessageSender(URL_DIAMOND, doc)
 
+    # logger.info("----------Case 1: Correct experiment Id----------")
+    print("--------------------Case 1: Correct experiment Id--------------------")
     strExperimentId = "0000-0000-0000"
     sendURL = URL_DIAMOND + f"/request_one_time_password/{strExperimentId}"
     logger.info(f"sendURL: {sendURL}")
@@ -142,8 +167,13 @@ def test_requestOneTimePassword():
     logger.info(f"responce: {response}")
     assert (response["status_code"] == 200) and (
         response["status"] is True
-    ), "Failed to send check experiment ID request"
+    ), "Failed to send check experiment ID request Case 1"
+    print(
+        "--------------------------------------------------------------------------------"
+    )
 
+    # logger.info("----------Case 2: Inorrect experiment Id----------")
+    print("--------------------Case 2: Inorrect experiment Id--------------------")
     strExperimentId = "0013-0000-0000"
     sendURL = URL_DIAMOND + f"/request_one_time_password/{strExperimentId}"
     logger.info(f"sendURL: {sendURL}")
@@ -155,7 +185,10 @@ def test_requestOneTimePassword():
     logger.info(f"responce: {response}")
     assert (response["status_code"] == 200) and (
         response["status"] is True
-    ), "Failed to send check experiment ID request"
+    ), "Failed to send check experiment ID request Case 2"
+    print(
+        "--------------------------------------------------------------------------------"
+    )
 
 
 if __name__ == "__main__":
