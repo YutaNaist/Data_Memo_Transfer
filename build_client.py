@@ -249,6 +249,6 @@ if __name__ == "__main__":
         )
 
         print_color(f"Build completed for: {version_name}", Fore.GREEN)
-        exit(1)
+        # exit(1)
 
     print_color("\nAll builds completed successfully!", Fore.CYAN)

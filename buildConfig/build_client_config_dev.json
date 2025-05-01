@@ -4,16 +4,16 @@
         "global_variable_file": "buildConfig/global_variable_Local.py",
         "experiment_id": "0050-6427-1000",
         "password": "data-memo-transfer",
-        "share_directory_in_storage": "D:/Share/NR-000",
+        "share_directory_in_storage": "C:/Project/DataDiamond/Share/NR-000",
         "url_diamond": "https://localhost:6426",
-        "save_directory": "D:/Share/NR-000"
+        "save_directory": "C:/Project/DataDiamond/Share/NR-000"
     },
     {
         "version_name": "NR-000",
         "global_variable_file": "buildConfig/global_variable_NR-000.py",
         "experiment_id": "0050-6427-0000",
         "password": "data-memo-transfer",
-        "share_directory_in_storage": "D:/Share/NR-000",
+        "share_directory_in_storage": "C:/Project/DataDiamond/Share/NR-000",
         "url_diamond": "https://192.168.150.10:6426",
         "save_directory": "Z:/"
     },
@@ -22,7 +22,7 @@
         "global_variable_file": "buildConfig/global_variable_NR-301.py",
         "experiment_id": "0050-6427-0301",
         "password": "data-memo-transfer",
-        "share_directory_in_storage": "D:/Share/NR-301",
+        "share_directory_in_storage": "C:/Project/DataDiamond/Share/NR-301",
         "url_diamond": "https://192.168.150.10:6426",
         "save_directory": "Z:/"
     },
@@ -31,7 +31,7 @@
         "global_variable_file": "buildConfig/global_variable_NR-401.py",
         "experiment_id": "0050-6427-0401",
         "password": "data-memo-transfer",
-        "share_directory_in_storage": "D:/Share/NR-401",
+        "share_directory_in_storage": "C:/Project/DataDiamond/Share/NR-401",
         "url_diamond": "https://192.168.150.10:6426",
         "save_directory": "Z:/"
     },
@@ -40,7 +40,7 @@
         "global_variable_file": "buildConfig/global_variable_NR-101.py",
         "experiment_id": "0050-6427-0101",
         "password": "data-memo-transfer",
-        "share_directory_in_storage": "D:/Share/NR-101",
+        "share_directory_in_storage": "C:/Project/DataDiamond/Share/NR-101",
         "url_diamond": "https://192.168.150.10:6426",
         "save_directory": "X:/"
     },
@@ -49,7 +49,7 @@
         "global_variable_file": "buildConfig/global_variable_NR-102.py",
         "experiment_id": "0050-6427-0102",
         "password": "data-memo-transfer",
-        "share_directory_in_storage": "D:/Share/NR-102",
+        "share_directory_in_storage": "C:/Project/DataDiamond/Share/NR-102",
         "url_diamond": "https://192.168.150.10:6426",
         "save_directory": "X:/"
     },
@@ -58,7 +58,7 @@
         "global_variable_file": "buildConfig/global_variable_NR-103.py",
         "experiment_id": "0050-6427-0103",
         "password": "data-memo-transfer",
-        "share_directory_in_storage": "D:/Share/NR-103",
+        "share_directory_in_storage": "C:/Project/DataDiamond/Share/NR-103",
         "url_diamond": "https://192.168.150.10:6426",
         "save_directory": "X:/"
     }
