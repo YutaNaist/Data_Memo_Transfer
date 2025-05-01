@@ -25,8 +25,8 @@ class TySubWidgetEquipmentInformation(QtWidgets.QWidget):
 
         self.timer = QtCore.QTimer()
         self.timer.setSingleShot(True)
-        self.ui.CMB_Method.currentIndexChanged.connect(self.start_edit_Timer)
-        self.timer.timeout.connect(self.save_Previous_State)
+        self.ui.CMB_Method.currentIndexChanged.connect(self.startEditTimer)
+        self.timer.timeout.connect(self.savePreviousStatus)
         self.previousState = []
 
         if isEditable is False:
@@ -42,48 +42,42 @@ class TySubWidgetEquipmentInformation(QtWidgets.QWidget):
             uic.loadUi(r"forms/FormSubWidgetEquipmentInformation.ui", self)
             self.ui = self
 
-    def get_From_Data_Model(self, index: int = -1, is_Template: bool = True) -> None:
+    def getFromDoc(self, index: int = -1, is_Template: bool = True) -> None:
         dict_file_data = {}
         if is_Template is True:
-            dict_file_data = self.doc.getDictExperimentInformation(
-                "dict_clipboard"
-            )
+            dict_file_data = self.doc.getDictExperimentInformation("dict_clipboard")
         else:
-            dict_file_data = self.doc.getDictExperimentInformation(
-                "list_file_data"
-            )[index]
+            dict_file_data = self.doc.getDictExperimentInformation("list_file_data")[
+                index
+            ]
         try:
             self.ui.CMB_Method.setCurrentText(dict_file_data["equipment"]["method"])
         except KeyError:
             pass
 
-    def set_To_Data_Model(self, index: int = -1, is_Template: bool = True) -> None:
-        dict_file_data = {}
+    def setToDoc(self, index: int = -1, is_Template: bool = True) -> None:
+        dictFileData = {}
         if is_Template is True:
-            dict_file_data = self.doc.getDictExperimentInformation(
-                "dict_clipboard"
-            )
+            dictFileData = self.doc.getDictExperimentInformation("dict_clipboard")
         else:
-            dict_file_data = self.doc.getDictExperimentInformation(
-                "list_file_data"
-            )[index]
-        dict_equipment = {}
-        dict_equipment["method"] = self.ui.CMB_Method.currentText()
-        dict_file_data["equipment"] = dict_equipment
+            dictFileData = self.doc.getDictExperimentInformation("list_file_data")[
+                index
+            ]
+        dictEquipment = {}
+        dictEquipment["method"] = self.ui.CMB_Method.currentText()
+        dictFileData["equipment"] = dictEquipment
 
         if is_Template is True:
-            self.doc.setDiCtExperimentInformation(
-                "dict_clipboard", dict_file_data
-            )
+            self.doc.setDiCtExperimentInformation("dict_clipboard", dictFileData)
         else:
             # self.data_Model.set_Dict_Data_Model("dict_clipboard",
             #                                     dict_file_data)
-            self.doc.setFileInformation(index, dict_file_data)
+            self.doc.setFileInformation(index, dictFileData)
 
-    def start_edit_Timer(self):
+    def startEditTimer(self):
         self.timer.start(1000)
 
-    def save_Previous_State(self):
+    def savePreviousStatus(self):
         saveState = {"experiment_method": self.ui.CMB_Method.currentText()}
         self.previousState.append(saveState)
         # print("Previous_State", self.previousState)

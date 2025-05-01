@@ -23,7 +23,7 @@ from PyQt5 import uic
 
 
 class Dialog_Edit_Form(QtWidgets.QDialog):
-    signal_update_to_metadata_clipboard = QtCore.pyqtSignal()
+    signaUpdateToMetadataClipboard = QtCore.pyqtSignal()
 
     def __init__(
         self, parent=None, doc=None, type_Form=None, isTemplate=True, index=-1
@@ -59,7 +59,7 @@ class Dialog_Edit_Form(QtWidgets.QDialog):
         # if isTemplate is True:
         # self.ui.PB_OK.setVisible(False)
 
-        self.set_Signals()
+        self.setSignals()
 
     def __loadUi(self):
         if self.doc.isBuild:
@@ -71,50 +71,44 @@ class Dialog_Edit_Form(QtWidgets.QDialog):
             uic.loadUi(r"forms/FormDialogEditInformation.ui", self)
             self.ui = self
 
-    def set_Signals(self):
-        self.ui.PB_OK.clicked.connect(self.save_Update)
-        self.ui.PB_Cancel.clicked.connect(self.cancel_Update)
-        self.ui.PB_Copy_From_Clipboard.clicked.connect(self.read_Current_Sample)
-        self.ui.PB_Paste_To_Clipboard.clicked.connect(self.paste_To_Clipboard)
+    def setSignals(self):
+        self.ui.PB_OK.clicked.connect(self.saveUpdate)
+        self.ui.PB_Cancel.clicked.connect(self.cancelUpdate)
+        self.ui.PB_Copy_From_Clipboard.clicked.connect(self.readCurrentSample)
+        self.ui.PB_Paste_To_Clipboard.clicked.connect(self.pasteToClipboard)
         # self.ui.PB_Undo.clicked.connect(self.Undo)
 
-    def set_Signal_Update_To_Metadata_Clipboard(self, signal: QtCore.pyqtSignal):
-        self.signal_update_to_metadata_clipboard = signal
+    def setSignalUpdateToMetadataClipboard(self, signal: QtCore.pyqtSignal):
+        self.signaUpdateToMetadataClipboard = signal
 
-    def set_Data_Model(self, data_model):
+    def setDoc(self, data_model):
         self.doc = data_model
 
-    def set_Type_Form(self, type_Form):
+    def setTypeForm(self, type_Form):
         self.type_Form = type_Form
 
-    def set_Input_Form(self):
-        self.index_Form_Type = self.list_Type_Form.index(self.type_Form)
-        if self.index_Form_Type == 0:
+    def setInputForm(self):
+        self.indexFormType = self.list_Type_Form.index(self.type_Form)
+        if self.indexFormType == 0:
             self.setWindowTitle("Edit Experiment")
             self.ui.LAB_Title.setText("Your Experiment")
-            self.sub_Widget = TySubWidgetExperimentInformation(doc=self.doc)
-            self.sub_Widget.get_From_Data_Model(
-                index=self.index, is_Template=self.isTemplate
-            )
-        elif self.index_Form_Type == 1:
+            self.subWidget = TySubWidgetExperimentInformation(doc=self.doc)
+            self.subWidget.getFromDoc(index=self.index, is_Template=self.isTemplate)
+        elif self.indexFormType == 1:
             self.setWindowTitle("Edit Current Sample")
             self.ui.LAB_Title.setText("Current Sample")
-            self.sub_Widget = TySubWidgetSampleInformation(doc=self.doc)
-            self.sub_Widget.get_From_Data_Model(
-                index=self.index, is_Template=self.isTemplate
-            )
-        elif self.index_Form_Type == 2:
+            self.subWidget = TySubWidgetSampleInformation(doc=self.doc)
+            self.subWidget.getFromDoc(index=self.index, is_Template=self.isTemplate)
+        elif self.indexFormType == 2:
             self.setWindowTitle("Edit Current Equipment")
             self.ui.LAB_Title.setText("Current Equipment")
-            self.sub_Widget = TySubWidgetEquipmentInformation(doc=self.doc)
-            self.sub_Widget.get_From_Data_Model(
-                index=self.index, is_Template=self.isTemplate
-            )
-        self.ui.HL_Add_Widget.addWidget(self.sub_Widget)
+            self.subWidget = TySubWidgetEquipmentInformation(doc=self.doc)
+            self.subWidget.getFromDoc(index=self.index, is_Template=self.isTemplate)
+        self.ui.HL_Add_Widget.addWidget(self.subWidget)
 
-    def save_Update(self):
-        self.index_Form_Type = self.list_Type_Form.index(self.type_Form)
-        self.sub_Widget.set_To_Data_Model(self.index, self.isTemplate)
+    def saveUpdate(self):
+        self.indexFormType = self.list_Type_Form.index(self.type_Form)
+        self.subWidget.setToDoc(self.index, self.isTemplate)
         """
             if self.index_Form_Type == 0:
                 self.sub_Widget.set_All_To_Data_Model()
@@ -134,14 +128,14 @@ class Dialog_Edit_Form(QtWidgets.QDialog):
                     self.index)
         """
         self.doc.saveToTemporary()
-        self.signal_update_to_metadata_clipboard.emit()
+        self.signaUpdateToMetadataClipboard.emit()
         self.close()
 
-    def cancel_Update(self):
+    def cancelUpdate(self):
         self.close()
 
-    def read_Current_Sample(self):
-        self.sub_Widget.get_From_Data_Model(index=self.index, is_Template=True)
+    def readCurrentSample(self):
+        self.subWidget.getFromDoc(index=self.index, is_Template=True)
         # if self.index_Form_Type == 0:
         #     self.sub_Widget.get_All_From_Data_Model()
         # elif self.index_Form_Type == 1:
@@ -149,9 +143,9 @@ class Dialog_Edit_Form(QtWidgets.QDialog):
         # elif self.index_Form_Type == 2:
         #     self.sub_Widget.get_All_From_Data_Model()
 
-    def paste_To_Clipboard(self):
-        self.index_Form_Type = self.list_Type_Form.index(self.type_Form)
-        self.sub_Widget.set_To_Data_Model(self.index, is_Template=True)
+    def pasteToClipboard(self):
+        self.indexFormType = self.list_Type_Form.index(self.type_Form)
+        self.subWidget.setToDoc(self.index, is_Template=True)
         # if self.index_Form_Type == 0:
         #     self.sub_Widget.set_All_To_Data_Model()
         # elif self.index_Form_Type == 1:
@@ -159,7 +153,7 @@ class Dialog_Edit_Form(QtWidgets.QDialog):
         # elif self.index_Form_Type == 2:
         #     self.sub_Widget.set_All_To_Data_Model()
         self.doc.saveToTemporary()
-        self.signal_update_to_metadata_clipboard.emit()
+        self.signaUpdateToMetadataClipboard.emit()
 
     def Undo(self):
-        self.sub_Widget.undo()
+        self.subWidget.undo()

@@ -1,6 +1,6 @@
 from __future__ import annotations
 from typing import TYPE_CHECKING
-from typing import TypedDict, Any, Optional, Union, cast
+from typing import TypedDict, Any, Optional, Union, Dict, TypeVar, Type, cast
 
 # from typing import Dict
 
@@ -70,8 +70,15 @@ class TyStartExperimentResponse(TypedDict):
     status: bool
     message: str
     status_code: int
-    experiment_information: dict[str, Any]
+    experiment_information: Dict[str, Any]
     # experiment_information: TyExperimentInformation
+
+
+class TyFinishExperimentResponse(TypedDict):
+    status: bool
+    message: str
+    status_code: int
+    experiment_information: Dict[str, Any]
 
 
 class TyMessageSender:
@@ -252,23 +259,35 @@ class TyMessageSender:
         return cast(TyLoginResponse, dictResponse)
 
     def sendRequestFinishExperiment(
-        self, doc: TyDocDataMemoTransfer, isAppendExisting: bool = False
-    ) -> dict:
-        url = self._urlBase + "/finish_experiment"
-        args = {}
-        args["experiment_id"] = doc.getExperimentId()
-        args["share_directory"] = self.doc.getDictExperimentInformation(
+        self,
+        strExperimentId: str,
+        doc: TyDocDataMemoTransfer,
+    ) -> TyFinishExperimentResponse:
+        url = self._urlBase + f"/finish_experiment/{strExperimentId}"
+        jsonData = {}
+        # jsonData["experiment_id"] = strExperimentId
+        jsonData["share_directory"] = self.doc.getDictExperimentInformation(
             "str_share_directory_in_storage"
         )
-        args["dict_experiment_information"] = doc.getAllDictExperimentInformation()
-        # args["isAppendExisting"] = isAppendExisting
+        jsonData["dict_experiment_information"] = doc.getAllDictExperimentInformation()
         # args["file_names"] = doc.getFileNameList()
         # args["meta_data"] = doc.getListDictMetaData()
         # args["experiment_information"] = doc.getAllDictExperimentInformation()
-        print(id(self.doc))
-        self.doc.writeToLogger(f"args = {args}")
-        dictResponse = self.sendMessage(url, args)
-        return dictResponse
+        # print(id(self.doc))
+        # self.doc.writeToLogger(f"args = {jsonData}")
+        # self.logger.info(f"Request  = {jsonData}")
+        dictResponse = self.sendMessage(url, jsonData, "POST")
+        if not all(
+            key in dictResponse
+            for key in [
+                "status",
+                "message",
+                "status_code",
+                "experiment_information",
+            ]
+        ):
+            raise ValueError("Invalid response format for sendRequestFinishExperiment")
+        return cast(TyFinishExperimentResponse, dictResponse)
 
     def sendRequestStartExperiment(
         self, strExperimentId: str, doc: TyDocDataMemoTransfer
@@ -334,7 +353,20 @@ class TyMessageSender:
         dictResponse = self.sendMessage(url, {}, "POST")
         if not all(key in dictResponse for key in ["status", "message", "status_code"]):
             raise ValueError("Invalid response format for sendRequestLogOut")
+
         return cast(TyMessageSenderResponce, dictResponse)
+
+    # T = TypeVar("T", bound=TypedDict)
+
+    # def validate_response(self, response: dict, response_type: Type[T]) -> T:
+    #     """
+    #     レスポンスの型を検証し、型が一致しない場合は例外をスローします。
+    #     """
+    #     try:
+    #         # 型チェックを行い、型が一致しない場合は KeyError や TypeError をスロー
+    #         return cast(response_type, response)
+    #     except (KeyError, TypeError) as e:
+    #         raise ValueError(f"Invalid response format: {e}")
 
     # def sendRequestCheckProposal(self, str_Experiment_ID: str) -> dict:
     #     args = {"experiment_id": str_Experiment_ID}

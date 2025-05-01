@@ -21,10 +21,10 @@ class TySubWidgetSampleInformation(QtWidgets.QWidget):
         # self.ui.setupUi(self)
         self.timer = QtCore.QTimer()
         self.timer.setSingleShot(True)
-        self.ui.LE_Sample_ID.textChanged.connect(self.start_edit_Timer)
-        self.ui.LE_Sample_Name.textChanged.connect(self.start_edit_Timer)
-        self.ui.TE_Sample_Comment.textChanged.connect(self.start_edit_Timer)
-        self.timer.timeout.connect(self.save_Previous_State)
+        self.ui.LE_Sample_ID.textChanged.connect(self.startEditTimer)
+        self.ui.LE_Sample_Name.textChanged.connect(self.startEditTimer)
+        self.ui.TE_Sample_Comment.textChanged.connect(self.startEditTimer)
+        self.timer.timeout.connect(self.savePreviousStatus)
         self.previousState = []
 
         if isEditable is False:
@@ -42,7 +42,7 @@ class TySubWidgetSampleInformation(QtWidgets.QWidget):
             uic.loadUi(r"forms/FormSubWidgetSampleInformation.ui", self)
             self.ui = self
 
-    def get_From_Data_Model(self, index: int = -1, is_Template: bool = True) -> None:
+    def getFromDoc(self, index: int = -1, is_Template: bool = True) -> None:
         dict_file_data = {}
         if is_Template is True:
             dict_file_data = self.doc.getDictExperimentInformation("dict_clipboard")
@@ -57,30 +57,30 @@ class TySubWidgetSampleInformation(QtWidgets.QWidget):
         except KeyError:
             pass
 
-    def set_To_Data_Model(self, index: int = -1, is_Template: bool = True) -> None:
-        dict_file_data = {}
+    def setToDoc(self, index: int = -1, is_Template: bool = True) -> None:
+        dictFileData = {}
         if is_Template is True:
-            dict_file_data = self.doc.getDictExperimentInformation("dict_clipboard")
+            dictFileData = self.doc.getDictExperimentInformation("dict_clipboard")
         else:
-            dict_file_data = self.doc.getDictExperimentInformation("list_file_data")[
+            dictFileData = self.doc.getDictExperimentInformation("list_file_data")[
                 index
             ]
-        dict_sample = {}
-        dict_sample["name"] = self.ui.LE_Sample_Name.text()
-        dict_sample["id"] = self.ui.LE_Sample_ID.text()
-        dict_sample["comment"] = self.ui.TE_Sample_Comment.toPlainText()
-        dict_file_data["sample"] = dict_sample
+        dictSample = {}
+        dictSample["name"] = self.ui.LE_Sample_Name.text()
+        dictSample["id"] = self.ui.LE_Sample_ID.text()
+        dictSample["comment"] = self.ui.TE_Sample_Comment.toPlainText()
+        dictFileData["sample"] = dictSample
         if is_Template is True:
-            self.doc.setDiCtExperimentInformation("dict_clipboard", dict_file_data)
+            self.doc.setDiCtExperimentInformation("dict_clipboard", dictFileData)
         else:
             # self.data_Model.set_Dict_Data_Model("dict_clipboard",
             #                                     dict_file_data)
-            self.doc.setFileInformation(index, dict_file_data)
+            self.doc.setFileInformation(index, dictFileData)
 
-    def start_edit_Timer(self):
+    def startEditTimer(self):
         self.timer.start(1000)
 
-    def save_Previous_State(self):
+    def savePreviousStatus(self):
         saveState = {}
         saveState["sample_id"] = self.ui.LE_Sample_ID.text()
         saveState["sample_name"] = self.ui.LE_Sample_Name.text()

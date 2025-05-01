@@ -13,6 +13,7 @@ from controller.TyDialogLogin import TyDialogLogin
 # from PyQt5 import QtGui
 from PyQt5 import QtWidgets
 from PyQt5 import uic
+import logging
 
 
 class TyDialogRegisterPassword(QtWidgets.QDialog):
@@ -26,6 +27,7 @@ class TyDialogRegisterPassword(QtWidgets.QDialog):
             self.doc = doc
         else:
             self.doc = TyDocDataMemoTransfer()
+        self.logger = logging.getLogger("data_memo_transfer")
 
         self.experimentId = self.doc.getExperimentId()
         self.userMailAddress = self.doc.getMailAddress()
@@ -63,7 +65,7 @@ class TyDialogRegisterPassword(QtWidgets.QDialog):
             return False
         oneTimePassword = self.ui.LE_One_Time_Password.text()
         hashPassword = self.doc.makeHashFromString(newPassword)
-        print(str(hashPassword))
+        # print(str(hashPassword))
         self.doc.setHashPassword(hashPassword)
         response = self.doc.messageSender.sendRequestRegisterPassword(
             self.experimentId, hashPassword, oneTimePassword
@@ -74,9 +76,11 @@ class TyDialogRegisterPassword(QtWidgets.QDialog):
             response = self.doc.messageSender.sendRequestLogin(
                 self.experimentId, hashPassword
             )
-            dictProposal = response["args"]["dict_proposal"]
+            self.logger.info(f"responce: {response}")
+            dictProposal = response["proposal"]
             login = TyDialogLogin(doc=self.doc)
-            login.startExperiment(self.experimentId, dictProposal)
+            login.setProposal(dictProposal)
+            login.startExperiment(self.experimentId)
             # self.doc.writeToLogger(response["message"], "info")
             # self.doc.changeView("experiment_information")
         else:

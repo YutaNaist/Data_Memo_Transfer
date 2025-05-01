@@ -139,7 +139,7 @@ class TyDialogSetInitial(QtWidgets.QDialog):
                 msgBox.exec_()
                 return False
             else:
-                self.subWidgetExperimentInformation.set_To_Data_Model()
+                self.subWidgetExperimentInformation.setToDoc()
                 return True
         if currentState == "sample_information":
             if self.subWidgetSampleInformation.ui.LE_Sample_Name.text() == "":
@@ -148,10 +148,10 @@ class TyDialogSetInitial(QtWidgets.QDialog):
                 msgBox.exec_()
                 return False
             else:
-                self.subWidgetSampleInformation.set_To_Data_Model()
+                self.subWidgetSampleInformation.setToDoc()
                 return True
         elif currentState == "equipment_information":
-            self.subWidgetEquipmentInformation.set_To_Data_Model()
+            self.subWidgetEquipmentInformation.setToDoc()
             return True
         elif currentState == "finish":
             # self.doc.writeToLogger("Initialization finished.", "info")
@@ -196,6 +196,6 @@ class TyDialogSetInitial(QtWidgets.QDialog):
     #     self.close()
 
     def initializeFromDocument(self):
-        self.subWidgetExperimentInformation.get_From_Data_Model()
-        self.subWidgetSampleInformation.get_From_Data_Model()
-        self.subWidgetEquipmentInformation.get_From_Data_Model()
+        self.subWidgetExperimentInformation.getFromDoc()
+        self.subWidgetSampleInformation.getFromDoc()
+        self.subWidgetEquipmentInformation.getFromDoc()

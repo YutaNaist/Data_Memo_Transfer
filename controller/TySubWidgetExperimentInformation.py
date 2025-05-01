@@ -24,9 +24,9 @@ class TySubWidgetExperimentInformation(QtWidgets.QWidget):
 
         self.timer = QtCore.QTimer()
         self.timer.setSingleShot(True)
-        self.timer.timeout.connect(self.save_Previous_State)
-        self.ui.LE_Title.textChanged.connect(self.start_edit_Timer)
-        self.ui.TE_Experiment_Comment.textChanged.connect(self.start_edit_Timer)
+        self.timer.timeout.connect(self.savePreviousStatus)
+        self.ui.LE_Title.textChanged.connect(self.startEditTimer)
+        self.ui.TE_Experiment_Comment.textChanged.connect(self.startEditTimer)
         self.previousState = []
 
         if isEditable is False:
@@ -47,7 +47,7 @@ class TySubWidgetExperimentInformation(QtWidgets.QWidget):
             self.ui = self
         # pass
 
-    def get_From_Data_Model(self, index: int = -1, is_Template: bool = True) -> None:
+    def getFromDoc(self, index: int = -1, is_Template: bool = True) -> None:
         self.ui.LE_Title.setText(
             self.doc.getDictExperimentInformation("dict_clipboard")["experiment"][
                 "title"
@@ -59,18 +59,18 @@ class TySubWidgetExperimentInformation(QtWidgets.QWidget):
             ]
         )
 
-    def set_To_Data_Model(self, index: int = -1, is_Template: bool = True) -> None:
-        dict_file_data = self.doc.getDictExperimentInformation("dict_clipboard")
-        dict_experiment = {}
-        dict_experiment["title"] = self.ui.LE_Title.text()
-        dict_experiment["comment"] = self.ui.TE_Experiment_Comment.toPlainText()
-        dict_file_data["experiment"] = dict_experiment
-        self.doc.setDiCtExperimentInformation("dict_clipboard", dict_file_data)
+    def setToDoc(self, index: int = -1, is_Template: bool = True) -> None:
+        dictFileData = self.doc.getDictExperimentInformation("dict_clipboard")
+        dictExperiment = {}
+        dictExperiment["title"] = self.ui.LE_Title.text()
+        dictExperiment["comment"] = self.ui.TE_Experiment_Comment.toPlainText()
+        dictFileData["experiment"] = dictExperiment
+        self.doc.setDiCtExperimentInformation("dict_clipboard", dictFileData)
 
-    def start_edit_Timer(self):
+    def startEditTimer(self):
         self.timer.start(1000)
 
-    def save_Previous_State(self):
+    def savePreviousStatus(self):
         saveState = {}
         saveState["title"] = self.ui.LE_Title.text()
         saveState["comment"] = self.ui.TE_Experiment_Comment.toPlainText()

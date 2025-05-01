@@ -8,7 +8,7 @@ import logging
 # import urllib3
 import hashlib
 import base64
-from typing import TypedDict, Any, List, Dict, cast
+from typing import TypedDict, Any, List, Dict, cast, Literal
 
 from TyMessageSender import TyMessageSender
 from PyQt5 import QtWidgets
@@ -28,6 +28,15 @@ class DataMemoTransferException(Exception):
 class DataMemoTransferDocTypeException(DataMemoTransferException):
     def __str__(self):
         return "DataModelException DataMemoTransfer: Different Type is used."
+
+
+StateType = Literal[
+    "log_in",
+    "send_one_time_password",
+    "register_password",
+    "set_initial",
+    "main_window",
+]
 
 
 class TyClipboardInfo(TypedDict):
@@ -485,7 +494,7 @@ class TyDocDataMemoTransfer:
     def getMailAddress(self) -> str:
         return self.dictExperimentInformation["str_mail_address"]
 
-    def changeView(self, state: str, isTest: bool = False) -> bool:
+    def changeView(self, state: StateType, isTest: bool = False) -> bool:
         currentState = self.viewState
         self.logger.info(f"Change View from {currentState} to {state}")
         self.viewState = state
@@ -500,13 +509,13 @@ class TyDocDataMemoTransfer:
             self.messageBox("Test", f"View is changed to {state}", 1)
         return True
 
-    def createView(self, state: str):
+    def createView(self, state: StateType):
         self.logger.info(f"Create View To: {state}")
         newWindow = self.__setView(state)
         self.__changeViewMain(newWindow, isChange=False)
         return
 
-    def __setView(self, state: str):
+    def __setView(self, state: StateType):
         self.logger.debug(f"Set View: {state}")
         if state == "log_in":
             newWindow = TyDialogLogin(doc=self)

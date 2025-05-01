@@ -179,6 +179,9 @@ class TyDialogLogin(QtWidgets.QDialog):
         # self.dialogSetInitial.show()
         # self.close()
 
+    def setProposal(self, proposal: dict) -> None:
+        self.proposal = proposal
+
     def createLoginMessage(self, message: str) -> str:
         strSetText = ""
         strSetText += message + "\n"
