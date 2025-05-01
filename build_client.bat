@@ -12,6 +12,8 @@
 @REM echo "Succeed to build"
 @REM pause 60
 
-powershell -ExecutionPolicy Bypass -File "%~dp0build_client.ps1"
+@REM powershell -ExecutionPolicy Bypass -File "%~dp0build_client.ps1"
+@REM %USERPROFILE%\miniconda3\envs\data-memo-transfer-PyQt5\python.exe -m PyInstaller Data_Memo_transfer.py -F -w --add-data "icons;icons" --add-data "forms;forms" --add-data "settings;settings" --distpath dist --workpath build --specpath .
+%USERPROFILE%\miniconda3\envs\data-memo-transfer-PyQt5\python.exe build_client.py
 
 pause

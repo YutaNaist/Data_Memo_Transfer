@@ -116,4 +116,4 @@ foreach ($condition in $buildConditions) {
     Write-Host "Build completed for: $versionName" -ForegroundColor Green
 }
 # Remove-Item -Force global_variable.py
-Write-Host "`nAll builds completed successfully!" -ForegroundColor Magenta
+Write-Host "`nAll builds completed successfully!" -ForegroundColor Cyan

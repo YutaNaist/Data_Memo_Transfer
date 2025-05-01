@@ -12,14 +12,22 @@ def main():
     # * build_client.ps1から実行されたかどうかを判別。
     # * global_variable.pyが存在する場合はbuild_client.ps1から実行されたと判断。
     # * テストする場合はglobal_variable_Local.pyを使用。(global_variable.pyは削除する)
-    if os.path.exists("global_variable.py"):
+    if getattr(sys, "frozen", False):
         import global_variable as global_variable
 
+        print("Running as a bundled executable.")
         isBuild = True
     else:
+        print("Running as a script.")
         import buildConfig.global_variable_Local as global_variable
 
         isBuild = False
+
+        # if os.path.exists("global_variable.py"):
+        #     import global_variable as global_variable
+
+        # else:
+        # import buildConfig.global_variable_Local as global_variable
 
     URL_DIAMOND = global_variable.URL_DIAMOND
     SAVE_DIRECTORY = global_variable.SAVE_DIRECTORY
@@ -39,6 +47,7 @@ def main():
         logger = logging.getLogger("data_memo_transfer_debug")
         logger.setLevel(logging.DEBUG)
     logger.info("Start Data Memo Transfer.")
+    logger.info(f"arguments: {sys.argv}")
     app = QtWidgets.QApplication(sys.argv)
 
     lockFilePath = "./lock_file.lock"
