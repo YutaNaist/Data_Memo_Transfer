@@ -31,10 +31,10 @@ if exist "%USERPROFILE%\miniconda3\envs\data-memo-transfer-PyQt5" (
 )
 
 @REM REM To install with this script, MinGW and python with pip is required before running bat file.
-git clone https://github.com/pyinstaller/pyinstaller.git
-winget install MartinStorsjo.LLVM-MinGW.MSVCRT
-cd .\pyinstaller\bootloader\
-python .\waf distclean all
+@REM git clone https://github.com/pyinstaller/pyinstaller.git
+@REM winget install MartinStorsjo.LLVM-MinGW.MSVCRT
+@REM cd .\pyinstaller\bootloader\
+@REM python .\waf distclean all
 @REM cd ..
 @REM @REM pip install wheel
 @REM pip install .
