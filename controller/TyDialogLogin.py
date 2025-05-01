@@ -87,11 +87,13 @@ class TyDialogLogin(QtWidgets.QDialog):
                 if response["status"] is True:
                     self.proposal = response["proposal"]
                     if self.isTest:
+                        self.doc.setExperimentId(strExperimentId)
                         return (True, "Success")
                     strSetText = self.createLoginMessage(response["message"])
                     retval = self.doc.messageBox("Your Experiment ID", strSetText, 2)
                     if retval == 1024:
                         self.doc.setHashPassword(hashPassword)
+                        self.doc.setExperimentId(strExperimentId)
                         self.startExperiment(strExperimentId)
                         return (True, "Success")
                     else:

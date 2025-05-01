@@ -172,14 +172,14 @@ class TyMessageSender:
             except requests.exceptions.HTTPError as e:
                 self.logger.error(f"HTTPError: {e}")
                 raise MessageSenderException(
-                    f"{responseMessage})",
+                    f"{responseMessage}",
                     response.status_code,
                     self.logger,
                 )
             except requests.exceptions.RequestException as e:
                 self.logger.error(f"RequestException: {e}")
                 raise MessageSenderException(
-                    f"{responseMessage})",
+                    f"{responseMessage}",
                     400,
                     self.logger,
                 )

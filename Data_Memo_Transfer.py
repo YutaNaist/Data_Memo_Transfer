@@ -19,7 +19,7 @@ def main():
         logger = logging.getLogger("data_memo_transfer")
         logger.info("Running as a bundled executable.")
     else:
-        import buildConfig.global_variable_Local as global_variable
+        import global_variable_Local as global_variable
 
         isBuild = False
         logger = logging.getLogger("data_memo_transfer_debug")

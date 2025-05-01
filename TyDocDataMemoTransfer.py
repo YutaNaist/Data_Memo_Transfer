@@ -98,7 +98,7 @@ class TyDocDataMemoTransfer:
             self.logger = logging.getLogger("data_memo_transfer_debug")
             self.logger.setLevel(logging.DEBUG)
 
-        self.dictExperimentInformation = {}
+        self.dictExperimentInformation: TyExperimentInformation = {}
         self.list_keys = [
             "str_url_diamond",
             "str_save_directory",
