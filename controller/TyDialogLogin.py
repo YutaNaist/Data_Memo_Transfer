@@ -188,7 +188,6 @@ class TyDialogLogin(QtWidgets.QDialog):
                         "dict_user_information", self.proposal
                     )
             self.doc.saveToTemporary()
-            # self.doc.writeToLogger("Start experiment")
             self.logger.info("Start experiment")
             self.doc.changeView("set_initial", isTest=self.isTest)
             return (True, "Success")

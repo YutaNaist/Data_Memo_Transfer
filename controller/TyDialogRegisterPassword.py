@@ -2,6 +2,7 @@ from __future__ import annotations
 from typing import TYPE_CHECKING
 import sys
 import os
+
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), "..")))
 
 if TYPE_CHECKING:
@@ -63,8 +64,8 @@ class TyDialogRegisterPassword(QtWidgets.QDialog):
         newPassword = self.ui.LE_New_Password.text()
         newPasswordVerify = self.ui.LE_New_Password_Verify.text()
         if newPassword != newPasswordVerify:
-            self.doc.writeToLogger("Password does not match", "error")
-            message = "Error!\n" + "Password does not match"
+            self.logger.error("Verify password does not match")
+            message = "Error!\n" + "Verified password does not match"
             self.doc.messageBox("Error", message)
             return False
         oneTimePassword = self.ui.LE_One_Time_Password.text()
@@ -86,10 +87,8 @@ class TyDialogRegisterPassword(QtWidgets.QDialog):
                 login = TyDialogLogin(doc=self.doc)
                 login.setProposal(dictProposal)
                 login.startExperiment(self.experimentId)
-                # self.doc.writeToLogger(response["message"], "info")
                 # self.doc.changeView("experiment_information")
             else:
-                # self.doc.writeToLogger(response["message"], "error")
                 self.logger.error(response["message"])
                 message = "Error!\n" + response["message"]
                 self.doc.messageBox("Error", message)

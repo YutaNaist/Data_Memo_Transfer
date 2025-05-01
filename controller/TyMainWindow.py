@@ -373,9 +373,6 @@ class TyMainWindow(QtWidgets.QMainWindow):
                     retval = self.doc.messageBox(
                         "Finish Experiment", response["message"], 1
                     )
-                    # self.doc.writeToLogger(
-                    #     "any error occurs: {}.".format(response["message"])
-                    # )
                     self.logger.error("Finish experiment procedure canceled.")
                     self.logger.error(f"Message: {response['message']}")
                     return False

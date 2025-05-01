@@ -159,16 +159,27 @@ class TyMessageSender:
             statusCode = response.status_code
             self.logger.info(f"Get response, Status Code: {statusCode}")
             try:
+                responseJson = response.json()
+                responseMessage = responseJson.get("message", None)
                 response.raise_for_status()
-            except requests.exceptions.HTTPError as e:
+            except json.JSONDecodeError as e:
+                self.logger.error(f"JSONDecodeError: {e}")
                 raise MessageSenderException(
-                    f"HTTPError: {e}",
+                    "Invalid JSON response",
+                    500,
+                    self.logger,
+                )
+            except requests.exceptions.HTTPError as e:
+                self.logger.error(f"HTTPError: {e}")
+                raise MessageSenderException(
+                    f"{responseMessage})",
                     response.status_code,
                     self.logger,
                 )
             except requests.exceptions.RequestException as e:
+                self.logger.error(f"RequestException: {e}")
                 raise MessageSenderException(
-                    f"RequestException: {e}",
+                    f"{responseMessage})",
                     400,
                     self.logger,
                 )

@@ -154,7 +154,6 @@ class TyDialogSetInitial(QtWidgets.QDialog):
             self.subWidgetEquipmentInformation.setToDoc()
             return True
         elif currentState == "finish":
-            # self.doc.writeToLogger("Initialization finished.", "info")
             self.logger.info("Initialization finished")
 
     # def go_Next_To_1(self):
@@ -188,7 +187,6 @@ class TyDialogSetInitial(QtWidgets.QDialog):
     #     self.setWindowTitle("Set Initial Information 2/3")
 
     # def finish_Set(self):
-    #     self.doc.writeToLogger("finish initialization.")
     #     self.sub_Widget_Equipment_Information.set_To_Data_Model()
     #     self.doc.saveToTemporary()
     #     self.window_Main = Window_Main(data_Model=self.doc)

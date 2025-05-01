@@ -58,7 +58,6 @@ class TyDialogSendOneTimePassword(QtWidgets.QDialog):
                 self.doc.setMailAddress(mailAddress)
                 self.doc.changeView("register_password")
             else:
-                # self.doc.writeToLogger(response["message"], "error")
                 self.logger.error(response["message"])
                 message = "Error!\n" + response["message"]
                 self.doc.messageBox("Error", message)
