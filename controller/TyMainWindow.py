@@ -1,8 +1,12 @@
 from __future__ import annotations
 from typing import TYPE_CHECKING
+import sys
+import os
+sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), "..")))
 
 if TYPE_CHECKING:
     from TyDocDataMemoTransfer import TyDocDataMemoTransfer
+
 
 # import forms.MainWindow_ui as MainWidow_ui
 
@@ -23,6 +27,7 @@ from controller.TySubWidgetEquipmentInformation import (
 )
 
 from TyMessageSender import TyMessageSender
+from TyMessageSender import MessageSenderException
 
 from PyQt5 import QtCore
 from PyQt5 import QtGui
@@ -300,10 +305,10 @@ class TyMainWindow(QtWidgets.QMainWindow):
         self.logger.info("Finish experiment procedure starting.")
         # experiment_ID = self.data_Model.get_Dict_Data_Model(
         #     "str_experiment_id")
-        self.messageSender = TyMessageSender(
-            self.doc.getDictExperimentInformation("str_url_diamond"),
-            self.doc,
-        )
+        # self.messageSender = TyMessageSender(
+        #     self.doc.getDictExperimentInformation("str_url_diamond"),
+        #     self.doc,
+        # )
         if self.doc.getDictExperimentInformation("is_upload_arim") is True:
             listFileData = self.doc.getAllFileInformation()
             flagCheckedArim = False
@@ -339,39 +344,52 @@ class TyMainWindow(QtWidgets.QMainWindow):
         # retval = msgBox.exec_()
         retval = self.doc.messageBox("Finish Experiment", strSetText, 2)
         if retval == 1024:
-            response = self.doc.messageSender.sendRequestFinishExperiment(
-                self.doc.getExperimentId(), self.doc
-            )
-            if response["status"] is True:
-                message = "Data upload have finished.\nThis program will be closed after click OK button."
-                # msgBox.setText(
-                #     "Data upload have finished.\nThis program will be closed after click OK button."
-                # )
-                # msgBox.setStandardButtons(QtWidgets.QMessageBox.Ok)
-                # retval = msgBox.exec_()
-                retval = self.doc.messageBox("Finish Experiment", message, 1)
-                os.remove("./temporary.json")
-                self.logger.info("Finish all procedure.")
-                return True
-            elif response["status_code"] == 401:
-                message = "Your session has expired.\nPlease log in again."
-                retval = self.doc.messageBox("Finish Experiment", message, 1)
-                self.logger.error("Session expired. Log in again.")
-                self.isForceCloseWindow = True
-                self.doc.changeView("log_in")
-                return True
-            else:
-                # msgBox.setText(response["message"])
-                # msgBox.setStandardButtons(QtWidgets.QMessageBox.Ok)
-                # retval = msgBox.exec_()
-                retval = self.doc.messageBox(
-                    "Finish Experiment", response["message"], 1
+            try:
+                response = self.doc.messageSender.sendRequestFinishExperiment(
+                    self.doc.getExperimentId(), self.doc
                 )
-                # self.doc.writeToLogger(
-                #     "any error occurs: {}.".format(response["message"])
-                # )
-                self.logger.error("Finish experiment procedure canceled.")
-                self.logger.error(f"Message: {response['message']}")
+                if response["status"] is True:
+                    message = "Data upload have finished.\nThis program will be closed after click OK button."
+                    # msgBox.setText(
+                    #     "Data upload have finished.\nThis program will be closed after click OK button."
+                    # )
+                    # msgBox.setStandardButtons(QtWidgets.QMessageBox.Ok)
+                    # retval = msgBox.exec_()
+                    retval = self.doc.messageBox("Finish Experiment", message, 1)
+                    os.remove("./temporary.json")
+                    self.logger.info("Finish all procedure.")
+                    return True
+                # elif response["status_code"] == 401:
+                #     message = "Your session has expired.\nPlease log in again."
+                #     retval = self.doc.messageBox("Finish Experiment", message, 1)
+                #     self.logger.error("Session expired. Log in again.")
+                #     self.isForceCloseWindow = True
+                #     self.doc.changeView("log_in")
+                #     return True
+                else:
+                    # msgBox.setText(response["message"])
+                    # msgBox.setStandardButtons(QtWidgets.QMessageBox.Ok)
+                    # retval = msgBox.exec_()
+                    retval = self.doc.messageBox(
+                        "Finish Experiment", response["message"], 1
+                    )
+                    # self.doc.writeToLogger(
+                    #     "any error occurs: {}.".format(response["message"])
+                    # )
+                    self.logger.error("Finish experiment procedure canceled.")
+                    self.logger.error(f"Message: {response['message']}")
+                    return False
+            except MessageSenderException as e:
+                if e.status_code == 401:
+                    message = "Your session has expired.\nPlease log in again."
+                    retval = self.doc.messageBox("Finish Experiment", message, 1)
+                    self.logger.error("Session expired. Log in again.")
+                    self.isForceCloseWindow = True
+                    self.doc.changeView("log_in")
+                    return True
+                message = f"Error in Finishing Experiment: {e.message}, {e.status_code}"
+                retval = self.doc.messageBox("Error", message, 1)
+                self.logger.error(message)
                 return False
         else:
             self.logger.info("Finish experiment procedure canceled.")

@@ -10,7 +10,7 @@ import hashlib
 import base64
 from typing import TypedDict, Any, List, Dict, cast, Literal
 
-from TyMessageSender import TyMessageSender
+from TyMessageSender import TyMessageSender  # , MessageSenderException
 from PyQt5 import QtWidgets
 
 from controller.TyDialogLogin import TyDialogLogin
@@ -481,6 +481,9 @@ class TyDocDataMemoTransfer:
     def setUrlBase(self, urlBase: str):
         self.dictExperimentInformation["str_url_diamond"] = urlBase
         self.messageSender.updateUrlBase(urlBase)
+
+    def getUrlBase(self) -> str:
+        return self.dictExperimentInformation["str_url_diamond"]
 
     def setExperimentId(self, experimentId: str):
         self.dictExperimentInformation["str_experiment_id"] = experimentId

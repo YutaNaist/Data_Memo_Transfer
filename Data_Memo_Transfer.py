@@ -15,13 +15,16 @@ def main():
     if getattr(sys, "frozen", False):
         import global_variable as global_variable
 
-        print("Running as a bundled executable.")
         isBuild = True
+        logger = logging.getLogger("data_memo_transfer")
+        logger.info("Running as a bundled executable.")
     else:
-        print("Running as a script.")
         import buildConfig.global_variable_Local as global_variable
 
         isBuild = False
+        logger = logging.getLogger("data_memo_transfer_debug")
+        logger.setLevel(logging.DEBUG)
+        logger.info("Running as a script.")
 
         # if os.path.exists("global_variable.py"):
         #     import global_variable as global_variable
@@ -41,11 +44,6 @@ def main():
     # doc.makeLogger("settings/logDataMemoTransfer.json", name=__name__)
     # doc.setLogger(logger)
     doc.setIsBuild(isBuild)
-    if doc.isBuild:
-        logger = logging.getLogger("data_memo_transfer")
-    else:
-        logger = logging.getLogger("data_memo_transfer_debug")
-        logger.setLevel(logging.DEBUG)
     logger.info("Start Data Memo Transfer.")
     logger.info(f"arguments: {sys.argv}")
     app = QtWidgets.QApplication(sys.argv)

@@ -1,9 +1,13 @@
 from __future__ import annotations
 from typing import TYPE_CHECKING
+import sys
+import os
+sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), "..")))
 
 if TYPE_CHECKING:
     # from controller.TyDialogSetInitial import TyDialogSetInitial
     from TyDocDataMemoTransfer import TyDocDataMemoTransfer
+from TyMessageSender import MessageSenderException
 
 from controller.TyDialogLogin import TyDialogLogin
 
@@ -67,25 +71,31 @@ class TyDialogRegisterPassword(QtWidgets.QDialog):
         hashPassword = self.doc.makeHashFromString(newPassword)
         # print(str(hashPassword))
         self.doc.setHashPassword(hashPassword)
-        response = self.doc.messageSender.sendRequestRegisterPassword(
-            self.experimentId, hashPassword, oneTimePassword
-        )
-        if response["status"] is True:
-            message = "Success!\n" + "Password has been registered"
-            self.doc.messageBox("Success", message)
-            response = self.doc.messageSender.sendRequestLogin(
-                self.experimentId, hashPassword
+        try:
+            response = self.doc.messageSender.sendRequestRegisterPassword(
+                self.experimentId, hashPassword, oneTimePassword
             )
-            self.logger.info(f"responce: {response}")
-            dictProposal = response["proposal"]
-            login = TyDialogLogin(doc=self.doc)
-            login.setProposal(dictProposal)
-            login.startExperiment(self.experimentId)
-            # self.doc.writeToLogger(response["message"], "info")
-            # self.doc.changeView("experiment_information")
-        else:
-            self.doc.writeToLogger(response["message"], "error")
-            message = "Error!\n" + response["message"]
+            if response["status"] is True:
+                message = "Success!\n" + "Password has been registered"
+                self.doc.messageBox("Success", message)
+                response = self.doc.messageSender.sendRequestLogin(
+                    self.experimentId, hashPassword
+                )
+                self.logger.info(f"responce: {response}")
+                dictProposal = response["proposal"]
+                login = TyDialogLogin(doc=self.doc)
+                login.setProposal(dictProposal)
+                login.startExperiment(self.experimentId)
+                # self.doc.writeToLogger(response["message"], "info")
+                # self.doc.changeView("experiment_information")
+            else:
+                # self.doc.writeToLogger(response["message"], "error")
+                self.logger.error(response["message"])
+                message = "Error!\n" + response["message"]
+                self.doc.messageBox("Error", message)
+        except MessageSenderException as e:
+            message = f"Error in registering password: {e.message}: {e.status_code}"
+            self.logger.error(message)
             self.doc.messageBox("Error", message)
 
     def cancel(self):
