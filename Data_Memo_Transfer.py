@@ -70,23 +70,23 @@ if __name__ == "__main__":
             msgBox.setText("Another Data_Memo_Transfer is running")
             msgBox.setStandardButtons(QtWidgets.QMessageBox.Ok)
             msgBox.exec_()
-            exit(1)
-        processLock.writeLockInfo()
+        else:
+            processLock.writeLockInfo()
 
-        doc.loadFromTemporary()
-        doc.setUrlBase(URL_DIAMOND)
-        doc.setDiCtExperimentInformation("str_save_directory", SAVE_DIRECTORY)
-        doc.setDiCtExperimentInformation(
-            "str_share_directory_in_storage", SHARE_DIRECTORY_IN_STORAGE
-        )
-        doc.setListMeasurementMethod(LIST_MEASUREMENT_METHODS)
-        # doc.setLogger(logger)
-        logger.info("Start Data Memo Transfer.")
-        doc.changeView("log_in")
-        app.exec_()
-        if os.path.exists(lockFilePath):
-            os.remove(lockFilePath)
-        logger.info("End Data Memo Transfer.")
+            doc.loadFromTemporary()
+            doc.setUrlBase(URL_DIAMOND)
+            doc.setDiCtExperimentInformation("str_save_directory", SAVE_DIRECTORY)
+            doc.setDiCtExperimentInformation(
+                "str_share_directory_in_storage", SHARE_DIRECTORY_IN_STORAGE
+            )
+            doc.setListMeasurementMethod(LIST_MEASUREMENT_METHODS)
+            # doc.setLogger(logger)
+            logger.info("Start Data Memo Transfer.")
+            doc.changeView("log_in")
+            app.exec_()
+            if os.path.exists(lockFilePath):
+                os.remove(lockFilePath)
+            logger.info("End Data Memo Transfer.")
     except Exception as e:
         logger.critical(f"Critical: {e}")
         logger.critical(f"Traceback: {traceback.format_exc()}")
