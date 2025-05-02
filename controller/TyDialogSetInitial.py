@@ -13,6 +13,7 @@ from controller.TySubWidgetSampleInformation import (
 from controller.TySubWidgetEquipmentInformation import (
     TySubWidgetEquipmentInformation,
 )
+
 # from controller.TyMainWindow import TyMainWindow
 
 
@@ -121,7 +122,7 @@ class TyDialogSetInitial(QtWidgets.QDialog):
             self.setWindowTitle("Set Initial Information 2/3")
         elif newState == "equipment_information":
             self.ui.stackedWidget.setCurrentIndex(2)
-            self.setWindowTitle("Set Initial Informationl 3/3")
+            self.setWindowTitle("Set Initial Information 3/3")
         elif newState == "finish":
             self.logger.info("Finish Initialize. Next, Change View To MainWindow")
             self.doc.saveToTemporary()

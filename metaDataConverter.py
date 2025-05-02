@@ -71,7 +71,7 @@ class MetaDataConverter:
             if filesets[i]["filename"] == filename:
                 return 1
         fileset = {}
-        fileset["filenaem"] = filename
+        fileset["filename"] = filename
         fileset["description"] = description
         fileset["status_valid"] = status_valid
         filesets.append(fileset)

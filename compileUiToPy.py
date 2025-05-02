@@ -54,8 +54,8 @@ def mergeFiles(original, new, output):
         else:
             merged_lines.append(line)  # 必要ならここでマージルールを変更
 
-    with open(output, "w", encoding="utf-8") as fout:
-        fout.writelines(merged_lines)
+    with open(output, "w", encoding="utf-8") as f:
+        f.writelines(merged_lines)
 
     print(f"マージ完了: {output}")
     os.remove(original)

@@ -118,7 +118,7 @@ class TyMainWindow(QtWidgets.QMainWindow):
         self.ui.PB_Experiment_Title_Edit.setIcon(QtGui.QIcon("./icons/edit.png"))
         self.ui.PB_Sample_ID_Edit.setIcon(QtGui.QIcon("./icons/edit.png"))
         self.ui.PB_Experiment_Method_Edit.setIcon(QtGui.QIcon("./icons/edit.png"))
-        self.ui.PB_Refresh.setIcon(QtGui.QIcon("./icons/reflesh.png"))
+        self.ui.PB_Refresh.setIcon(QtGui.QIcon("./icons/refresh.png"))
         self.ui.PB_Upload_Data.setIcon(QtGui.QIcon("./icons/Exit2.png"))
         pixmap = QtGui.QPixmap("./icons/FileIcon.png")
         pixmap = pixmap.scaled(
