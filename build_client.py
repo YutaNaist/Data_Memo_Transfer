@@ -7,6 +7,7 @@ import json
 from colorama import Fore, Style
 from TyMessageSender import TyMessageSender, MessageSenderException
 from TyDocDataMemoTransfer import TyDocDataMemoTransfer
+from compileUiToPy import compileUiToPy
 
 # 設定
 condaEnv = "data-memo-transfer-PyQt5"
@@ -23,6 +24,7 @@ urlProposalHandlerBase = "http://127.0.0.1:6427"
 urlHttpsServerBase = "https://192.168.150.10:6426"
 # urlHttpsServerBase = "https://127.0.0.1:6426"
 doc = TyDocDataMemoTransfer()
+doc.isBuild = True
 messageSenderProposalHandler = TyMessageSender(urlProposalHandlerBase, doc)
 messageSenderHttpsServer = TyMessageSender(urlHttpsServerBase, doc)
 
@@ -67,16 +69,17 @@ def registerProposal(experimentId: str, password: str):
     }
     try:
         response = messageSenderProposalHandler.sendMessage(url, jsonData, "POST")
-        print_color(
+        printColorized(
             f"Proposal registered successfully: {response['message']}", Fore.GREEN
         )
         return True
     except MessageSenderException as e:
-        print_color(f"Error: {e.message}: {e.status_code}", Fore.RED)
+        printColorized(f"Error: {e.message}: {e.status_code}", Fore.RED)
         return False
 
 
 def upLoadFiles(
+    version_name: str,
     experimentId: str,
     password: str,
     shareFolderInStorage: str,
@@ -87,6 +90,12 @@ def upLoadFiles(
         shareFolderInStorage
     )
     doc.dictExperimentInformation["str_save_directory"] = savedFolder
+    doc.dictExperimentInformation["dict_clipboard"]["experiment"][
+        "title"
+    ] = f"Data Memo Transfer {version_name}"
+    doc.dictExperimentInformation["dict_clipboard"]["sample"][
+        "name"
+    ] = f"{version_name}"
     hashPassword = doc.makeHashFromString(password)
     try:
         messageSenderHttpsServer.sendRequestLogin(experimentId, hashPassword)
@@ -94,17 +103,17 @@ def upLoadFiles(
 
         shutil.copytree(
             copyOriginal,
-            os.path.join(savedFolder, os.path.basename(copyOriginal)),
+            os.path.join(shareFolderInStorage, os.path.basename(copyOriginal)),
             dirs_exist_ok=True,
         )
         messageSenderHttpsServer.sendRequestFinishExperiment(experimentId, doc)
         # messageSenderHttpsServer.sendRequestLogout(experimentId)
         return True
     except MessageSenderException as e:
-        print_color(f"Error: {e.message}: {e.status_code}", Fore.RED)
+        printColorized(f"Error: {e.message}: {e.status_code}", Fore.RED)
         return False
     except Exception as e:
-        print_color(f"Error: {e}", Fore.RED)
+        printColorized(f"Error: {e}", Fore.RED)
         return False
 
 
@@ -147,12 +156,12 @@ def createDummyProposal():
     }
 
 
-def run_pyinstaller(py_path, script_path, args):
+def runPyinstaller(py_path, script_path, args):
     cmd = [str(py_path), "colorized_pyinstaller.py", str(script_path)] + args
     subprocess.run(cmd, check=True)
 
 
-def print_color(text, color):
+def printColorized(text, color):
     print(color + text + Style.RESET_ALL)
 
 
@@ -161,32 +170,36 @@ def createGlobalVariableFile(configureJson):
     share_directory_in_storage = configureJson["share_directory_in_storage"]
     url_diamond = configureJson["url_diamond"]
     save_directory = configureJson["save_directory"]
+    listMeasurementMethods = configureJson["measurement_methods"]
     with open(global_variable_file, "w", encoding="utf-8") as f:
         f.write(f'SHARE_DIRECTORY_IN_STORAGE = "{share_directory_in_storage}"\n')
         f.write(f'URL_DIAMOND = "{url_diamond}"\n')
         f.write(f'SAVE_DIRECTORY = "{save_directory}"\n')
+        f.write(f'LIST_MEASUREMENT_METHODS = "{listMeasurementMethods}"\n')
 
 
 if __name__ == "__main__":
-    print_color("Start to build Data_Memo_Transfer.exe", Fore.CYAN)
+    printColorized("Start to build Data_Memo_Transfer.exe", Fore.CYAN)
     base_dir = os.path.dirname(os.path.abspath(__file__))
     os.chdir(base_dir)
     if not os.path.exists(configFile):
-        print_color(f"Error: JSON file '{configFile}' not found!", Fore.RED)
+        printColorized(f"Error: JSON file '{configFile}' not found!", Fore.RED)
         exit(1)
     listBuildCondition = json.load(open(configFile, encoding="utf-8"))
     # print_color(f"PyInstaller Path: {pyinstallerPath}", Fore.CYAN)
     # 古いBuildExeを削除
     buildExeDir = os.path.abspath("BuildExe")
     if os.path.exists(buildExeDir):
-        print_color("BuildExe folder already exists. Deleting it...", Fore.YELLOW)
+        printColorized("BuildExe folder already exists. Deleting it...", Fore.YELLOW)
         shutil.rmtree(buildExeDir)
+    printColorized("Compiling Ui files to Py files...", Fore.CYAN)
+    compileUiToPy()
 
     for condition in listBuildCondition:
         version_name = condition["version_name"]
-        print_color(f"Starting build: {version_name}", Fore.CYAN)
+        printColorized(f"Starting build: {version_name}", Fore.CYAN)
         createGlobalVariableFile(condition)
-        run_pyinstaller(pythonPath, pyinstallerPath, pyinstaller_args)
+        runPyinstaller(pythonPath, pyinstallerPath, pyinstaller_args)
         # リソースのコピー
         for folder in ["settings", "icons", "forms"]:
             shutil.copytree(
@@ -216,7 +229,7 @@ if __name__ == "__main__":
                 os.path.abspath(os.path.join(buildExeDir, output_dist_folder)),
             )
         else:
-            print_color("Error: No 'dist' folder found after build!", Fore.RED)
+            printColorized("Error: No 'dist' folder found after build!", Fore.RED)
             continue
 
         if os.path.exists("build"):
@@ -231,9 +244,9 @@ if __name__ == "__main__":
                 os.path.abspath(os.path.join(buildExeDir, output_build_folder)),
             )
         else:
-            print_color("Error: No 'build' folder found after build!", Fore.RED)
+            printColorized("Error: No 'build' folder found after build!", Fore.RED)
             continue
-        print_color("Start to register to server", Fore.CYAN)
+        printColorized("Start to register to server", Fore.CYAN)
         experimentId = condition["experiment_id"]
         password = condition["password"]
         shareFolderInStorage = condition["share_directory_in_storage"]
@@ -241,6 +254,7 @@ if __name__ == "__main__":
         copyOriginal = os.path.abspath(os.path.join(buildExeDir, output_dist_folder))
         registerProposal(experimentId, password)
         upLoadFiles(
+            version_name,
             experimentId,
             password,
             shareFolderInStorage,
@@ -248,7 +262,7 @@ if __name__ == "__main__":
             copyOriginal,
         )
 
-        print_color(f"Build completed for: {version_name}", Fore.GREEN)
+        printColorized(f"Build completed for: {version_name}", Fore.GREEN)
         # exit(1)
 
-    print_color("\nAll builds completed successfully!", Fore.CYAN)
+    printColorized("\nAll builds completed successfully!", Fore.CYAN)

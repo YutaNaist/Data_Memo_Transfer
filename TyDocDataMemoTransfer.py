@@ -39,6 +39,36 @@ StateType = Literal[
 ]
 
 
+class TyMetadata(TypedDict):
+    title: str
+    description: str
+    resource_type: str
+    creators: List[Dict[str, Any]]
+    created_at: str
+    updated_at: str
+    filename: str
+    index: int
+    classified: str
+    valid: bool
+    arim_upload: bool
+    comment: str
+    experiment: Dict[str, Any]
+    sample: Dict[str, Any]
+    equipment: Dict[str, Any]
+
+    #     "resource_type": "",
+    #     "descriptions": [],
+    #     "creators": [],
+    #     "created_at": "",
+    #     "updated_at": "",
+    #     "filesets": [],
+    #     "instruments": [],
+    #     "experimental_methods": [],
+    #     "specimens": [],
+    #     "custom_properties": [],
+    # }
+
+
 class TyClipboardInfo(TypedDict):
     filename: str
     index: int
@@ -98,32 +128,35 @@ class TyDocDataMemoTransfer:
             self.logger = logging.getLogger("data_memo_transfer_debug")
             self.logger.setLevel(logging.DEBUG)
 
-        self.dictExperimentInformation: TyExperimentInformation = {}
-        self.list_keys = [
-            "str_url_diamond",
-            "str_save_directory",
-            "str_share_directory_in_storage",
-            "str_experiment_id",
-            "is_upload_arim",
-            "is_share_with_google",
-            "dict_user_information",
-            "is_exist_temp_file",
-            "dict_clipboard",
-            "list_file_data",
-            "str_parent_id_in_google_drive",
-            "str_mail_address",
-        ]
-        self.list_keys_data = [
-            "filename",
-            "index",
-            "classified",
-            "valid",
-            "arim_upload",
-            "comment",
-            "experiment",
-            "sample",
-            "equipment",
-        ]
+        self.dictExperimentInformation = TyExperimentInformation()
+        self.listKeys = list(TyExperimentInformation.__annotations__.keys())
+        self.listDataKeys = list(TyFileDataInfo.__annotations__.keys())
+        self.logger.info(self.listDataKeys)
+        # self.list_keys = [
+        #     "str_url_diamond",
+        #     "str_save_directory",
+        #     "str_share_directory_in_storage",
+        #     "str_experiment_id",
+        #     "is_upload_arim",
+        #     "is_share_with_google",
+        #     "dict_user_information",
+        #     "is_exist_temp_file",
+        #     "dict_clipboard",
+        #     "list_file_data",
+        #     "str_parent_id_in_google_drive",
+        #     "str_mail_address",
+        # ]
+        # self.listDataKeys = [
+        #     "filename",
+        #     "index",
+        #     "classified",
+        #     "valid",
+        #     "arim_upload",
+        #     "comment",
+        #     "experiment",
+        #     "sample",
+        #     "equipment",
+        # ]
         self.salt = "abcd"
         # self._logger = logging.getLogger(__name__)
         self.initializeExperimentInformation()
@@ -132,12 +165,13 @@ class TyDocDataMemoTransfer:
         self.__hashPassword = ""
         self.viewState = "log_in"
         self.currentWindow = None
+        self.listMeasurementMethod = []
 
     def initializeExperimentInformation(self):
         self.dictExperimentInformation["str_url_diamond"] = "http://192.168.0.10:5462"
         self.dictExperimentInformation["str_save_directory"] = "Z:/"
         self.dictExperimentInformation["str_share_directory_in_storage"] = (
-            "C:/Share/SmartLab/"
+            "D:/Share/NR-000/"
         )
         self.dictExperimentInformation["str_experiment_id"] = ""
         self.dictExperimentInformation["dict_user_information"] = {}
@@ -146,7 +180,6 @@ class TyDocDataMemoTransfer:
         self.dictExperimentInformation["is_share_with_google"] = False
         self.dictExperimentInformation["str_parent_id_in_google_drive"] = ""
         self.dictExperimentInformation["str_mail_address"] = ""
-        # self.dict_Data_Model["list_file_name"] = []
         self.dictExperimentInformation["dict_clipboard"] = {}
         self.dictExperimentInformation["list_file_data"] = []
 
@@ -183,7 +216,7 @@ class TyDocDataMemoTransfer:
 
     def setAllDictExperimentInformation(self, dictExperimentInformation):
         for key, value in dictExperimentInformation.items():
-            if key not in self.list_keys:
+            if key not in self.listKeys:
                 raise DataMemoTransferException
             else:
                 self.dictExperimentInformation[key] = value
@@ -259,7 +292,7 @@ class TyDocDataMemoTransfer:
     def addFileInformation(self, dict_File_Information: dict) -> None:
         self.dictExperimentInformation["list_file_data"].append(dict_File_Information)
 
-    def getFileInformation(self, index: int) -> dict:
+    def getFileInformation(self, index: int) -> TyClipboardInfo:
         if index == -1:
             return copy.copy(self.dictExperimentInformation["dict_clipboard"])
         else:
@@ -285,138 +318,156 @@ class TyDocDataMemoTransfer:
         listDictMetaData = []
         listFileNames = self.getFileNameList()
         for index, file_Name in enumerate(listFileNames):
-            dictMetaData = {
-                "titles": [],
-                "identifiers": [],
-                "experimental_identifier": "",
-                "resource_type": "",
-                "descriptions": [],
-                "creators": [],
-                "created_at": "",
-                "updated_at": "",
-                "filesets": [],
-                "instruments": [],
-                "experimental_methods": [],
-                "specimens": [],
-                "custom_properties": [],
-            }
-            print(self.dictExperimentInformation)
-            dictMetaData["titles"].append(
-                {
-                    "title": self.dictExperimentInformation["dict_clipboard"][
-                        "experiment"
-                    ]["title"]
-                }
-            )
-            dictMetaData["identifiers"].append(
-                {"identifier": self.dictExperimentInformation["str_experiment_id"]}
-            )
-            dictMetaData["experimental_identifier"] = self.dictExperimentInformation[
-                "str_experiment_id"
-            ]
-            dictMetaData["resource_type"] = "dataset"
-            dictMetaData["descriptions"].append(
-                {
-                    "description": self.dictExperimentInformation["dict_clipboard"][
-                        "experiment"
-                    ]["comment"]
-                }
-            )
-
-            dictMetaData["creators"] = [
-                self.dictExperimentInformation["dict_user_information"]["user"]
-            ]
-            # created = (
-            #     self.dictExperimentInformation["dict_user_information"][
-            #         "experiment_date"
-            #     ]["start_date"]
-            #     + " "
-            #     + self.dictExperimentInformation["dict_user_information"][
-            #         "experiment_date"
-            #     ]["start_time"]
-            # )
-            created = self.dictExperimentInformation["dict_user_information"]["date"][
-                "start"
-            ]
-            dictMetaData["created_at"] = created
+            fileInformation = self.getFileInformation(index)
             current = datetime.datetime.now().strftime("%Y/%m/%d %H:%M:%S")
-            dictMetaData["updated_at"] = current
-
-            dict_File_Set = {}
-            dict_File_Set["filename"] = file_Name
-            dict_File_Set["description"] = self.dictExperimentInformation[
-                "list_file_data"
-            ][index]["experiment"]["comment"]
-            dict_File_Set["status_valid"] = self.dictExperimentInformation[
-                "list_file_data"
-            ][index]["valid"]
-            dictMetaData["filesets"].append(dict_File_Set)
-            dict_Instrument = {}
-            dict_Instrument["name"] = self.dictExperimentInformation[
-                "dict_user_information"
-            ]["instrument"]["name"]
-            dict_Instrument["identifier"] = self.dictExperimentInformation[
-                "dict_user_information"
-            ]["instrument"]["id"]
-            dict_Instrument["instrument_type"] = ""
-            dict_Instrument["description"] = ""
-            dictMetaData["instruments"].append(dict_Instrument)
-
-            dict_Experiment_Method = {}
-            try:
-                dict_Experiment_Method["category_description"] = (
-                    self.dictExperimentInformation["list_file_data"][index][
-                        "equipment"
-                    ]["method"]
-                )
-            except KeyError:
-                dict_Experiment_Method["category_description"] = ""
-            dict_Experiment_Method["description"] = ""
-            dictMetaData["experimental_methods"].append(dict_Experiment_Method)
-
-            dict_Specimens = {}
-            dict_Specimens["name"] = self.dictExperimentInformation["list_file_data"][
-                index
-            ]["sample"]["name"]
-            dict_Specimens["identifier"] = self.dictExperimentInformation[
-                "list_file_data"
-            ][index]["sample"]["id"]
-            dict_Specimens["description"] = self.dictExperimentInformation[
-                "list_file_data"
-            ][index]["sample"]["comment"]
-            dictMetaData["specimens"].append(dict_Specimens)
-
-            if (
-                len(
-                    list(
-                        self.dictExperimentInformation["list_file_data"][index][
-                            "equipment"
-                        ].keys()
-                    )
-                )
-                > 1
-            ):
-                keys = list(
-                    self.dictExperimentInformation["list_file_data"][index][
-                        "equipment"
-                    ].keys()
-                )
-                for i, key in enumerate(keys):
-                    if i == 0:
-                        continue
-                    dict_Equipment_Information = {}
-                    dict_Equipment_Information["name"] = key
-                    dict_Equipment_Information["value"] = (
-                        self.dictExperimentInformation["list_file_data"][index][
-                            "equipment"
-                        ][key]
-                    )
-                    dictMetaData["custom_properties"].append(dict_Equipment_Information)
-            listDictMetaData.append(dictMetaData)
+            dictMeadata = TyMetadata(
+                title=fileInformation["experiment"]["title"],
+                description=fileInformation["experiment"]["comment"],
+                resource_type="dataset",
+                creators=[
+                    self.dictExperimentInformation["dict_user_information"]["user"]
+                ],
+                created_at=self.dictExperimentInformation["dict_user_information"][
+                    "date"
+                ]("start"),
+                updated_at=current,
+                filename=fileInformation["filename"],
+                index=index,
+                classified=fileInformation["classified"],
+                valid=fileInformation["valid"],
+                arim_upload=fileInformation["arim_upload"],
+                comment=fileInformation["comment"],
+                experiment=fileInformation["experiment"],
+                sample=fileInformation["sample"],
+                equipment=fileInformation["equipment"],
+            )
+            listDictMetaData.append(dictMeadata)
         return listDictMetaData
+        # dictMetaData = {
+        #     "titles": [],
+        #     "identifiers": [],
+        #     "experimental_identifier": "",
+        #     "resource_type": "",
+        #     "descriptions": [],
+        #     "creators": [],
+        #     "created_at": "",
+        #     "updated_at": "",
+        #     "filesets": [],
+        #     "instruments": [],
+        #     "experimental_methods": [],
+        #     "specimens": [],
+        #     "custom_properties": [],
+        # }
+        # print(self.dictExperimentInformation)
+        # dictMetaData["titles"].append(
+        #     {
+        #         "title": self.dictExperimentInformation["dict_clipboard"][
+        #             "experiment"
+        #         ]["title"]
+        #     }
+        # )
+        # dictMetaData["identifiers"].append(
+        #     {"identifier": self.dictExperimentInformation["str_experiment_id"]}
+        # )
+        # dictMetaData["experimental_identifier"] = self.dictExperimentInformation[
+        #     "str_experiment_id"
+        # ]
+        # dictMetaData["resource_type"] = "dataset"
+        # dictMetaData["descriptions"].append(
+        #     {
+        #         "description": self.dictExperimentInformation["dict_clipboard"][
+        #             "experiment"
+        #         ]["comment"]
+        #     }
+        # )
 
-    def set_from_meta_data_dict(self, list_File_Name, list_Dict_Meta_Data):
-        pass
+        # dictMetaData["creators"] = [
+        #     self.dictExperimentInformation["dict_user_information"]["user"]
+        # ]
+        # created = self.dictExperimentInformation["dict_user_information"]["date"][
+        #     "start"
+        # ]
+        # dictMetaData["created_at"] = created
+        # current = datetime.datetime.now().strftime("%Y/%m/%d %H:%M:%S")
+        # dictMetaData["updated_at"] = current
+
+        # dictFileSet = {}
+        # dictFileSet["filename"] = file_Name
+        # dictFileSet["description"] = self.dictExperimentInformation[
+        #     "list_file_data"
+        # ][index]["experiment"]["comment"]
+        # dictFileSet["status_valid"] = self.dictExperimentInformation[
+        #     "list_file_data"
+        # ][index]["valid"]
+        # dictMetaData["filesets"].append(dictFileSet)
+        # dict_Instrument = {}
+        # dict_Instrument["name"] = self.dictExperimentInformation[
+        #     "dict_user_information"
+        # ]["instrument"]["name"]
+        # dict_Instrument["identifier"] = self.dictExperimentInformation[
+        #     "dict_user_information"
+        # ]["instrument"]["id"]
+        # dict_Instrument["instrument_type"] = ""
+        # dict_Instrument["description"] = ""
+        # dictMetaData["instruments"].append(dict_Instrument)
+
+        # dict_Experiment_Method = {}
+        # try:
+        #     dict_Experiment_Method["category_description"] = (
+        #         self.dictExperimentInformation["list_file_data"][index][
+        #             "equipment"
+        #         ]["method"]
+        #     )
+        # except KeyError:
+        #     dict_Experiment_Method["category_description"] = ""
+        # dict_Experiment_Method["description"] = ""
+        # dictMetaData["experimental_methods"].append(dict_Experiment_Method)
+
+        # dict_Specimens = {}
+        # dict_Specimens["name"] = self.dictExperimentInformation["list_file_data"][
+        #     index
+        # ]["sample"]["name"]
+        # dict_Specimens["identifier"] = self.dictExperimentInformation[
+        #     "list_file_data"
+        # ][index]["sample"]["id"]
+        # dict_Specimens["description"] = self.dictExperimentInformation[
+        #     "list_file_data"
+        # ][index]["sample"]["comment"]
+        # dictMetaData["specimens"].append(dict_Specimens)
+
+        # if (
+        #     len(
+        #         list(
+        #             self.dictExperimentInformation["list_file_data"][index][
+        #                 "equipment"
+        #             ].keys()
+        #         )
+        #     )
+        #     > 1
+        # ):
+        #     keys = list(
+        #         self.dictExperimentInformation["list_file_data"][index][
+        #             "equipment"
+        #         ].keys()
+        #     )
+        #     for i, key in enumerate(keys):
+        #         if i == 0:
+        #             continue
+        #         dict_Equipment_Information = {}
+        #         dict_Equipment_Information["name"] = key
+        #         dict_Equipment_Information["value"] = (
+        #             self.dictExperimentInformation["list_file_data"][index][
+        #                 "equipment"
+        #             ][key]
+        #         )
+        #         dictMetaData["custom_properties"].append(dict_Equipment_Information)
+
+    # def set_from_meta_data_dict(self, list_File_Name, list_Dict_Meta_Data):
+    #     # return listDictMetaData
+    #     pass
+
+    # def set_from_meta_data_dict(self, list_File_Name, list_Dict_Meta_Data):
+    #     pass
 
     def saveInitialTemporaryFromDict(self, dict_To_Save):
         try:
@@ -496,6 +547,12 @@ class TyDocDataMemoTransfer:
 
     def getMailAddress(self) -> str:
         return self.dictExperimentInformation["str_mail_address"]
+
+    def getListMeasurementMethod(self) -> List[str]:
+        return self.listMeasurementMethod
+
+    def setListMeasurementMethod(self, listMeasurementMethod: List[str]) -> None:
+        self.listMeasurementMethod = listMeasurementMethod
 
     def changeView(self, state: StateType, isTest: bool = False) -> bool:
         currentState = self.viewState

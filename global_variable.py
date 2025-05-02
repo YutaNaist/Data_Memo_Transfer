@@ -1,3 +1,4 @@
-SHARE_DIRECTORY_IN_STORAGE = "C:/Project/DataDiamond/Share/NR-401"
+SHARE_DIRECTORY_IN_STORAGE = "D:/Share/NR-103"
 URL_DIAMOND = "https://192.168.150.10:6426"
-SAVE_DIRECTORY = "Z:/"
+SAVE_DIRECTORY = "X:/"
+LIST_MEASUREMENT_METHODS = "['1d spectra', '2d spectra map', 'other']"

@@ -41,6 +41,9 @@ class TySubWidgetEquipmentInformation(QtWidgets.QWidget):
         else:
             uic.loadUi(r"forms/FormSubWidgetEquipmentInformation.ui", self)
             self.ui = self
+        listMeasurementMethods = self.doc.getListMeasurementMethod()
+        for method in listMeasurementMethods:
+            self.ui.CMB_Method.addItem(method)
 
     def getFromDoc(self, index: int = -1, is_Template: bool = True) -> None:
         dict_file_data = {}

@@ -26,31 +26,6 @@
      <property name="editable">
       <bool>false</bool>
      </property>
-     <item>
-      <property name="text">
-       <string>Powder diffraction</string>
-      </property>
-     </item>
-     <item>
-      <property name="text">
-       <string>Thin film</string>
-      </property>
-     </item>
-     <item>
-      <property name="text">
-       <string>2D diffraction map</string>
-      </property>
-     </item>
-     <item>
-      <property name="text">
-       <string>Inverse lattice map</string>
-      </property>
-     </item>
-     <item>
-      <property name="text">
-       <string>Other</string>
-      </property>
-     </item>
     </widget>
    </item>
    <item>

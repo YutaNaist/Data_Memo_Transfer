@@ -35,6 +35,7 @@ def main():
     URL_DIAMOND = global_variable.URL_DIAMOND
     SAVE_DIRECTORY = global_variable.SAVE_DIRECTORY
     SHARE_DIRECTORY_IN_STORAGE = global_variable.SHARE_DIRECTORY_IN_STORAGE
+    LIST_MEASUREMENT_METHODS = global_variable.LIST_MEASUREMENT_METHODS
 
     doc = TyDocDataMemoTransfer()
     # for handler in doc.logger.handlers:
@@ -68,6 +69,7 @@ def main():
     doc.setDiCtExperimentInformation(
         "str_share_directory_in_storage", SHARE_DIRECTORY_IN_STORAGE
     )
+    doc.setListMeasurementMethod(LIST_MEASUREMENT_METHODS)
     # doc.setLogger(logger)
     logger.info("Start Data Memo Transfer.")
     doc.changeView("log_in")
