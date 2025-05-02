@@ -1,72 +1,90 @@
 # from controller.MainWindow_Controller import Window_Main
-import PyQt5.Qt
+# import PyQt5.Qt
 from TyDocDataMemoTransfer import TyDocDataMemoTransfer
 import sys
 import os
 import portalocker
-import subprocess
-import platform
+import logging
 from PyQt5 import QtWidgets
 
 def main():
-    #* build_client.ps1から実行されたかどうかを判別。
-    #* global_variable.pyが存在する場合はbuild_client.ps1から実行されたと判断。
-    #* テストする場合はglobal_variable_Local.pyを使用。(global_variable.pyは削除する)
-    if os.path.exists("global_variable.py"):
-        import global_variable as global_variable
-        isBuild = True
+    # * build_client.ps1から実行されたかどうかを判別。
+    # * global_variable.pyが存在する場合はbuild_client.ps1から実行されたと判断。
+    # * テストする場合はglobal_variable_Local.pyを使用。(global_variable.pyは削除する)
+    isDisplayDebug = False  # Trueにするとデバッグ用のログが出力される。
+
+    if isDisplayDebug:
+        loggerName = "data_memo_transfer_debug"
+        logger = logging.getLogger(loggerName)
     else:
-        import buildConfig.global_variable_Local as global_variable
+        loggerName = "data_memo_transfer"
+        logger = logging.getLogger(loggerName)
+        logger.setLevel(logging.DEBUG)
+
+    if getattr(sys, "frozen", False):
+        import global_variable as global_variable  # type: ignore
+
+        isBuild = True
+        logger.info("Running as a bundled executable.")
+    else:
+        import global_variable_Local as global_variable
+
+        loggerName = "data_memo_transfer_debug"
         isBuild = False
+        logger.info("Running as a script.")
+
+        # if os.path.exists("global_variable.py"):
+        #     import global_variable as global_variable
+
+        # else:
+        # import buildConfig.global_variable_Local as global_variable
 
     URL_DIAMOND = global_variable.URL_DIAMOND
     SAVE_DIRECTORY = global_variable.SAVE_DIRECTORY
     SHARE_DIRECTORY_IN_STORAGE = global_variable.SHARE_DIRECTORY_IN_STORAGE
+    LIST_MEASUREMENT_METHODS = global_variable.LIST_MEASUREMENT_METHODS
 
     doc = TyDocDataMemoTransfer()
-    doc.makeLogger("settings/logDataMemoTransfer.json", name=__name__)
-    doc.isBuild = isBuild
+    # for handler in doc.logger.handlers:
+    #     # print(handler.name)
+    #     if handler.get_name() == "console_log" or handler.get_name() == "console_error":
+    #         handler.setLevel(logging.DEBUG)
+    # doc.makeLogger("settings/logDataMemoTransfer.json", name=__name__)
+    # doc.setLogger(logger)
+    doc.setLoggerName(loggerName)
+    doc.setIsBuild(isBuild)
+    logger.info("Start Data Memo Transfer.")
+    logger.info(f"arguments: {sys.argv}")
     app = QtWidgets.QApplication(sys.argv)
 
-    lock_file_path = "./test.lock"
-    process_lock = portalocker.ProcessLock(lock_file_path)
-
-    # 古いロックファイルのチェック
-    if os.path.exists(lock_file_path):
-        if not process_lock.check_and_remove_stale_lock():
-            msgBox = QtWidgets.QMessageBox()
-            msgBox.setText("Another Data_Memo_Transfer is running")
-            msgBox.setStandardButtons(QtWidgets.QMessageBox.Ok)
-            msgBox.exec_()
-            return False
-
-    # 新しいロックファイルの作成
-    lock_file = open(lock_file_path, mode="w")
-    try:
-        portalocker.lock(lock_file, portalocker.LOCK_EX | portalocker.LOCK_NB)
-        process_lock.write_lock_info()
-    except IOError:
+    lockFilePath = "./lock_file.lock"
+    processLock = portalocker.ProcessLock(lockFilePath)
+    logger.info(f"Lock file path: {lockFilePath}")
+    logger.info(f"Process ID: {processLock.pid}")
+    # if os.path.exists(lockFilePath):
+    if processLock.checkAndRemoveStateLock():
+        logger.error("Another Data_Memo_Transfer is running.")
         msgBox = QtWidgets.QMessageBox()
         msgBox.setText("Another Data_Memo_Transfer is running")
         msgBox.setStandardButtons(QtWidgets.QMessageBox.Ok)
         msgBox.exec_()
-        return False
+        exit(1)
+    processLock.writeLockInfo()
 
     doc.loadFromTemporary()
-    # doc.setDiCtExperimentInformation("str_url_diamond", URL_DIAMOND)
     doc.setUrlBase(URL_DIAMOND)
     doc.setDiCtExperimentInformation("str_save_directory", SAVE_DIRECTORY)
     doc.setDiCtExperimentInformation(
         "str_share_directory_in_storage", SHARE_DIRECTORY_IN_STORAGE
     )
+    doc.setListMeasurementMethod(LIST_MEASUREMENT_METHODS)
     # doc.setLogger(logger)
-    doc.writeToLogger("Start Data Memo Transfer.")
+    logger.info("Start Data Memo Transfer.")
     doc.changeView("log_in")
-
-    # dialog_Ask_ID = TyDialogAskId(doc=data_Model)
-    # dialog_Ask_ID.show()
-    # dialog_Ask_ID.activateWindow()
     app.exec_()
+    if os.path.exists(lockFilePath):
+        os.remove(lockFilePath)
+    logger.info("End Data Memo Transfer.")
 
 
 if __name__ == "__main__":

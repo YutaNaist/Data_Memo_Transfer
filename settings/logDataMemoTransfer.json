@@ -2,25 +2,39 @@
     "version": 1,
     "disable_existing_loggers": false,
     "formatters": {
-        "simple": {
-            "format": "%(asctime)s - %(levelname)s - %(filename)s - %(funcName)s -%(process)d - %(message)s"
+        "display": {
+            "format": "%(asctime)s - %(levelname)s - %(funcName)s - %(message)s",
+            "datefmt": "%Y-%m-%d %H:%M:%S"
+        },
+        "display_error": {
+            "format": "%(levelname)s, \"%(pathname)s\" line %(lineno)d in %(module)s.%(funcName)s\n----------------------------------------",
+            "datefmt": "%Y-%m-%d %H:%M:%S"
+        },
+        "file": {
+            "format": "%(asctime)s, %(levelname)s, %(process)d/%(threadName)s:%(thread)d, %(filename)s:%(lineno)d, %(module)s.%(funcName)s, %(message)s",
+            "datefmt": "%Y-%m-%d %H:%M:%S"
         }
     },
     "handlers": {
         "consoleHandler": {
             "class": "logging.StreamHandler",
             "level": "DEBUG",
-            "formatter": "simple",
+            "formatter": "display",
             "stream": "ext://sys.stdout"
         },
-        "TimedRotatingFileHandler": {
-            "class": "logging.handlers.TimedRotatingFileHandler",
+        "consoleHandlerError": {
+            "class": "logging.StreamHandler",
+            "level": "DEBUG",
+            "formatter": "display_error",
+            "stream": "ext://sys.stdout"
+        },
+        "FileHandler": {
+            "class": "logging.handlers.RotatingFileHandler",
             "level": "INFO",
-            "formatter": "simple",
-            "filename": "Log/logDataMemoTransfer.log",
-            "when": "MIDNIGHT",
-            "interval": 1,
-            "backupCount": 30,
+            "formatter": "file",
+            "filename": "Logs/logDataMemoTransfer.log",
+            "maxBytes": 10485760,
+            "backupCount": 10,
             "encoding": "utf-8"
         }
     },
@@ -29,28 +43,32 @@
             "level": "DEBUG",
             "handlers": [
                 "consoleHandler",
-                "TimedRotatingFileHandler"
+                "consoleHandlerError",
+                "FileHandler"
             ],
             "propagate": false
         },
-        "same_hierarchy": {
-            "level": "DEBUG",
+        "data_memo_transfer": {
+            "level": "INFO",
             "handlers": [
-                "consoleHandler",
-                "TimedRotatingFileHandler"
+                "FileHandler"
             ],
             "propagate": false
         },
-        "lower.sub": {
+        "data_memo_transfer_debug": {
             "level": "DEBUG",
             "handlers": [
                 "consoleHandler",
-                "TimedRotatingFileHandler"
+                "consoleHandlerError",
+                "FileHandler"
             ],
             "propagate": false
         }
     },
     "root": {
-        "level": "INFO"
+        "level": "INFO",
+        "handlers": [
+            "consoleHandler"
+        ]
     }
 }

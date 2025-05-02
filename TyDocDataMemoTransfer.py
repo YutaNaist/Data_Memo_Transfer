@@ -8,8 +8,9 @@ import logging
 # import urllib3
 import hashlib
 import base64
+from typing import TypedDict, Any, List, Dict, Literal
 
-from TyMessageSender import TyMessageSender
+from TyMessageSender import TyMessageSender  # , MessageSenderException
 from PyQt5 import QtWidgets
 
 from controller.TyDialogLogin import TyDialogLogin
@@ -19,58 +20,160 @@ from controller.TyDialogSetInitial import TyDialogSetInitial
 from controller.TyMainWindow import TyMainWindow
 
 
-class DataModel_DataMemoTransfer_Exception(Exception):
+class DataMemoTransferException(Exception):
     def __init__(self):
         pass
 
 
-class DataModel_DataMemoTransfer_TypeException(DataModel_DataMemoTransfer_Exception):
+class DataMemoTransferDocTypeException(DataMemoTransferException):
     def __str__(self):
         return "DataModelException DataMemoTransfer: Different Type is used."
+
+
+StateType = Literal[
+    "log_in",
+    "send_one_time_password",
+    "register_password",
+    "set_initial",
+    "main_window",
+]
+
+
+class TyMetadata(TypedDict):
+    title: str
+    description: str
+    resource_type: str
+    creators: List[Dict[str, Any]]
+    created_at: str
+    updated_at: str
+    filename: str
+    index: int
+    classified: str
+    valid: bool
+    arim_upload: bool
+    comment: str
+    experiment: Dict[str, Any]
+    sample: Dict[str, Any]
+    equipment: Dict[str, Any]
+
+    #     "resource_type": "",
+    #     "descriptions": [],
+    #     "creators": [],
+    #     "created_at": "",
+    #     "updated_at": "",
+    #     "filesets": [],
+    #     "instruments": [],
+    #     "experimental_methods": [],
+    #     "specimens": [],
+    #     "custom_properties": [],
+    # }
+
+
+class TyClipboardInfo(TypedDict):
+    filename: str
+    index: int
+    classified: str
+    valid: bool
+    arim_upload: bool
+    comment: str
+    experiment: Dict[str, Any]
+    sample: Dict[str, Any]
+    equipment: Dict[str, Any]
+
+
+class TyFileDataInfo(TypedDict):
+    filename: str
+    index: int
+    classified: str
+    valid: bool
+    arim_upload: bool
+    comment: str
+    experiment: Dict[str, Any]
+    sample: Dict[str, Any]
+    equipment: Dict[str, Any]
+
+
+class TyUserInformation(TypedDict):
+    arim: Dict[str, Any]
+    date: Dict[str, Any]
+    edit_url: str
+    experiment_id: str
+    instrument: Dict[str, Any]
+    share: Dict[str, Any]
+    user: Dict[str, Any]
+
+
+class TyExperimentInformation(TypedDict):
+    str_url_diamond: str
+    str_save_directory: str
+    str_share_directory_in_storage: str
+    str_experiment_id: str
+    dict_user_information: TyUserInformation
+    is_exist_temp_file: bool
+    is_upload_arim: bool
+    is_share_with_google: bool
+    str_parent_id_in_google_drive: str
+    str_mail_address: str
+    dict_clipboard: TyClipboardInfo
+    list_file_data: List[TyFileDataInfo]
 
 
 class TyDocDataMemoTransfer:
     def __init__(self):
         self.isBuild = False
-        self.dictExperimentInformation = {}
-        self.list_keys = [
-            "str_url_diamond",
-            "str_save_directory",
-            "str_share_directory_in_storage",
-            "str_experiment_id",
-            "is_upload_arim",
-            "is_share_with_google",
-            "dict_user_information",
-            "is_exist_temp_file",
-            "dict_clipboard",
-            "list_file_data",
-            "str_parent_id_in_google_drive",
-            "str_mail_address",
-        ]
-        self.list_keys_data = [
-            "filename",
-            "index",
-            "classified",
-            "valid",
-            "arim_upload",
-            "comment",
-            "experiment",
-            "sample",
-            "equipment",
-        ]
-        self._logger = logging.getLogger(__name__)
+        self.initLogger("settings/logDataMemoTransfer.json")
+        if self.isBuild:
+            self.logger = logging.getLogger("data_memo_transfer")
+        else:
+            self.logger = logging.getLogger("data_memo_transfer_debug")
+            self.logger.setLevel(logging.DEBUG)
+
+        self.dictExperimentInformation = TyExperimentInformation()
+        self.listKeys = list(TyExperimentInformation.__annotations__.keys())
+        self.listDataKeys = list(TyFileDataInfo.__annotations__.keys())
+        self.logger.info(self.listDataKeys)
+        # self.list_keys = [
+        #     "str_url_diamond",
+        #     "str_save_directory",
+        #     "str_share_directory_in_storage",
+        #     "str_experiment_id",
+        #     "is_upload_arim",
+        #     "is_share_with_google",
+        #     "dict_user_information",
+        #     "is_exist_temp_file",
+        #     "dict_clipboard",
+        #     "list_file_data",
+        #     "str_parent_id_in_google_drive",
+        #     "str_mail_address",
+        # ]
+        # self.listDataKeys = [
+        #     "filename",
+        #     "index",
+        #     "classified",
+        #     "valid",
+        #     "arim_upload",
+        #     "comment",
+        #     "experiment",
+        #     "sample",
+        #     "equipment",
+        # ]
+        self.salt = "abcd"
+        # self._logger = logging.getLogger(__name__)
         self.initializeExperimentInformation()
-        urlBase = self.getDictExperimentInformation("str_url_diamond")
-        self.messageSender = TyMessageSender(urlBase, self)
+        self.messageSender = TyMessageSender(
+            self.getDictExperimentInformation("str_url_diamond"), self
+        )
         self.__hashPassword = ""
         self.viewState = "log_in"
         self.currentWindow = None
+        self.listMeasurementMethod = []
+        self.loggerName = "data_memo_transfer"
 
     def initializeExperimentInformation(self):
         self.dictExperimentInformation["str_url_diamond"] = "http://192.168.0.10:5462"
         self.dictExperimentInformation["str_save_directory"] = "Z:/"
         self.dictExperimentInformation["str_share_directory_in_storage"] = (
-            "C:/Share/SmartLab/"
+            "D:/Share/NR-000/"
         )
         self.dictExperimentInformation["str_experiment_id"] = ""
         self.dictExperimentInformation["dict_user_information"] = {}
@@ -79,7 +182,6 @@ class TyDocDataMemoTransfer:
         self.dictExperimentInformation["is_share_with_google"] = False
         self.dictExperimentInformation["str_parent_id_in_google_drive"] = ""
         self.dictExperimentInformation["str_mail_address"] = ""
-        # self.dict_Data_Model["list_file_name"] = []
         self.dictExperimentInformation["dict_clipboard"] = {}
         self.dictExperimentInformation["list_file_data"] = []
 
@@ -103,17 +205,31 @@ class TyDocDataMemoTransfer:
         self.dictExperimentInformation["dict_clipboard"] = dict_Template_Clipboard
 
     # Function of Template Data
-    def getAllDictExperimentInformation(self):
+    def getAllDictExperimentInformation(self) -> TyExperimentInformation:
+        # return cast(TyExperimentInformation, self.dictExperimentInformation)
         return self.dictExperimentInformation
+
+    def setIsBuild(self, isBuild: bool) -> None:
+        self.isBuild = isBuild
+
+    def getIsBuild(self) -> bool:
+        return self.isBuild
+
+    def setLoggerName(self, loggerName: str) -> None:
+        self.loggerName = loggerName
+        self.logger = logging.getLogger(loggerName)
+
+    def getLoggerName(self) -> str:
+        return self.loggerName
 
     def setAllDictExperimentInformation(self, dictExperimentInformation):
         for key, value in dictExperimentInformation.items():
-            if key not in self.list_keys:
-                raise DataModel_DataMemoTransfer_Exception
+            if key not in self.listKeys:
+                raise DataMemoTransferException
             else:
                 self.dictExperimentInformation[key] = value
 
-    def getDictExperimentInformation(self, key):
+    def getDictExperimentInformation(self, key: str) -> Any:
         try:
             return self.dictExperimentInformation[key]
         except KeyError:
@@ -121,8 +237,8 @@ class TyDocDataMemoTransfer:
 
     def setDiCtExperimentInformation(self, key, value):
         # if isinstance(value, type(self.dict_Data_Model[key])):
-        if type(value) != type(self.dictExperimentInformation[key]):
-            raise DataModel_DataMemoTransfer_TypeException
+        if type(value) is not type(self.dictExperimentInformation[key]):
+            raise DataMemoTransferDocTypeException
         self.dictExperimentInformation[key] = value
 
     def setNumberOfFiles(self) -> int:
@@ -136,7 +252,8 @@ class TyDocDataMemoTransfer:
             ensure_ascii=False,
             indent=4,
         )
-        self.writeToLogger("save temporary")
+        # self.writeToLogger("save temporary")
+        self.logger.info("save temporary")
 
     def loadFromTemporary(self) -> bool:
         try:
@@ -145,33 +262,37 @@ class TyDocDataMemoTransfer:
                 raise FileNotFoundError
             self.dictExperimentInformation = docLoad
             self.dictExperimentInformation["is_exist_temp_file"] = True
-            self.writeToLogger("load temporary")
+            # self.writeToLogger("load temporary")
+            self.logger.info("load temporary")
             return True
         except FileNotFoundError:
             self.dictExperimentInformation["is_exist_temp_file"] = False
-            self.writeToLogger("Temporary file not found")
+            # self.writeToLogger("Temporary file not found")
+            self.logger.error("Temporary file not found")
             return False
         except json.decoder.JSONDecodeError:
             self.dictExperimentInformation["is_exist_temp_file"] = False
-            self.writeToLogger("Temporary file can't read")
+            # self.writeToLogger("Temporary file can't read")
+            self.logger.error("Temporary file can't read")
             return False
 
     def deleteTemporary(self) -> None:
         os.remove("temporary.json")
         self.dictExperimentInformation["is_exist_temp_file"] = False
-        self.writeToLogger("delete temporary file")
+        # self.writeToLogger("delete temporary file")
+        self.logger.info("delete temporary file")
 
-    def getFillClipboard(self) -> dict:
-        return copy.copy(self.dictExperimentInformation["dict_clipboard"])
+    def getFillClipboard(self) -> TyClipboardInfo:
+        return copy.deepcopy(self.dictExperimentInformation["dict_clipboard"])
 
-    def getAllFileInformation(self) -> list:
-        return self.dictExperimentInformation["list_file_data"]
+    def getAllFileInformation(self) -> TyFileDataInfo:
+        return copy.deepcopy(self.dictExperimentInformation["list_file_data"])
 
-    def getFileNameList(self) -> list:
-        list_File_Name = []
+    def getFileNameList(self) -> List[str]:
+        listFileName = []
         for dict_File_Information in self.dictExperimentInformation["list_file_data"]:
-            list_File_Name.append(dict_File_Information["filename"])
-        return list_File_Name
+            listFileName.append(dict_File_Information["filename"])
+        return listFileName
 
     def resetFileData(self) -> None:
         self.dictExperimentInformation["list_file_data"] = []
@@ -179,8 +300,9 @@ class TyDocDataMemoTransfer:
     def addFileInformation(self, dict_File_Information: dict) -> None:
         self.dictExperimentInformation["list_file_data"].append(dict_File_Information)
 
-    def getFileInformation(self, index: int) -> dict:
-        if index == -1:
+    def getFileInformation(self, index: int) -> TyClipboardInfo:
+        if index < 0 or index >= len(self.dictExperimentInformation["list_file_data"]):
+            self.logger.warning("Index out of range")
             return copy.copy(self.dictExperimentInformation["dict_clipboard"])
         else:
             return self.dictExperimentInformation["list_file_data"][index]
@@ -201,142 +323,160 @@ class TyDocDataMemoTransfer:
             return -1
 
     # meta data converter for diamond
-    def getListDictMetaData(self) -> list:
+    def getListDictMetaData(self) -> List[TyMetadata]:
         listDictMetaData = []
         listFileNames = self.getFileNameList()
         for index, file_Name in enumerate(listFileNames):
-            dictMetaData = {
-                "titles": [],
-                "identifiers": [],
-                "experimental_identifier": "",
-                "resource_type": "",
-                "descriptions": [],
-                "creators": [],
-                "created_at": "",
-                "updated_at": "",
-                "filesets": [],
-                "instruments": [],
-                "experimental_methods": [],
-                "specimens": [],
-                "custom_properties": [],
-            }
-            print(self.dictExperimentInformation)
-            dictMetaData["titles"].append(
-                {
-                    "title": self.dictExperimentInformation["dict_clipboard"][
-                        "experiment"
-                    ]["title"]
-                }
-            )
-            dictMetaData["identifiers"].append(
-                {"identifier": self.dictExperimentInformation["str_experiment_id"]}
-            )
-            dictMetaData["experimental_identifier"] = self.dictExperimentInformation[
-                "str_experiment_id"
-            ]
-            dictMetaData["resource_type"] = "dataset"
-            dictMetaData["descriptions"].append(
-                {
-                    "description": self.dictExperimentInformation["dict_clipboard"][
-                        "experiment"
-                    ]["comment"]
-                }
-            )
-
-            dictMetaData["creators"] = [
-                self.dictExperimentInformation["dict_user_information"]["user"]
-            ]
-            # created = (
-            #     self.dictExperimentInformation["dict_user_information"][
-            #         "experiment_date"
-            #     ]["start_date"]
-            #     + " "
-            #     + self.dictExperimentInformation["dict_user_information"][
-            #         "experiment_date"
-            #     ]["start_time"]
-            # )
-            created = self.dictExperimentInformation["dict_user_information"]["date"][
-                "start"
-            ]
-            dictMetaData["created_at"] = created
+            fileInformation = self.getFileInformation(index)
             current = datetime.datetime.now().strftime("%Y/%m/%d %H:%M:%S")
-            dictMetaData["updated_at"] = current
-
-            dict_File_Set = {}
-            dict_File_Set["filename"] = file_Name
-            dict_File_Set["description"] = self.dictExperimentInformation[
-                "list_file_data"
-            ][index]["experiment"]["comment"]
-            dict_File_Set["status_valid"] = self.dictExperimentInformation[
-                "list_file_data"
-            ][index]["valid"]
-            dictMetaData["filesets"].append(dict_File_Set)
-            dict_Instrument = {}
-            dict_Instrument["name"] = self.dictExperimentInformation[
-                "dict_user_information"
-            ]["instrument"]["name"]
-            dict_Instrument["identifier"] = self.dictExperimentInformation[
-                "dict_user_information"
-            ]["instrument"]["id"]
-            dict_Instrument["instrument_type"] = ""
-            dict_Instrument["description"] = ""
-            dictMetaData["instruments"].append(dict_Instrument)
-
-            dict_Experiment_Method = {}
-            try:
-                dict_Experiment_Method["category_description"] = (
-                    self.dictExperimentInformation["list_file_data"][index][
-                        "equipment"
-                    ]["method"]
-                )
-            except KeyError:
-                dict_Experiment_Method["category_description"] = ""
-            dict_Experiment_Method["description"] = ""
-            dictMetaData["experimental_methods"].append(dict_Experiment_Method)
-
-            dict_Specimens = {}
-            dict_Specimens["name"] = self.dictExperimentInformation["list_file_data"][
-                index
-            ]["sample"]["name"]
-            dict_Specimens["identifier"] = self.dictExperimentInformation[
-                "list_file_data"
-            ][index]["sample"]["id"]
-            dict_Specimens["description"] = self.dictExperimentInformation[
-                "list_file_data"
-            ][index]["sample"]["comment"]
-            dictMetaData["specimens"].append(dict_Specimens)
-
-            if (
-                len(
-                    list(
-                        self.dictExperimentInformation["list_file_data"][index][
-                            "equipment"
-                        ].keys()
-                    )
-                )
-                > 1
-            ):
-                keys = list(
-                    self.dictExperimentInformation["list_file_data"][index][
-                        "equipment"
-                    ].keys()
-                )
-                for i, key in enumerate(keys):
-                    if i == 0:
-                        continue
-                    dict_Equipment_Information = {}
-                    dict_Equipment_Information["name"] = key
-                    dict_Equipment_Information["value"] = (
-                        self.dictExperimentInformation["list_file_data"][index][
-                            "equipment"
-                        ][key]
-                    )
-                    dictMetaData["custom_properties"].append(dict_Equipment_Information)
-            listDictMetaData.append(dictMetaData)
+            dictMeadata = TyMetadata(
+                title=fileInformation["experiment"]["title"],
+                description=fileInformation["experiment"]["comment"],
+                resource_type="dataset",
+                creators=[
+                    self.dictExperimentInformation["dict_user_information"]["user"]
+                ],
+                created_at=self.dictExperimentInformation["dict_user_information"][
+                    "date"
+                ]("start"),
+                updated_at=current,
+                filename=fileInformation["filename"],
+                index=index,
+                classified=fileInformation["classified"],
+                valid=fileInformation["valid"],
+                arim_upload=fileInformation["arim_upload"],
+                comment=fileInformation["comment"],
+                experiment=fileInformation["experiment"],
+                sample=fileInformation["sample"],
+                equipment=fileInformation["equipment"],
+            )
+            listDictMetaData.append(dictMeadata)
         return listDictMetaData
+        # dictMetaData = {
+        #     "titles": [],
+        #     "identifiers": [],
+        #     "experimental_identifier": "",
+        #     "resource_type": "",
+        #     "descriptions": [],
+        #     "creators": [],
+        #     "created_at": "",
+        #     "updated_at": "",
+        #     "filesets": [],
+        #     "instruments": [],
+        #     "experimental_methods": [],
+        #     "specimens": [],
+        #     "custom_properties": [],
+        # }
+        # print(self.dictExperimentInformation)
+        # dictMetaData["titles"].append(
+        #     {
+        #         "title": self.dictExperimentInformation["dict_clipboard"][
+        #             "experiment"
+        #         ]["title"]
+        #     }
+        # )
+        # dictMetaData["identifiers"].append(
+        #     {"identifier": self.dictExperimentInformation["str_experiment_id"]}
+        # )
+        # dictMetaData["experimental_identifier"] = self.dictExperimentInformation[
+        #     "str_experiment_id"
+        # ]
+        # dictMetaData["resource_type"] = "dataset"
+        # dictMetaData["descriptions"].append(
+        #     {
+        #         "description": self.dictExperimentInformation["dict_clipboard"][
+        #             "experiment"
+        #         ]["comment"]
+        #     }
+        # )
 
-    def set_from_meta_data_dict(self, list_File_Name, list_Dict_Meta_Data):
-        pass
+        # dictMetaData["creators"] = [
+        #     self.dictExperimentInformation["dict_user_information"]["user"]
+        # ]
+        # created = self.dictExperimentInformation["dict_user_information"]["date"][
+        #     "start"
+        # ]
+        # dictMetaData["created_at"] = created
+        # current = datetime.datetime.now().strftime("%Y/%m/%d %H:%M:%S")
+        # dictMetaData["updated_at"] = current
+
+        # dictFileSet = {}
+        # dictFileSet["filename"] = file_Name
+        # dictFileSet["description"] = self.dictExperimentInformation[
+        #     "list_file_data"
+        # ][index]["experiment"]["comment"]
+        # dictFileSet["status_valid"] = self.dictExperimentInformation[
+        #     "list_file_data"
+        # ][index]["valid"]
+        # dictMetaData["filesets"].append(dictFileSet)
+        # dict_Instrument = {}
+        # dict_Instrument["name"] = self.dictExperimentInformation[
+        #     "dict_user_information"
+        # ]["instrument"]["name"]
+        # dict_Instrument["identifier"] = self.dictExperimentInformation[
+        #     "dict_user_information"
+        # ]["instrument"]["id"]
+        # dict_Instrument["instrument_type"] = ""
+        # dict_Instrument["description"] = ""
+        # dictMetaData["instruments"].append(dict_Instrument)
+
+        # dict_Experiment_Method = {}
+        # try:
+        #     dict_Experiment_Method["category_description"] = (
+        #         self.dictExperimentInformation["list_file_data"][index][
+        #             "equipment"
+        #         ]["method"]
+        #     )
+        # except KeyError:
+        #     dict_Experiment_Method["category_description"] = ""
+        # dict_Experiment_Method["description"] = ""
+        # dictMetaData["experimental_methods"].append(dict_Experiment_Method)
+
+        # dict_Specimens = {}
+        # dict_Specimens["name"] = self.dictExperimentInformation["list_file_data"][
+        #     index
+        # ]["sample"]["name"]
+        # dict_Specimens["identifier"] = self.dictExperimentInformation[
+        #     "list_file_data"
+        # ][index]["sample"]["id"]
+        # dict_Specimens["description"] = self.dictExperimentInformation[
+        #     "list_file_data"
+        # ][index]["sample"]["comment"]
+        # dictMetaData["specimens"].append(dict_Specimens)
+
+        # if (
+        #     len(
+        #         list(
+        #             self.dictExperimentInformation["list_file_data"][index][
+        #                 "equipment"
+        #             ].keys()
+        #         )
+        #     )
+        #     > 1
+        # ):
+        #     keys = list(
+        #         self.dictExperimentInformation["list_file_data"][index][
+        #             "equipment"
+        #         ].keys()
+        #     )
+        #     for i, key in enumerate(keys):
+        #         if i == 0:
+        #             continue
+        #         dict_Equipment_Information = {}
+        #         dict_Equipment_Information["name"] = key
+        #         dict_Equipment_Information["value"] = (
+        #             self.dictExperimentInformation["list_file_data"][index][
+        #                 "equipment"
+        #             ][key]
+        #         )
+        #         dictMetaData["custom_properties"].append(dict_Equipment_Information)
+
+    # def set_from_meta_data_dict(self, list_File_Name, list_Dict_Meta_Data):
+    #     # return listDictMetaData
+    #     pass
+
+    # def set_from_meta_data_dict(self, list_File_Name, list_Dict_Meta_Data):
+    #     pass
 
     def saveInitialTemporaryFromDict(self, dict_To_Save):
         try:
@@ -347,49 +487,47 @@ class TyDocDataMemoTransfer:
                 ensure_ascii=False,
             )
             self.loadFromTemporary()
-            self.writeToLogger("save temporary")
+            # self.writeToLogger("save temporary")
+            self.logger.info("save temporary")
         except BaseException:
-            self.writeToLogger("failed to save temporary")
-            pass
+            # self.writeToLogger("failed to save temporary")
+            self.logger.error("failed to save temporary")
 
     def setLogger(self, logger: logging.Logger) -> None:
         self._logger = logger
 
-    def makeLogger(self, strLogConfigName: str = "", name: str = "") -> logging.Logger:
-        if strLogConfigName == "":
-            self._logger = logging.getLogger(__name__)
-            if name != "":
-                self._logger = logging.getLogger(name)
-            self._logger.setLevel(logging.DEBUG)
-            log_Stream_Handler = logging.StreamHandler()
-            sh_formatter = logging.Formatter(
-                "%(asctime)s - %(levelname)s - %(process)d - %(message)s",
-                "%Y/%m/%d %H:%M:%S",
-            )
-            log_Stream_Handler.setFormatter(sh_formatter)
-            self._logger.addHandler(log_Stream_Handler)
-        else:
-            log_config = json.load(open(strLogConfigName, mode="r"))
-            logging.config.dictConfig(log_config)
-            self._logger = logging.getLogger(__name__)
-            if name != "":
-                self._logger = logging.getLogger(name)
-        return self._logger
+    def initLogger(self, loggerConfigPath) -> None:
+        # if self.isBuild is False:
+        #     self._logger = logging.getLogger()
+        #     self._logger.setLevel(logging.DEBUG)
+        #     log_Stream_Handler = logging.StreamHandler()
+        #     sh_formatter = logging.Formatter(
+        #         "%(asctime)s - %(levelname)s - %(process)d - %(message)s",
+        #         "%Y/%m/%d %H:%M:%S",
+        #     )
+        #     log_Stream_Handler.setFormatter(sh_formatter)
+        #     self._logger.addHandler(log_Stream_Handler)
+        # else:
+        log_config = json.load(open(loggerConfigPath, mode="r"))
+        logging.config.dictConfig(log_config)
+        return None
 
-    def writeToLogger(self, msg: str, mode: str = "debug") -> None:
-        if mode == "error":
-            self._logger.error(msg)
-        elif mode == "warning":
-            self._logger.warning(msg)
-        elif mode == "critical":
-            self._logger.critical(msg)
-        elif mode == "info":
-            self._logger.info(msg)
-        else:
-            self._logger.debug(msg)
+    # def writeToLogger(self, msg: str, mode: str = "debug") -> None:
+    #     if mode == "error":
+    #         self.logger.error(msg)
+    #     elif mode == "warning":
+    #         self.logger.warning(msg)
+    #     elif mode == "critical":
+    #         self.logger.critical(msg)
+    #     elif mode == "info":
+    #         self.logger.info(msg)
+    #     else:
+    #         self.logger.debug(msg)
 
     def makeHashFromString(self, string: str) -> str:
-        salt = "abcd".encode("utf-8")
+        # salt = "abcd".encode("utf-8")
+        self.logger.debug("Make Hash")
+        salt = self.salt.encode("utf-8")
         hashPass = hashlib.pbkdf2_hmac("sha256", string.encode("utf-8"), salt, 100000)
         strHashPass = str(base64.standard_b64encode(hashPass).decode("utf-8"))
         return strHashPass
@@ -404,6 +542,9 @@ class TyDocDataMemoTransfer:
         self.dictExperimentInformation["str_url_diamond"] = urlBase
         self.messageSender.updateUrlBase(urlBase)
 
+    def getUrlBase(self) -> str:
+        return self.dictExperimentInformation["str_url_diamond"]
+
     def setExperimentId(self, experimentId: str):
         self.dictExperimentInformation["str_experiment_id"] = experimentId
 
@@ -416,28 +557,49 @@ class TyDocDataMemoTransfer:
     def getMailAddress(self) -> str:
         return self.dictExperimentInformation["str_mail_address"]
 
-    def changeView(self, state: str):
-        viewStateTemp = self.viewState
+    def getListMeasurementMethod(self) -> List[str]:
+        return self.listMeasurementMethod
+
+    def setListMeasurementMethod(self, listMeasurementMethod: List[str]) -> None:
+        self.listMeasurementMethod = listMeasurementMethod
+
+    def appendListMeasurementMethod(self, strMeasurementMethod: str) -> None:
+        self.logger.debug(f"List Measurement Method: {self.listMeasurementMethod}")
+        self.logger.debug(f"Append Measurement Method: {strMeasurementMethod}")
+        if strMeasurementMethod not in self.listMeasurementMethod:
+            self.listMeasurementMethod.append(strMeasurementMethod)
+
+    def changeView(self, state: StateType, isTest: bool = False) -> bool:
+        currentState = self.viewState
+        self.logger.info(f"Change View from {currentState} to {state}")
         self.viewState = state
         newWindow = self.__setView(state)
         if newWindow is None:
-            self.viewState = viewStateTemp
+            self.logger.debug(f"View State: {state} is not defined.")
+            self.viewState = currentState
             return False
-        self.__changeViewMain(newWindow)
+        if not (isTest):
+            self.__changeViewMain(newWindow)
+        else:
+            self.messageBox("Test", f"View is changed to {state}", 1)
         return True
 
-    def createView(self, state: str):
+    def createView(self, state: StateType):
+        self.logger.info(f"Create View To: {state}")
         newWindow = self.__setView(state)
         self.__changeViewMain(newWindow, isChange=False)
         return
 
-    def __setView(self, state: str):
+    def __setView(self, state: StateType):
+        self.logger.debug(f"Set View: {state}")
         if state == "log_in":
             newWindow = TyDialogLogin(doc=self)
         elif state == "send_one_time_password":
             newWindow = TyDialogSendOneTimePassword(doc=self)
         elif state == "register_password":
-            print(self.getExperimentId())
+            self.logger.debug(
+                f"Register Password, Experiment ID: {self.getExperimentId()}"
+            )
             newWindow = TyDialogRegisterPassword(
                 doc=self,
             )
@@ -450,13 +612,17 @@ class TyDocDataMemoTransfer:
         return newWindow
 
     def __changeViewMain(self, viewNext, isChange: bool = True):
+        self.logger.debug("Change View Main")
         if self.currentWindow is not None and isChange:
+            self.logger.debug("Close View")
             self.currentWindow.close()
         self.currentWindow = viewNext
         self.currentWindow.show()
         self.currentWindow.activateWindow()
 
     def messageBox(self, title: str, message: str, buttonNo: int = 1):
+        self.logger.debug("Create Message Box")
+        self.logger.debug(f"message: {message}")
         msg = QtWidgets.QMessageBox()
         msg.setWindowTitle(title)
         msg.setText(message)
