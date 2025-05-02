@@ -211,6 +211,7 @@ if __name__ == "__main__":
 
         # Path("global_variable.py").unlink(missing_ok=True)
         # Path("Data_Memo_Transfer.spec").unlink(missing_ok=True)
+        os.remove(os.path.abspath("global_variable.py"))
         os.remove(os.path.abspath("Data_Memo_Transfer.spec"))
 
         output_dist_folder = f"Data_Memo_Transfer_{version_name}"

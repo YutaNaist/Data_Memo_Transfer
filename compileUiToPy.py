@@ -4,9 +4,17 @@ import filecmp
 import shutil
 
 # 変換元・先・バックアップディレクトリ
-source_dir = "./forms"
-target_dir = "./views"
-backup_dir = "./views_backup"
+sourceDir = "./forms"
+targetDir = "./views"
+backupDir = "./views_backup"
+condaEnv = "data-memo-transfer-PyQt5"
+
+userProfile = str(os.environ.get("USERPROFILE"))
+condaPath = os.path.abspath(os.path.join(userProfile, f"miniconda3/envs/{condaEnv}"))
+# condaLibPath = os.path.abspath(os.path.join(condaPath, "Library/bin"))
+pyuicPath = os.path.abspath(os.path.join(condaPath, "Scripts/pyuic5.exe"))
+# pythonPath = os.path.abspath(os.path.join(condaPath, "python.exe"))
+# os.environ["PATH"] = f"{condaLibPath};{os.environ['PATH']}"
 
 
 def ensure_dir(path):
@@ -17,7 +25,7 @@ def ensure_dir(path):
 def check_pyuic5_installed():
     try:
         subprocess.run(
-            ["pyuic5", "--version"],
+            [pyuicPath, "--version"],
             stdout=subprocess.DEVNULL,
             stderr=subprocess.DEVNULL,
         )
@@ -54,15 +62,15 @@ def merge_files(original, new, output):
 
 def compileUiToPy():
     check_pyuic5_installed()
-    ensure_dir(target_dir)
-    ensure_dir(backup_dir)
+    ensure_dir(targetDir)
+    ensure_dir(backupDir)
 
-    for filename in os.listdir(source_dir):
+    for filename in os.listdir(sourceDir):
         if filename.endswith(".ui"):
-            ui_file = os.path.join(source_dir, filename)
+            ui_file = os.path.join(sourceDir, filename)
             base_name = os.path.splitext(filename)[0]
-            py_file = os.path.join(target_dir, base_name + ".py")
-            backup_file = os.path.join(target_dir, base_name + "_tmp.py")
+            py_file = os.path.join(targetDir, base_name + ".py")
+            backup_file = os.path.join(targetDir, base_name + "_tmp.py")
 
             convert_ui_to_py(ui_file, backup_file)
 
