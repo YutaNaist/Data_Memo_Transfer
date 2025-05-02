@@ -15,14 +15,18 @@ def main():
     if getattr(sys, "frozen", False):
         import global_variable as global_variable
 
+        loggerName = "data_memo_transfer"
+        loggerName = "data_memo_transfer_debug"
+
         isBuild = True
-        logger = logging.getLogger("data_memo_transfer")
+        logger = logging.getLogger(loggerName)
         logger.info("Running as a bundled executable.")
     else:
         import global_variable_Local as global_variable
 
+        loggerName = "data_memo_transfer_debug"
         isBuild = False
-        logger = logging.getLogger("data_memo_transfer_debug")
+        logger = logging.getLogger(loggerName)
         logger.setLevel(logging.DEBUG)
         logger.info("Running as a script.")
 
@@ -44,6 +48,7 @@ def main():
     #         handler.setLevel(logging.DEBUG)
     # doc.makeLogger("settings/logDataMemoTransfer.json", name=__name__)
     # doc.setLogger(logger)
+    doc.setLoggerName(loggerName)
     doc.setIsBuild(isBuild)
     logger.info("Start Data Memo Transfer.")
     logger.info(f"arguments: {sys.argv}")
@@ -62,8 +67,8 @@ def main():
         msgBox.exec_()
         exit(1)
     processLock.writeLockInfo()
-    doc.loadFromTemporary()
 
+    doc.loadFromTemporary()
     doc.setUrlBase(URL_DIAMOND)
     doc.setDiCtExperimentInformation("str_save_directory", SAVE_DIRECTORY)
     doc.setDiCtExperimentInformation(

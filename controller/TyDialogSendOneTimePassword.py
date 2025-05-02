@@ -4,10 +4,12 @@ from typing import TYPE_CHECKING
 import sys
 import os
 import logging
+
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), "..")))
 
 if TYPE_CHECKING:
     from TyDocDataMemoTransfer import TyDocDataMemoTransfer
+
     # from controller.TyDialogLogin import TyDialogLogin
     # from controller.TyDialogRegisterPassword import TyDialogRegisterPassword
 from TyMessageSender import MessageSenderException
@@ -27,7 +29,7 @@ class TyDialogSendOneTimePassword(QtWidgets.QDialog):
             self.doc = doc
         else:
             self.doc = TyDocDataMemoTransfer()
-        self.logger = logging.getLogger("data_memo_transfer")
+        self.logger = logging.getLogger(self.doc.getLoggerName())
         self.loadUi()
 
         self.setSignal()
@@ -37,8 +39,14 @@ class TyDialogSendOneTimePassword(QtWidgets.QDialog):
         # self.window_Main = Window_Main(data_Model=data_Model)
 
     def loadUi(self):
-        uic.loadUi(r"forms\FormSendOneTimePassword.ui", self)
-        self.ui = self
+        if self.doc.getIsDarkMode():
+            from views.FormSendOneTimePassword import Ui_Dialog
+
+            self.ui = Ui_Dialog()
+            self.ui.setupUi(self)
+        else:
+            uic.loadUi(r"forms\FormSendOneTimePassword.ui", self)
+            self.ui = self
 
     def setSignal(self):
         self.ui.PB_Send_One_Time_Password.clicked.connect(self.sendOneTimePassword)

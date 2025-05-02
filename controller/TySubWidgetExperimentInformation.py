@@ -9,6 +9,7 @@ if TYPE_CHECKING:
 from PyQt5 import QtWidgets
 from PyQt5 import QtCore
 from PyQt5 import uic
+import logging
 
 
 class TySubWidgetExperimentInformation(QtWidgets.QWidget):
@@ -19,6 +20,7 @@ class TySubWidgetExperimentInformation(QtWidgets.QWidget):
             self.doc = doc
         else:
             self.doc = TyDocDataMemoTransfer()
+        self.logger = logging.getLogger(self.doc.loggerName)
         self.__loadUi()
         # self.ui = Ui_Widget_Experiment_Information()
 
@@ -37,7 +39,7 @@ class TySubWidgetExperimentInformation(QtWidgets.QWidget):
     #     self.data_Model = data_model
     # def loadUi(self):
     def __loadUi(self):
-        if self.doc.isBuild:
+        if self.doc.getIsBuild():
             from views.FormSubWidgetExperimentInformation import Ui_Form
 
             self.ui = Ui_Form()

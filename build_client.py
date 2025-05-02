@@ -10,6 +10,7 @@ from TyDocDataMemoTransfer import TyDocDataMemoTransfer
 from compileUiToPy import compileUiToPy
 
 # 設定
+isBuildLocalDebug = True
 condaEnv = "data-memo-transfer-PyQt5"
 userProfile = str(os.environ.get("USERPROFILE"))
 condaPath = os.path.abspath(os.path.join(userProfile, f"miniconda3/envs/{condaEnv}"))
@@ -19,15 +20,18 @@ pythonPath = os.path.abspath(os.path.join(condaPath, "python.exe"))
 os.environ["PATH"] = f"{condaLibPath};{os.environ['PATH']}"
 
 configFile = os.path.abspath("buildConfig/build_client_config.json")
-is_debug_mode = False
+isDisplayStd = True
 urlProposalHandlerBase = "http://127.0.0.1:6427"
 urlHttpsServerBase = "https://192.168.150.10:6426"
-# urlHttpsServerBase = "https://127.0.0.1:6426"
+
+if isBuildLocalDebug:
+    urlHttpsServerBase = "https://127.0.0.1:6426"
+    configFile = os.path.abspath("buildConfig/build_client_config_dev.json")
+
 doc = TyDocDataMemoTransfer()
 doc.isBuild = True
 messageSenderProposalHandler = TyMessageSender(urlProposalHandlerBase, doc)
 messageSenderHttpsServer = TyMessageSender(urlHttpsServerBase, doc)
-
 
 excluded_modules = [
     "tkinter",
@@ -52,7 +56,7 @@ pyinstaller_args = [
     "Data_Memo_Transfer.py",
     "--onefile",
 ]
-if not is_debug_mode:
+if not isDisplayStd:
     pyinstaller_args.append("--windowed")
 for module in excluded_modules:
     pyinstaller_args += ["--exclude-module", module]
@@ -175,7 +179,7 @@ def createGlobalVariableFile(configureJson):
         f.write(f'SHARE_DIRECTORY_IN_STORAGE = "{share_directory_in_storage}"\n')
         f.write(f'URL_DIAMOND = "{url_diamond}"\n')
         f.write(f'SAVE_DIRECTORY = "{save_directory}"\n')
-        f.write(f'LIST_MEASUREMENT_METHODS = "{listMeasurementMethods}"\n')
+        f.write(f"LIST_MEASUREMENT_METHODS = {listMeasurementMethods}\n")
 
 
 if __name__ == "__main__":

@@ -13,11 +13,13 @@ from controller.TySubWidgetSampleInformation import (
 from controller.TySubWidgetEquipmentInformation import (
     TySubWidgetEquipmentInformation,
 )
-from TyMessageSender import MessageSenderException
+
+# from TyMessageSender import MessageSenderException
 
 from PyQt5 import QtCore
 from PyQt5 import QtWidgets
 from PyQt5 import uic
+import logging
 
 from TyDocDataMemoTransfer import TyDocDataMemoTransfer
 
@@ -31,6 +33,20 @@ class TyWindowEditForm(QtWidgets.QMainWindow):
             self.doc = doc
         else:
             self.doc = TyDocDataMemoTransfer()
+        self.logger = logging.getLogger(self.doc.loggerName)
+        self.__loadUi()
+        self.listTypeForm = [
+            "experiment_information",
+            "sample_information",
+            "equipment_information",
+        ]
+        if type_Form is not None:
+            self.type_Form = type_Form
+        else:
+            self.type_Form = None
+        self.set_Signals()
+
+    def __loadUi(self):
         if self.doc.isBuild:
             from views.FormDialogEditInformation import Ui_Dialog
 
@@ -39,19 +55,6 @@ class TyWindowEditForm(QtWidgets.QMainWindow):
         else:
             uic.loadUi(r"forms/FormDialogEditInformation.ui", self)
             self.ui = self
-
-        self.listTypeForm = [
-            "experiment_information",
-            "sample_information",
-            "equipment_information",
-        ]
-
-        if type_Form is not None:
-            self.type_Form = type_Form
-        else:
-            self.type_Form = None
-
-        self.set_Signals()
 
     def set_Signals(self):
         self.ui.PB_OK.clicked.connect(self.save_Update)

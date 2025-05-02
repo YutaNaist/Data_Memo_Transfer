@@ -2,6 +2,7 @@ from __future__ import annotations
 from typing import TYPE_CHECKING
 import sys
 import os
+
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), "..")))
 
 if TYPE_CHECKING:
@@ -26,7 +27,7 @@ from controller.TySubWidgetEquipmentInformation import (
     TySubWidgetEquipmentInformation,
 )
 
-from TyMessageSender import TyMessageSender
+# from TyMessageSender import TyMessageSender
 from TyMessageSender import MessageSenderException
 
 from PyQt5 import QtCore
@@ -51,7 +52,7 @@ class TyMainWindow(QtWidgets.QMainWindow):
             self.doc = doc
         else:
             self.doc = TyDocDataMemoTransfer()
-        self.logger = logging.getLogger("data_memo_transfer")
+        self.logger = logging.getLogger(self.doc.getLoggerName())
         self.isForceCloseWindow = False
 
         self.currentIndexToolBox = 0
@@ -76,7 +77,7 @@ class TyMainWindow(QtWidgets.QMainWindow):
     # def __del__(self):
     #     self.finish_Experiment()
     def __loadUi(self) -> None:
-        if self.doc.isBuild:
+        if self.doc.getIsBuild():
             from views.FormMainWindow import Ui_MainWindow
 
             self.ui = Ui_MainWindow()
@@ -160,7 +161,7 @@ class TyMainWindow(QtWidgets.QMainWindow):
     def editExperimentInformation(self) -> None:
         self.windowEditForm = Dialog_Edit_Form(
             doc=self.doc,
-            type_Form="experiment_information",
+            typeForm="experiment_information",
             isTemplate=True,
         )
         self.windowEditForm.setInputForm()
@@ -171,7 +172,7 @@ class TyMainWindow(QtWidgets.QMainWindow):
 
     def editSampleInformation(self) -> None:
         self.windowEditForm = Dialog_Edit_Form(
-            doc=self.doc, type_Form="sample_information", isTemplate=True
+            doc=self.doc, typeForm="sample_information", isTemplate=True
         )
         self.windowEditForm.setInputForm()
         self.windowEditForm.setSignalUpdateToMetadataClipboard(
@@ -182,7 +183,7 @@ class TyMainWindow(QtWidgets.QMainWindow):
     def editEquipmentInformation(self) -> None:
         self.windowEditForm = Dialog_Edit_Form(
             doc=self.doc,
-            type_Form="equipment_information",
+            typeForm="equipment_information",
             isTemplate=True,
         )
         self.windowEditForm.setInputForm()
@@ -192,13 +193,14 @@ class TyMainWindow(QtWidgets.QMainWindow):
         self.windowEditForm.show()
 
     def refreshFiles(self) -> None:
+        self.logger.info("start refreshing files")
+
         def checkIndex(strFileName: str, listFileNames: List[str]) -> int:
             if strFileName in listFileNames:
                 return listFileNames.index(strFileName)
             else:
                 return -1
 
-        self.logger.info("start refreshing files")
         self.ui.LAB_File_List.setText("File List")
         # save_Directory = self.data_Model.get_Dict_Data_Model(
         #    "str_share_directory_in_storage")
@@ -292,7 +294,7 @@ class TyMainWindow(QtWidgets.QMainWindow):
 
             subWidgetEachFilesInformation.setIndex(i)
             subWidgetEachFilesInformation.setFileName(file)
-            subWidgetEachFilesInformation.setTextFromDoc()
+            subWidgetEachFilesInformation.readTextFromDoc()
             subWidgetEachFilesInformation.updateTitle()
             if newListFileNames[i] == focusedFileName:
                 self.ui.toolBox.setCurrentIndex(i)

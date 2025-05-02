@@ -7,16 +7,20 @@ if TYPE_CHECKING:
 from PyQt5 import QtWidgets
 from PyQt5 import QtCore
 from PyQt5 import uic
+import logging
 
 
 class TySubWidgetSampleInformation(QtWidgets.QWidget):
 
-    def __init__(self, parent=None, doc: TyDocDataMemoTransfer = None, isEditable=True):
+    def __init__(
+        self, parent=None, doc: TyDocDataMemoTransfer = None, isEditable: bool = True
+    ):
         super().__init__(parent)
         if doc is not None:
             self.doc = doc
         else:
             self.doc = TyDocDataMemoTransfer()
+        self.logger = logging.getLogger(self.doc.getLoggerName())
         self.__loadUi()
         # self.ui.setupUi(self)
         self.timer = QtCore.QTimer()
@@ -33,7 +37,7 @@ class TySubWidgetSampleInformation(QtWidgets.QWidget):
             self.ui.TE_Sample_Comment.setReadOnly(True)
 
     def __loadUi(self):
-        if self.doc.isBuild:
+        if self.doc.getIsBuild():
             from views.FormSubWidgetSampleInformation import Ui_Form
 
             self.ui = Ui_Form()

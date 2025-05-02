@@ -9,6 +9,7 @@ if TYPE_CHECKING:
 from PyQt5 import QtWidgets
 from PyQt5 import QtCore
 from PyQt5 import uic
+import logging
 
 
 class TySubWidgetEquipmentInformation(QtWidgets.QWidget):
@@ -19,6 +20,7 @@ class TySubWidgetEquipmentInformation(QtWidgets.QWidget):
             self.doc = doc
         else:
             self.doc = TyDocDataMemoTransfer()
+        self.logger = logging.getLogger(self.doc.loggerName)
         # self.ui = Ui_Widget_Equipment_Information()
         # self.ui.setupUi(self)
         self.__loadUi()
@@ -33,7 +35,7 @@ class TySubWidgetEquipmentInformation(QtWidgets.QWidget):
             self.ui.CMB_Method.setEditable(False)
 
     def __loadUi(self):
-        if self.doc.isBuild:
+        if self.doc.getIsBuild():
             from views.FormSubWidgetEquipmentInformation import Ui_Form
 
             self.ui = Ui_Form()

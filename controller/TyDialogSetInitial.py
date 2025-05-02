@@ -13,7 +13,7 @@ from controller.TySubWidgetSampleInformation import (
 from controller.TySubWidgetEquipmentInformation import (
     TySubWidgetEquipmentInformation,
 )
-from controller.TyMainWindow import TyMainWindow
+# from controller.TyMainWindow import TyMainWindow
 
 
 # from metaDataConverter import MetaDataConverter
@@ -33,7 +33,7 @@ class TyDialogSetInitial(QtWidgets.QDialog):
             self.doc = TyDocDataMemoTransfer()
         # self.data_Model = DataModel()
         # self.window_Main = Window_Main()
-        self.logger = logging.getLogger("data_memo_transfer")
+        self.logger = logging.getLogger(self.doc.getLoggerName())
 
         super().__init__(parent)
         # self.ui = Dialog_Set_Initial_ui.Ui_Dialog()
@@ -59,7 +59,7 @@ class TyDialogSetInitial(QtWidgets.QDialog):
         self.setWindowTitle("Set Initial Information 1/3")
 
     def __loadUi(self):
-        if self.doc.isBuild:
+        if self.doc.getIsBuild():
             from views.FormDialogSetInitial import Ui_Dialog
 
             self.ui = Ui_Dialog()

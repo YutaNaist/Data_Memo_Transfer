@@ -13,17 +13,25 @@ from TyDocDataMemoTransfer import TyDocDataMemoTransfer
 
 from PyQt5 import QtWidgets
 from PyQt5 import uic
+import logging
 
 
 class TySubWindowEditFileInformation(QtWidgets.QMainWindow):
-    def __init__(self, parent=None, doc=None, index_File_Information=0):
+    def __init__(self, parent=None, doc=None, indexFileInformation: int = 0):
         if doc is not None:
             self.doc = doc
         else:
             self.doc = TyDocDataMemoTransfer()
-
         super().__init__(parent)
-        if self.doc.isBuild:
+        self.logger = logging.getLogger(self.doc.getLoggerName())
+        self.__LoadUI()
+        self.indexFileInformation = indexFileInformation
+        self.setFileInformation()
+
+        self.set_Signal()
+
+    def __LoadUI(self):
+        if self.doc.getIsBuild():
             from views.FormSubWidgetEachFile import Ui_Form
 
             self.ui = Ui_Form()
@@ -32,34 +40,30 @@ class TySubWindowEditFileInformation(QtWidgets.QMainWindow):
             uic.loadUi(r"forms/FormSubWidgetEachFile.ui", self)
             self.ui = self
 
-        # self.ui = Ui_Window_Edit_File_Information()
-        # self.ui.setupUi(self)
-
-        self.index_File_Information = index_File_Information
+    def setFileInformation(self) -> None:
+        """Set the file information index."""
         self.sub_Widget_Equipment_Information = TySubWidgetEquipmentInformation(
             doc=self.doc
         )
         self.sub_Widget_Sample_Information = TySubWidgetSampleInformation(doc=self.doc)
         self.file_Name = self.doc.get_File_Data_By_Index_And_Key(
-            self.index_File_Information, "file_name"
+            self.indexFileInformation, "file_name"
         )
         self.setWindowTitle(self.file_Name)
         self.ui.LAB_Sample.setText("Sample of " + self.file_Name)
         self.ui.LAB_Equipment.setText("Equipment of " + self.file_Name)
 
         self.sub_Widget_Sample_Information.set_All_From_Data_Model_File_Information(
-            self.index_File_Information
+            self.indexFileInformation
         )
         self.sub_Widget_Equipment_Information.set_All_From_Data_Model_File_Information(
-            self.index_File_Information
+            self.indexFileInformation
         )
 
         self.ui.VL_Sample_Information.addWidget(self.sub_Widget_Sample_Information)
         self.ui.VL_Instrument_Information.addWidget(
             self.sub_Widget_Equipment_Information
         )
-
-        self.set_Signal()
 
     def set_Signal(self):
         self.ui.PB_OK.clicked.connect(self.set_To_Parent_File_Information)
@@ -73,17 +77,17 @@ class TySubWindowEditFileInformation(QtWidgets.QMainWindow):
 
     def set_To_Parent_File_Information(self):
         self.doc.set_File_Data_By_Index_And_Key(
-            self.index_File_Information,
+            self.indexFileInformation,
             "file_sample_id",
             self.sub_Widget_Sample_Information.ui.LE_Sample_ID.text(),
         )
         self.doc.set_File_Data_By_Index_And_Key(
-            self.index_File_Information,
+            self.indexFileInformation,
             "file_sample_name",
             self.sub_Widget_Sample_Information.ui.LE_Sample_Name.text(),
         )
         self.doc.set_File_Data_By_Index_And_Key(
-            self.index_File_Information,
+            self.indexFileInformation,
             "file_sample_comment",
             self.sub_Widget_Sample_Information.ui.TE_Sample_Comment.toPlainText(),
         )
@@ -93,27 +97,27 @@ class TySubWindowEditFileInformation(QtWidgets.QMainWindow):
     def read_Current_Template(self):
         current_Template = self.doc.get_All_Template_Data()
         self.doc.set_File_Data_By_Index_And_Key(
-            self.index_File_Information, "file_sample_id", current_Template["sample_id"]
+            self.indexFileInformation, "file_sample_id", current_Template["sample_id"]
         )
         self.doc.set_File_Data_By_Index_And_Key(
-            self.index_File_Information,
+            self.indexFileInformation,
             "file_sample_name",
             current_Template["sample_name"],
         )
         self.doc.set_File_Data_By_Index_And_Key(
-            self.index_File_Information,
+            self.indexFileInformation,
             "file_sample_comment",
             current_Template["sample_comment"],
         )
         self.doc.set_File_Data_By_Index_And_Key(
-            self.index_File_Information,
+            self.indexFileInformation,
             "file_equipment_contents",
             current_Template["equipment_contents"],
         )
 
         self.sub_Widget_Sample_Information.set_All_From_Data_Model_File_Information(
-            self.index_File_Information
+            self.indexFileInformation
         )
         self.sub_Widget_Equipment_Information.set_All_From_Data_Model_File_Information(
-            self.index_File_Information
+            self.indexFileInformation
         )

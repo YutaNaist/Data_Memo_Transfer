@@ -30,10 +30,9 @@ class TyDialogLogin(QtWidgets.QDialog):
             self.doc = doc
         else:
             self.doc = TyDocDataMemoTransfer()
-        if self.doc.isBuild:
-            self.logger = logging.getLogger("data_memo_transfer")
-        else:
-            self.logger = logging.getLogger("data_memo_transfer_debug")
+
+        self.logger = logging.getLogger(self.doc.getLoggerName())
+        if not self.doc.getIsBuild():
             self.logger.setLevel(logging.DEBUG)
         self.logger.info("----------Dialog Log in----------")
         # self.ui = Dialog_Ask_Experiment_ID_ui.Ui_Dialog()
@@ -49,8 +48,7 @@ class TyDialogLogin(QtWidgets.QDialog):
         # self.window_Main = Window_Main(data_Model=data_Model)
 
     def __loadUi(self):
-        if self.doc.isBuild:
-            # if True:
+        if self.doc.getIsBuild():
             from views.FormDiamondLogin import Ui_Dialog
 
             self.ui = Ui_Dialog()
@@ -111,6 +109,7 @@ class TyDialogLogin(QtWidgets.QDialog):
         except Exception as e:
             errorMessage = f"Error: {e}"
             self.logger.error(errorMessage)
+            self.doc.messageBox("Error", errorMessage)
             stackTrace = traceback.format_exc()  # スタックトレースを取得
             self.logger.debug(f"Stack Trace:\n{stackTrace}")
             return (False, errorMessage)
@@ -160,20 +159,13 @@ class TyDialogLogin(QtWidgets.QDialog):
                         message += "Are you sure to start experiment?\n"
                         retval = self.doc.messageBox("Warning", message, 2)
                         if retval == 1024:
-                            dictExperimentInformation["dict_user_information"] = (
-                                self.proposal
-                            )
-                            dictExperimentInformation[
-                                "str_share_directory_in_storage"
-                            ] = self.doc.getDictExperimentInformation(
-                                "str_share_directory_in_storage"
-                            )
-                            self.doc.setAllDictExperimentInformation(
-                                dictExperimentInformation
-                            )
+                            isOverwrite = True
                         else:
+                            isOverwrite = False
                             return (False, "Status is False")
                     else:
+                        isOverwrite = True
+                    if isOverwrite:
                         dictExperimentInformation["dict_user_information"] = (
                             self.proposal
                         )
@@ -182,8 +174,16 @@ class TyDialogLogin(QtWidgets.QDialog):
                                 "str_share_directory_in_storage"
                             )
                         )
+                        dictExperimentInformation["str_save_directory"] = (
+                            self.doc.getDictExperimentInformation("str_save_directory")
+                        )
                         self.doc.setAllDictExperimentInformation(
                             dictExperimentInformation
+                        )
+                        self.doc.appendListMeasurementMethod(
+                            self.doc.dictExperimentInformation["dict_clipboard"][
+                                "equipment"
+                            ]["method"]
                         )
                 else:
                     self.doc.setDiCtExperimentInformation(
@@ -221,14 +221,14 @@ if __name__ == "__main__":
     sys.path.append(
         os.path.abspath(os.path.join(os.path.dirname(__file__), os.path.pardir))
     )
-    from TyDocDataMemoTransfer import TyDocDataMemoTransfer
+    from TyDocDataMemoTransfer import TyDocDataMemoTransfer as DocDataMemoTransfer
     import buildConfig.global_variable_Local as global_variable
 
     URL_DIAMOND = global_variable.URL_DIAMOND
     SAVE_DIRECTORY = global_variable.SAVE_DIRECTORY
     SHARE_DIRECTORY_IN_STORAGE = global_variable.SHARE_DIRECTORY_IN_STORAGE
 
-    doc = TyDocDataMemoTransfer()
+    doc = DocDataMemoTransfer()
     doc.isBuild = False
     logger = logging.getLogger("data_memo_transfer_debug")
     logger.setLevel(logging.DEBUG)

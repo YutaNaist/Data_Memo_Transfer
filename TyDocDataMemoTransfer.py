@@ -166,6 +166,7 @@ class TyDocDataMemoTransfer:
         self.viewState = "log_in"
         self.currentWindow = None
         self.listMeasurementMethod = []
+        self.loggerName = "data_memo_transfer"
 
     def initializeExperimentInformation(self):
         self.dictExperimentInformation["str_url_diamond"] = "http://192.168.0.10:5462"
@@ -208,11 +209,16 @@ class TyDocDataMemoTransfer:
 
     def setIsBuild(self, isBuild: bool) -> None:
         self.isBuild = isBuild
-        if self.isBuild:
-            self.logger = logging.getLogger("data_memo_transfer")
-        else:
-            self.logger = logging.getLogger("data_memo_transfer_debug")
-            self.logger.setLevel(logging.DEBUG)
+
+    def getIsBuild(self) -> bool:
+        return self.isBuild
+
+    def setLoggerName(self, loggerName: str) -> None:
+        self.loggerName = loggerName
+        self.logger = logging.getLogger(loggerName)
+
+    def getLoggerName(self) -> str:
+        return self.loggerName
 
     def setAllDictExperimentInformation(self, dictExperimentInformation):
         for key, value in dictExperimentInformation.items():
@@ -553,6 +559,12 @@ class TyDocDataMemoTransfer:
 
     def setListMeasurementMethod(self, listMeasurementMethod: List[str]) -> None:
         self.listMeasurementMethod = listMeasurementMethod
+
+    def appendListMeasurementMethod(self, strMeasurementMethod: str) -> None:
+        self.logger.debug(f"List Measurement Method: {self.listMeasurementMethod}")
+        self.logger.debug(f"Append Measurement Method: {strMeasurementMethod}")
+        if strMeasurementMethod not in self.listMeasurementMethod:
+            self.listMeasurementMethod.append(strMeasurementMethod)
 
     def changeView(self, state: StateType, isTest: bool = False) -> bool:
         currentState = self.viewState

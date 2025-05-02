@@ -12,6 +12,7 @@ from PyQt5 import QtWidgets
 from PyQt5 import QtGui
 from PyQt5 import QtCore
 from PyQt5 import uic
+import logging
 
 
 class TySubWidgetEachFiles(QtWidgets.QWidget):
@@ -25,6 +26,7 @@ class TySubWidgetEachFiles(QtWidgets.QWidget):
             self.doc = doc
         else:
             self.doc = TyDocDataMemoTransfer()
+        self.logger = logging.getLogger(self.doc.getLoggerName())
         self.timer = QtCore.QTimer()
         self.timer.setSingleShot(True)
         super().__init__(parent)
@@ -49,7 +51,7 @@ class TySubWidgetEachFiles(QtWidgets.QWidget):
         self.ui.PB_Edit_Sample_Information.setIcon(QtGui.QIcon("./icons/edit.png"))
 
     def __loadUi(self):
-        if self.doc.isBuild:
+        if self.doc.getIsBuild():
             from views.FormSubWidgetEachFile import Ui_Form
 
             self.ui = Ui_Form()
@@ -73,7 +75,7 @@ class TySubWidgetEachFiles(QtWidgets.QWidget):
         self.ui.PB_Edit_Equipment_Information.clicked.connect(
             self.editEquipmentInformation
         )
-        self.signal_Edit_Sample_Information.connect(self.setTextFromDoc)
+        self.signal_Edit_Sample_Information.connect(self.readTextFromDoc)
 
     def setSignalUpdateToMetadataClipboard(self, signal: QtCore.pyqtSignal) -> None:
         self.signalUpdataToMetadataClipboard = signal
@@ -158,7 +160,7 @@ class TySubWidgetEachFiles(QtWidgets.QWidget):
             self.ui.RB_ARIM_Upload.setChecked(False)
             self.ui.RB_ARIM_Not_Upload.setChecked(True)
 
-    def setTextFromDoc(self) -> None:
+    def readTextFromDoc(self) -> None:
         # self.index = self.data_Model.check_Index_File_Name(self.file_Name)
         dict_File_Data = self.doc.getFileInformation(self.index)
         self.ui.TE_Free_Comment.setPlainText(dict_File_Data["comment"])
@@ -184,6 +186,7 @@ class TySubWidgetEachFiles(QtWidgets.QWidget):
             )
 
     def setFileCommentToDoc(self) -> None:
+        self.logger.debug("set file comment")
         dictFileData = self.doc.getFileInformation(self.index)
         dictFileData["comment"] = self.ui.TE_Free_Comment.toPlainText()
         self.doc.setFileInformation(self.index, dictFileData)
@@ -200,7 +203,7 @@ class TySubWidgetEachFiles(QtWidgets.QWidget):
         # self.sub_Window_Edit_Sample_Information.show()
         self.dialogEditSampleInformation = Dialog_Edit_Form(
             doc=self.doc,
-            type_Form="sample_information",
+            typeForm="sample_information",
             isTemplate=False,
             index=self.index,
         )
@@ -224,7 +227,7 @@ class TySubWidgetEachFiles(QtWidgets.QWidget):
         # self.sub_Window_Edit_Sample_Information.show()
         self.dialogEditEquipmentInformation = Dialog_Edit_Form(
             doc=self.doc,
-            type_Form="equipment_information",
+            typeForm="equipment_information",
             isTemplate=False,
             index=self.index,
         )
@@ -240,11 +243,10 @@ class TySubWidgetEachFiles(QtWidgets.QWidget):
         # self.update_Title()
 
     def setSampleAndEquipmentInformation(self, index: int) -> None:
+        self.logger.debug("set sample and equipment information")
         dictFileData = self.doc.getFileInformation(index)
         strFileInformation = ""
-        strFileInformation += "Sample Name: {}\n".format(
-            dictFileData["sample"]["name"]
-        )
+        strFileInformation += "Sample Name: {}\n".format(dictFileData["sample"]["name"])
         strFileInformation += "Sample ID: {}\n".format(dictFileData["sample"]["id"])
         strFileInformation += "Sample Comment: {}\n".format(
             dictFileData["sample"]["comment"]

@@ -32,7 +32,7 @@ class TyDialogRegisterPassword(QtWidgets.QDialog):
             self.doc = doc
         else:
             self.doc = TyDocDataMemoTransfer()
-        self.logger = logging.getLogger("data_memo_transfer")
+        self.logger = logging.getLogger(self.doc.getLoggerName())
 
         self.experimentId = self.doc.getExperimentId()
         self.userMailAddress = self.doc.getMailAddress()
@@ -53,8 +53,14 @@ class TyDialogRegisterPassword(QtWidgets.QDialog):
         # self.window_Main = Window_Main(data_Model=data_Model)
 
     def loadUi(self):
-        uic.loadUi(r"forms\FormRegisterNewPassword.ui", self)
-        self.ui = self
+        if self.doc.getIsDarkMode():
+            from views.FormRegisterNewPassword import Ui_Dialog
+
+            self.ui = Ui_Dialog()
+            self.ui.setupUi(self)
+        else:
+            uic.loadUi(r"forms\FormRegisterNewPassword.ui", self)
+            self.ui = self
 
     def setSignal(self):
         self.ui.PB_OK.clicked.connect(self.registerPassword)

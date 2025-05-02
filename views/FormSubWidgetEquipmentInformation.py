@@ -23,13 +23,10 @@ class Ui_Form(object):
         self.CMB_Method = QtWidgets.QComboBox(Form)
         self.CMB_Method.setEditable(False)
         self.CMB_Method.setObjectName("CMB_Method")
-        self.CMB_Method.addItem("")
-        self.CMB_Method.addItem("")
-        self.CMB_Method.addItem("")
-        self.CMB_Method.addItem("")
-        self.CMB_Method.addItem("")
         self.verticalLayout.addWidget(self.CMB_Method)
-        spacerItem = QtWidgets.QSpacerItem(17, 223, QtWidgets.QSizePolicy.Minimum, QtWidgets.QSizePolicy.Expanding)
+        spacerItem = QtWidgets.QSpacerItem(
+            17, 223, QtWidgets.QSizePolicy.Minimum, QtWidgets.QSizePolicy.Expanding
+        )
         self.verticalLayout.addItem(spacerItem)
 
         self.retranslateUi(Form)
@@ -38,16 +35,17 @@ class Ui_Form(object):
     def retranslateUi(self, Form):
         _translate = QtCore.QCoreApplication.translate
         Form.setWindowTitle(_translate("Form", "Form"))
-        self.label.setText(_translate("Form", "<html><head/><body><p><span style=\" font-weight:700;\">*Experiment Method</span></p></body></html>"))
-        self.CMB_Method.setItemText(0, _translate("Form", "Powder diffraction"))
-        self.CMB_Method.setItemText(1, _translate("Form", "Thin film"))
-        self.CMB_Method.setItemText(2, _translate("Form", "2D diffraction map"))
-        self.CMB_Method.setItemText(3, _translate("Form", "Inverse lattice map"))
-        self.CMB_Method.setItemText(4, _translate("Form", "Other"))
+        self.label.setText(
+            _translate(
+                "Form",
+                '<html><head/><body><p><span style=" font-weight:700;">*Experiment Method</span></p></body></html>',
+            )
+        )
 
 
 if __name__ == "__main__":
     import sys
+
     app = QtWidgets.QApplication(sys.argv)
     Form = QtWidgets.QWidget()
     ui = Ui_Form()
