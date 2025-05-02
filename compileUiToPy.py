@@ -22,7 +22,7 @@ def ensure_dir(path):
         os.makedirs(path)
 
 
-def check_pyuic5_installed():
+def checkPyuciInstalled():
     try:
         subprocess.run(
             [pyuicPath, "--version"],
@@ -36,12 +36,12 @@ def check_pyuic5_installed():
         exit(1)
 
 
-def convert_ui_to_py(ui_path, py_path_tmp):
+def converttUiToPyMain(ui_path, py_path_tmp):
     print(f"変換中: {ui_path} -> {py_path_tmp}")
-    subprocess.run(["pyuic5", "-x", ui_path, "-o", py_path_tmp], check=True)
+    subprocess.run([pyuicPath, "-x", ui_path, "-o", py_path_tmp], check=True)
 
 
-def merge_files(original, new, output):
+def mergeFiles(original, new, output):
     with open(original, encoding="utf-8") as f1, open(new, encoding="utf-8") as f2:
         original_lines = f1.readlines()
         new_lines = f2.readlines()
@@ -61,7 +61,7 @@ def merge_files(original, new, output):
 
 
 def compileUiToPy():
-    check_pyuic5_installed()
+    checkPyuciInstalled()
     ensure_dir(targetDir)
     ensure_dir(backupDir)
 
@@ -72,10 +72,10 @@ def compileUiToPy():
             py_file = os.path.join(targetDir, base_name + ".py")
             backup_file = os.path.join(targetDir, base_name + "_tmp.py")
 
-            convert_ui_to_py(ui_file, backup_file)
+            converttUiToPyMain(ui_file, backup_file)
 
             if os.path.exists(py_file):
-                merge_files(backup_file, py_file, py_file)
+                mergeFiles(backup_file, py_file, py_file)
             else:
                 shutil.move(backup_file, py_file)
                 print(f"生成完了: {py_file}")

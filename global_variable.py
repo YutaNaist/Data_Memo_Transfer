@@ -1,4 +1,4 @@
-SHARE_DIRECTORY_IN_STORAGE = "D:/Share/NR-103"
-URL_DIAMOND = "https://192.168.150.10:6426"
-SAVE_DIRECTORY = "X:/"
-LIST_MEASUREMENT_METHODS = "['1d spectra', '2d spectra map', 'other']"
+SHARE_DIRECTORY_IN_STORAGE = "D:/Share/NR-000"
+URL_DIAMOND = "https://localhost:6426"
+SAVE_DIRECTORY = "D:/Share/NR-000"
+LIST_MEASUREMENT_METHODS = "['dummy']"
