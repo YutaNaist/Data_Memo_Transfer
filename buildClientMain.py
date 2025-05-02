@@ -162,7 +162,7 @@ def createDummyProposal():
 
 
 def runPyinstaller(py_path, script_path, args):
-    cmd = [str(py_path), "colorlizedPyinstaller", str(script_path)] + args
+    cmd = [str(py_path), "colorlizedPyinstaller.py", str(script_path)] + args
     subprocess.run(cmd, check=True)
 
 
