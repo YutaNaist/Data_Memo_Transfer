@@ -13,7 +13,7 @@ def main():
     # * global_variable.pyが存在する場合はbuild_client.ps1から実行されたと判断。
     # * テストする場合はglobal_variable_Local.pyを使用。(global_variable.pyは削除する)
     if getattr(sys, "frozen", False):
-        import global_variable as global_variable
+        import global_variable as global_variable  # type: ignore
 
         loggerName = "data_memo_transfer"
         loggerName = "data_memo_transfer_debug"
