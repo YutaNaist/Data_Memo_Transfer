@@ -8,7 +8,7 @@ import logging
 # import urllib3
 import hashlib
 import base64
-from typing import TypedDict, Any, List, Dict, cast, Literal
+from typing import TypedDict, Any, List, Dict, Literal
 
 from TyMessageSender import TyMessageSender  # , MessageSenderException
 from PyQt5 import QtWidgets
@@ -160,8 +160,9 @@ class TyDocDataMemoTransfer:
         self.salt = "abcd"
         # self._logger = logging.getLogger(__name__)
         self.initializeExperimentInformation()
-        urlBase = self.getDictExperimentInformation("str_url_diamond")
-        self.messageSender = TyMessageSender(urlBase, self)
+        self.messageSender = TyMessageSender(
+            self.getDictExperimentInformation("str_url_diamond"), self
+        )
         self.__hashPassword = ""
         self.viewState = "log_in"
         self.currentWindow = None
@@ -204,7 +205,8 @@ class TyDocDataMemoTransfer:
         self.dictExperimentInformation["dict_clipboard"] = dict_Template_Clipboard
 
     # Function of Template Data
-    def getAllDictExperimentInformation(self):
+    def getAllDictExperimentInformation(self) -> TyExperimentInformation:
+        # return cast(TyExperimentInformation, self.dictExperimentInformation)
         return self.dictExperimentInformation
 
     def setIsBuild(self, isBuild: bool) -> None:
@@ -227,7 +229,7 @@ class TyDocDataMemoTransfer:
             else:
                 self.dictExperimentInformation[key] = value
 
-    def getDictExperimentInformation(self, key):
+    def getDictExperimentInformation(self, key: str) -> Any:
         try:
             return self.dictExperimentInformation[key]
         except KeyError:
@@ -280,17 +282,17 @@ class TyDocDataMemoTransfer:
         # self.writeToLogger("delete temporary file")
         self.logger.info("delete temporary file")
 
-    def getFillClipboard(self) -> dict:
-        return copy.copy(self.dictExperimentInformation["dict_clipboard"])
+    def getFillClipboard(self) -> TyClipboardInfo:
+        return copy.deepcopy(self.dictExperimentInformation["dict_clipboard"])
 
-    def getAllFileInformation(self) -> list:
-        return self.dictExperimentInformation["list_file_data"]
+    def getAllFileInformation(self) -> TyFileDataInfo:
+        return copy.deepcopy(self.dictExperimentInformation["list_file_data"])
 
-    def getFileNameList(self) -> list:
-        list_File_Name = []
+    def getFileNameList(self) -> List[str]:
+        listFileName = []
         for dict_File_Information in self.dictExperimentInformation["list_file_data"]:
-            list_File_Name.append(dict_File_Information["filename"])
-        return list_File_Name
+            listFileName.append(dict_File_Information["filename"])
+        return listFileName
 
     def resetFileData(self) -> None:
         self.dictExperimentInformation["list_file_data"] = []
@@ -299,7 +301,8 @@ class TyDocDataMemoTransfer:
         self.dictExperimentInformation["list_file_data"].append(dict_File_Information)
 
     def getFileInformation(self, index: int) -> TyClipboardInfo:
-        if index == -1:
+        if index < 0 or index >= len(self.dictExperimentInformation["list_file_data"]):
+            self.logger.warning("Index out of range")
             return copy.copy(self.dictExperimentInformation["dict_clipboard"])
         else:
             return self.dictExperimentInformation["list_file_data"][index]
@@ -320,7 +323,7 @@ class TyDocDataMemoTransfer:
             return -1
 
     # meta data converter for diamond
-    def getListDictMetaData(self) -> list:
+    def getListDictMetaData(self) -> List[TyMetadata]:
         listDictMetaData = []
         listFileNames = self.getFileNameList()
         for index, file_Name in enumerate(listFileNames):
