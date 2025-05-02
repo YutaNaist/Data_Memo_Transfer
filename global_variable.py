@@ -1,4 +1,0 @@
-SHARE_DIRECTORY_IN_STORAGE = "D:/Share/NR-000"
-URL_DIAMOND = "https://localhost:6426"
-SAVE_DIRECTORY = "D:/Share/NR-000"
-LIST_MEASUREMENT_METHODS = "['dummy']"
