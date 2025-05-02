@@ -570,25 +570,35 @@ class TyDocDataMemoTransfer:
             self.listMeasurementMethod.append(strMeasurementMethod)
 
     def changeView(self, state: StateType, isTest: bool = False) -> bool:
-        currentState = self.viewState
-        self.logger.info(f"Change View from {currentState} to {state}")
-        self.viewState = state
-        newWindow = self.__setView(state)
-        if newWindow is None:
-            self.logger.debug(f"View State: {state} is not defined.")
-            self.viewState = currentState
+        try:
+            currentState = self.viewState
+            self.logger.info(f"Change View from {currentState} to {state}")
+            self.viewState = state
+            newWindow = self.__setView(state)
+            if newWindow is None:
+                self.logger.debug(f"View State: {state} is not defined.")
+                self.viewState = currentState
+                return False
+            if not (isTest):
+                self.__changeViewMain(newWindow)
+            else:
+                self.messageBox("Test", f"View is changed to {state}", 1)
+            return True
+        except Exception as e:
+            self.logger.error(f"Error: {e}")
+            self.messageBox("Error", f"Failed to change View: {e}", 1)
             return False
-        if not (isTest):
-            self.__changeViewMain(newWindow)
-        else:
-            self.messageBox("Test", f"View is changed to {state}", 1)
-        return True
 
     def createView(self, state: StateType):
-        self.logger.info(f"Create View To: {state}")
-        newWindow = self.__setView(state)
-        self.__changeViewMain(newWindow, isChange=False)
-        return
+        try:
+            self.logger.info(f"Create View To: {state}")
+            newWindow = self.__setView(state)
+            self.__changeViewMain(newWindow, isChange=False)
+            return
+        except Exception as e:
+            self.logger.error(f"Error: {e}")
+            self.messageBox("Error", f"Failed to create View: {e}", 1)
+            return False
 
     def __setView(self, state: StateType):
         self.logger.debug(f"Set View: {state}")
