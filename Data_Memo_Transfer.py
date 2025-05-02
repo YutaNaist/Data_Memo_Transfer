@@ -12,22 +12,26 @@ def main():
     # * build_client.ps1から実行されたかどうかを判別。
     # * global_variable.pyが存在する場合はbuild_client.ps1から実行されたと判断。
     # * テストする場合はglobal_variable_Local.pyを使用。(global_variable.pyは削除する)
+    isDisplayDebug = False  # Trueにするとデバッグ用のログが出力される。
+
+    if isDisplayDebug:
+        loggerName = "data_memo_transfer_debug"
+        logger = logging.getLogger(loggerName)
+    else:
+        loggerName = "data_memo_transfer"
+        logger = logging.getLogger(loggerName)
+        logger.setLevel(logging.DEBUG)
+
     if getattr(sys, "frozen", False):
         import global_variable as global_variable  # type: ignore
 
-        loggerName = "data_memo_transfer"
-        loggerName = "data_memo_transfer_debug"
-
         isBuild = True
-        logger = logging.getLogger(loggerName)
         logger.info("Running as a bundled executable.")
     else:
         import global_variable_Local as global_variable
 
         loggerName = "data_memo_transfer_debug"
         isBuild = False
-        logger = logging.getLogger(loggerName)
-        logger.setLevel(logging.DEBUG)
         logger.info("Running as a script.")
 
         # if os.path.exists("global_variable.py"):

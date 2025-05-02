@@ -1,12 +1,13 @@
 import os
 import subprocess
-import filecmp
+
+# import filecmp
 import shutil
 
 # 変換元・先・バックアップディレクトリ
-sourceDir = "./forms"
-targetDir = "./views"
-backupDir = "./views_backup"
+formSourceDir = "./forms"
+viewTargetDir = "./views"
+viewBackupDir = "./views_backup"
 condaEnv = "data-memo-transfer-PyQt5"
 
 userProfile = str(os.environ.get("USERPROFILE"))
@@ -62,15 +63,15 @@ def mergeFiles(original, new, output):
 
 def compileUiToPy():
     checkPyuciInstalled()
-    ensure_dir(targetDir)
-    ensure_dir(backupDir)
+    ensure_dir(viewTargetDir)
+    ensure_dir(viewBackupDir)
 
-    for filename in os.listdir(sourceDir):
+    for filename in os.listdir(formSourceDir):
         if filename.endswith(".ui"):
-            ui_file = os.path.join(sourceDir, filename)
+            ui_file = os.path.join(formSourceDir, filename)
             base_name = os.path.splitext(filename)[0]
-            py_file = os.path.join(targetDir, base_name + ".py")
-            backup_file = os.path.join(targetDir, base_name + "_tmp.py")
+            py_file = os.path.join(viewTargetDir, base_name + ".py")
+            backup_file = os.path.join(viewTargetDir, base_name + "_tmp.py")
 
             converttUiToPyMain(ui_file, backup_file)
 

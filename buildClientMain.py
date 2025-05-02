@@ -10,7 +10,9 @@ from TyDocDataMemoTransfer import TyDocDataMemoTransfer
 from compileUiToPy import compileUiToPy
 
 # 設定
-isBuildLocalDebug = True
+isBuildLocalDebug = False  # True: ローカルデバッグ用、False: 本番ビルド用
+isDisplayStd = False  # True: コンソール表示、False: GUIのみ
+
 condaEnv = "data-memo-transfer-PyQt5"
 userProfile = str(os.environ.get("USERPROFILE"))
 condaPath = os.path.abspath(os.path.join(userProfile, f"miniconda3/envs/{condaEnv}"))
@@ -20,7 +22,6 @@ pythonPath = os.path.abspath(os.path.join(condaPath, "python.exe"))
 os.environ["PATH"] = f"{condaLibPath};{os.environ['PATH']}"
 
 configFile = os.path.abspath("buildConfig/build_client_config.json")
-isDisplayStd = True
 urlProposalHandlerBase = "http://127.0.0.1:6427"
 urlHttpsServerBase = "https://192.168.150.10:6426"
 
