@@ -1,10 +1,10 @@
 [
     {
         "version_name": "Local",
-        "global_variable_file": "buildConfig/global_variable_Local.py",
         "experiment_id": "0050-6427-1000",
         "password": "data-memo-transfer",
-        "share_directory_in_storage": "D:/Share/NR-000",
+        "share_directory": "D:/Share",
+        "folder_name": "NR-000",
         "url_diamond": "https://localhost:6426",
         "save_directory": "D:/Share/NR-000",
         "equipment_id": "NR-000",
@@ -14,10 +14,10 @@
     },
     {
         "version_name": "NR-000",
-        "global_variable_file": "buildConfig/global_variable_NR-000.py",
         "experiment_id": "0050-6427-0000",
         "password": "data-memo-transfer",
-        "share_directory_in_storage": "D:/Share/NR-000",
+        "share_directory": "D:/Share",
+        "folder_name": "NR-000",
         "url_diamond": "https://192.168.150.10:6426",
         "save_directory": "Z:/",
         "equipment_id": "NR-000",
@@ -26,11 +26,71 @@
         ]
     },
     {
+        "version_name": "NR-101",
+        "experiment_id": "0050-6427-0101",
+        "password": "data-memo-transfer",
+        "share_directory": "D:/Share",
+        "folder_name": "NR-101",
+        "url_diamond": "https://192.168.150.10:6426",
+        "save_directory": "X:/",
+        "equipment_id": "NR-101",
+        "measurement_methods": [
+            "1d spectra",
+            "2d spectra map",
+            "other"
+        ]
+    },
+    {
+        "version_name": "NR-102",
+        "experiment_id": "0050-6427-0102",
+        "password": "data-memo-transfer",
+        "share_directory": "D:/Share",
+        "folder_name": "NR-102",
+        "url_diamond": "https://192.168.150.10:6426",
+        "save_directory": "X:/",
+        "equipment_id": "NR-102",
+        "measurement_methods": [
+            "1d spectra",
+            "2d spectra map",
+            "other"
+        ]
+    },
+    {
+        "version_name": "NR-103",
+        "experiment_id": "0050-6427-0103",
+        "password": "data-memo-transfer",
+        "share_directory": "D:/Share",
+        "folder_name": "NR-103",
+        "url_diamond": "https://192.168.150.10:6426",
+        "save_directory": "X:/",
+        "equipment_id": "NR-103",
+        "measurement_methods": [
+            "1d spectra",
+            "2d spectra map",
+            "other"
+        ]
+    },
+    {
+        "version_name": "NR-104",
+        "experiment_id": "0050-6427-0103",
+        "password": "data-memo-transfer",
+        "share_directory": "D:/Share",
+        "folder_name": "NR-104",
+        "url_diamond": "https://192.168.150.10:6426",
+        "save_directory": "Z:/",
+        "equipment_id": "NR-104",
+        "measurement_methods": [
+            "1d spectra",
+            "2d spectra map",
+            "other"
+        ]
+    },
+    {
         "version_name": "NR-301",
-        "global_variable_file": "buildConfig/global_variable_NR-301.py",
         "experiment_id": "0050-6427-0301",
         "password": "data-memo-transfer",
-        "share_directory_in_storage": "D:/Share/NR-301",
+        "share_directory": "D:/Share",
+        "folder_name": "NR-301",
         "url_diamond": "https://192.168.150.10:6426",
         "save_directory": "Z:/",
         "equipment_id": "NR-301",
@@ -44,10 +104,10 @@
     },
     {
         "version_name": "NR-401",
-        "global_variable_file": "buildConfig/global_variable_NR-401.py",
         "experiment_id": "0050-6427-0401",
         "password": "data-memo-transfer",
-        "share_directory_in_storage": "D:/Share/NR-401",
+        "share_directory": "D:/Share",
+        "folder_name": "NR-401",
         "url_diamond": "https://192.168.150.10:6426",
         "save_directory": "Z:/",
         "equipment_id": "NR-401",
@@ -59,47 +119,30 @@
         ]
     },
     {
-        "version_name": "NR-101",
-        "global_variable_file": "buildConfig/global_variable_NR-101.py",
-        "experiment_id": "0050-6427-0101",
+        "version_name": "NR-402",
+        "experiment_id": "0050-6427-0401",
         "password": "data-memo-transfer",
-        "share_directory_in_storage": "D:/Share/NR-101",
+        "share_directory": "D:/Share",
+        "folder_name": "NR-402",
         "url_diamond": "https://192.168.150.10:6426",
-        "save_directory": "X:/",
-        "equipment_id": "NR-101",
+        "save_directory": "Z:/",
+        "equipment_id": "NR-402",
         "measurement_methods": [
-            "1d spectra",
-            "2d spectra map",
+            "normal xps",
             "other"
         ]
     },
     {
-        "version_name": "NR-102",
-        "global_variable_file": "buildConfig/global_variable_NR-102.py",
-        "experiment_id": "0050-6427-0102",
+        "version_name": "NR-702",
+        "experiment_id": "0050-6427-0401",
         "password": "data-memo-transfer",
-        "share_directory_in_storage": "D:/Share/NR-102",
+        "share_directory": "D:/Share",
+        "folder_name": "NR-702",
         "url_diamond": "https://192.168.150.10:6426",
-        "save_directory": "X:/",
-        "equipment_id": "NR-102",
+        "save_directory": "Z:/",
+        "equipment_id": "NR-702",
         "measurement_methods": [
-            "1d spectra",
-            "2d spectra map",
-            "other"
-        ]
-    },
-    {
-        "version_name": "NR-103",
-        "global_variable_file": "buildConfig/global_variable_NR-103.py",
-        "experiment_id": "0050-6427-0103",
-        "password": "data-memo-transfer",
-        "share_directory_in_storage": "D:/Share/NR-103",
-        "url_diamond": "https://192.168.150.10:6426",
-        "save_directory": "X:/",
-        "equipment_id": "NR-103",
-        "measurement_methods": [
-            "1d spectra",
-            "2d spectra map",
+            "image scan",
             "other"
         ]
     }

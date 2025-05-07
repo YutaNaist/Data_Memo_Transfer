@@ -172,7 +172,11 @@ def printColorized(text, color):
 
 def createGlobalVariableFile(configureJson):
     global_variable_file = os.path.abspath("global_variable.py")
-    share_directory_in_storage = configureJson["share_directory_in_storage"]
+    share_directory = configureJson["share_directory"]
+    share_directory_folder_name = configureJson["folder_name"]
+    share_directory_in_storage = os.path.abspath(
+        os.path.join(share_directory, share_directory_folder_name)
+    )
     url_diamond = configureJson["url_diamond"]
     save_directory = configureJson["save_directory"]
     listMeasurementMethods = configureJson["measurement_methods"]
