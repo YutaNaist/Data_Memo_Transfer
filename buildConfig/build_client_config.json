@@ -5,7 +5,7 @@
         "password": "data-memo-transfer",
         "share_directory": "D:/Share",
         "folder_name": "NR-000",
-        "url_diamond": "https://localhost:6426",
+        "url_diamond": "https://192.168.150.10:6426",
         "save_directory": "D:/Share/NR-000",
         "equipment_id": "NR-000",
         "measurement_methods": [
