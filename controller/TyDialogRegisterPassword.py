@@ -42,18 +42,18 @@ class TyDialogRegisterPassword(QtWidgets.QDialog):
         self.setWindowTitle("Input new password")
         # self.LAB_Experiment_ID.setText(experimentId)
         # self.LAB_Email_Address.setText(userMailAddress)
-        self.LAB_Experiment_ID.setText(self.experimentId)
+        self.ui.LAB_Experiment_ID.setText(self.experimentId)
         strMailAddressHide = (
             self.userMailAddress[:3]
             + "*" * 5
             + "@"
             + self.userMailAddress.split("@")[1]
         )
-        self.LAB_Email_Address.setText(strMailAddressHide)
+        self.ui.LAB_Email_Address.setText(strMailAddressHide)
         # self.window_Main = Window_Main(data_Model=data_Model)
 
     def loadUi(self):
-        if self.doc.getIsDarkMode():
+        if self.doc.getIsBuild():
             from views.FormRegisterNewPassword import Ui_Dialog
 
             self.ui = Ui_Dialog()
