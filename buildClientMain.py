@@ -257,12 +257,12 @@ if __name__ == "__main__":
         else:
             printColorized("Error: No 'build' folder found after build!", Fore.RED)
             continue
+        output_dist_folder_zip = os.path.abspath(
+            os.path.join(buildExeDir, f"{output_dist_folder}.zip")
+        )
         if os.path.exists(
             os.path.abspath(os.path.join(buildExeDir, output_dist_folder))
         ):
-            output_dist_folder_zip = os.path.abspath(
-                os.path.join(buildExeDir, f"{output_dist_folder}.zip")
-            )
             if os.path.exists(output_dist_folder_zip):
                 os.remove(output_dist_folder_zip)
             shutil.make_archive(
@@ -279,7 +279,8 @@ if __name__ == "__main__":
             os.path.join(shareDirectory, folderName)
         )
         savedFolder = condition["save_directory"]
-        copyOriginal = os.path.abspath(os.path.join(buildExeDir, output_dist_folder))
+        # copyOriginal = os.path.abspath(os.path.join(buildExeDir, output_dist_folder))
+        copyOriginal = os.path.abspath(os.path.join(buildExeDir, output_dist_folder_zip))
         registerProposal(experimentId, password)
         upLoadFiles(
             version_name,
