@@ -273,7 +273,11 @@ if __name__ == "__main__":
         printColorized("Start to register to server", Fore.CYAN)
         experimentId = condition["experiment_id"]
         password = condition["password"]
-        shareFolderInStorage = condition["share_directory_in_storage"]
+        shareDirectory = condition["share_directory"]
+        folderName = condition["folder_name"]
+        shareFolderInStorage = os.path.abspath(
+            os.path.join(shareDirectory, folderName)
+        )
         savedFolder = condition["save_directory"]
         copyOriginal = os.path.abspath(os.path.join(buildExeDir, output_dist_folder))
         registerProposal(experimentId, password)
