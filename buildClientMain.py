@@ -8,6 +8,7 @@ from colorama import Fore, Style
 from TyMessageSender import TyMessageSender, MessageSenderException
 from TyDocDataMemoTransfer import TyDocDataMemoTransfer
 from compileUiToPy import compileUiToPy
+import zipfile
 
 # 設定
 isBuildLocalDebug = False  # True: ローカルデバッグ用、False: 本番ビルド用
@@ -256,6 +257,19 @@ if __name__ == "__main__":
         else:
             printColorized("Error: No 'build' folder found after build!", Fore.RED)
             continue
+        if os.path.exists(
+            os.path.abspath(os.path.join(buildExeDir, output_dist_folder))
+        ):
+            output_dist_folder_zip = os.path.abspath(
+                os.path.join(buildExeDir, f"{output_dist_folder}.zip")
+            )
+            if os.path.exists(output_dist_folder_zip):
+                os.remove(output_dist_folder_zip)
+            shutil.make_archive(
+                os.path.abspath(os.path.join(buildExeDir, output_dist_folder)),
+                "zip",
+                os.path.abspath(os.path.join(buildExeDir, output_dist_folder)),
+            )
         printColorized("Start to register to server", Fore.CYAN)
         experimentId = condition["experiment_id"]
         password = condition["password"]
