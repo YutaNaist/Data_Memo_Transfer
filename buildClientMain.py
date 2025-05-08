@@ -106,11 +106,15 @@ def upLoadFiles(
     try:
         messageSenderHttpsServer.sendRequestLogin(experimentId, hashPassword)
         messageSenderHttpsServer.sendRequestStartExperiment(experimentId, doc)
+        # shutil.copytree(
+        #     copyOriginal,
+        #     os.path.join(shareFolderInStorage, os.path.basename(copyOriginal)),
+        #     dirs_exist_ok=True,
+        # )
 
-        shutil.copytree(
+        shutil.copy2(
             copyOriginal,
             os.path.join(shareFolderInStorage, os.path.basename(copyOriginal)),
-            dirs_exist_ok=True,
         )
         messageSenderHttpsServer.sendRequestFinishExperiment(experimentId, doc)
         # messageSenderHttpsServer.sendRequestLogout(experimentId)
@@ -275,12 +279,10 @@ if __name__ == "__main__":
         password = condition["password"]
         shareDirectory = condition["share_directory"]
         folderName = condition["folder_name"]
-        shareFolderInStorage = os.path.abspath(
-            os.path.join(shareDirectory, folderName)
-        )
+        shareFolderInStorage = os.path.abspath(os.path.join(shareDirectory, folderName))
         savedFolder = condition["save_directory"]
         # copyOriginal = os.path.abspath(os.path.join(buildExeDir, output_dist_folder))
-        copyOriginal = os.path.abspath(os.path.join(buildExeDir, output_dist_folder_zip))
+        copyOriginal = os.path.abspath(output_dist_folder_zip)
         registerProposal(experimentId, password)
         upLoadFiles(
             version_name,
