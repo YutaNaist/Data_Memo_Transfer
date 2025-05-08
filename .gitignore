@@ -4,6 +4,7 @@ test.lock
 ./build/
 ./dist/
 ./BuildExe/
+./BuildExe/*.zip
 Build_Data_Memo_transfer_*/
 Data_Memo_transfer_*/
 Logs/*.log

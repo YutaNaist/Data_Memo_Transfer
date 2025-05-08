@@ -8,6 +8,7 @@ from colorama import Fore, Style
 from TyMessageSender import TyMessageSender, MessageSenderException
 from TyDocDataMemoTransfer import TyDocDataMemoTransfer
 from compileUiToPy import compileUiToPy
+import zipfile
 
 # 設定
 isBuildLocalDebug = False  # True: ローカルデバッグ用、False: 本番ビルド用
@@ -172,7 +173,11 @@ def printColorized(text, color):
 
 def createGlobalVariableFile(configureJson):
     global_variable_file = os.path.abspath("global_variable.py")
-    share_directory_in_storage = configureJson["share_directory_in_storage"]
+    share_directory = configureJson["share_directory"]
+    share_directory_folder_name = configureJson["folder_name"]
+    share_directory_in_storage = os.path.abspath(
+        os.path.join(share_directory, share_directory_folder_name)
+    )
     url_diamond = configureJson["url_diamond"]
     save_directory = configureJson["save_directory"]
     listMeasurementMethods = configureJson["measurement_methods"]
@@ -252,12 +257,30 @@ if __name__ == "__main__":
         else:
             printColorized("Error: No 'build' folder found after build!", Fore.RED)
             continue
+        output_dist_folder_zip = os.path.abspath(
+            os.path.join(buildExeDir, f"{output_dist_folder}.zip")
+        )
+        if os.path.exists(
+            os.path.abspath(os.path.join(buildExeDir, output_dist_folder))
+        ):
+            if os.path.exists(output_dist_folder_zip):
+                os.remove(output_dist_folder_zip)
+            shutil.make_archive(
+                os.path.abspath(os.path.join(buildExeDir, output_dist_folder)),
+                "zip",
+                os.path.abspath(os.path.join(buildExeDir, output_dist_folder)),
+            )
         printColorized("Start to register to server", Fore.CYAN)
         experimentId = condition["experiment_id"]
         password = condition["password"]
-        shareFolderInStorage = condition["share_directory_in_storage"]
+        shareDirectory = condition["share_directory"]
+        folderName = condition["folder_name"]
+        shareFolderInStorage = os.path.abspath(
+            os.path.join(shareDirectory, folderName)
+        )
         savedFolder = condition["save_directory"]
-        copyOriginal = os.path.abspath(os.path.join(buildExeDir, output_dist_folder))
+        # copyOriginal = os.path.abspath(os.path.join(buildExeDir, output_dist_folder))
+        copyOriginal = os.path.abspath(os.path.join(buildExeDir, output_dist_folder_zip))
         registerProposal(experimentId, password)
         upLoadFiles(
             version_name,

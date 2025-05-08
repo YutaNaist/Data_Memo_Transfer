@@ -39,7 +39,7 @@ class TyDialogSendOneTimePassword(QtWidgets.QDialog):
         # self.window_Main = Window_Main(data_Model=data_Model)
 
     def loadUi(self):
-        if self.doc.getIsDarkMode():
+        if self.doc.getIsBuild():
             from views.FormSendOneTimePassword import Ui_Dialog
 
             self.ui = Ui_Dialog()
