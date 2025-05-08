@@ -22,13 +22,13 @@ pyinstallerPath = os.path.abspath(os.path.join(condaPath, "Scripts/pyinstaller.e
 pythonPath = os.path.abspath(os.path.join(condaPath, "python.exe"))
 os.environ["PATH"] = f"{condaLibPath};{os.environ['PATH']}"
 
-configFile = os.path.abspath("buildConfig/build_client_config.json")
+configFile = os.path.abspath("buildConfig/config_build.json")
 urlProposalHandlerBase = "http://127.0.0.1:6427"
 urlHttpsServerBase = "https://192.168.150.10:6426"
 
 if isBuildLocalDebug:
     urlHttpsServerBase = "https://127.0.0.1:6426"
-    configFile = os.path.abspath("buildConfig/build_client_config_dev.json")
+    configFile = os.path.abspath("buildConfig/config_build_dev.json")
 
 doc = TyDocDataMemoTransfer()
 doc.isBuild = True
